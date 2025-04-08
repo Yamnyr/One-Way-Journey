@@ -14,7 +14,7 @@ const Connexion = ({ navigation }) => {
 
         try {
             // Remplace 'http://localhost:5000' par l'adresse IP de ton serveur si tu testes sur un appareil réel
-            const response = await axios.post('http://localhost:3000/users/login', {
+            const response = await axios.post('http://localhost:3333/users/login', {
                 username: username,  // Utilise le username
                 password: password
             });
