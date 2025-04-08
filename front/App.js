@@ -9,6 +9,7 @@ import Inscription from './pages/Inscription';
 import Accueil from './pages/Accueil';
 import CharactersPage from './pages/CharacterList';
 import Admin from './pages/Admin';
+import ScenarioScreen from './pages/Scenario';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,11 @@ export default function App() {
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Inscription" component={Inscription} />
         <Stack.Screen name="Accueil" component={Accueil} />
+        <Stack.Screen
+          name="Scenario"
+          component={ScenarioScreen}
+          options={{ headerShown: false }} // Ou avec un header si vous préférez
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
