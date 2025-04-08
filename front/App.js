@@ -7,6 +7,7 @@ import { checkUserToken } from './services/Auth';
 import Connexion from './pages/Connexion';
 import Inscription from './pages/Inscription';
 import Accueil from './pages/Accueil';
+import CharactersPage from './pages/CharacterList';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator initialRouteName={isLoggedIn ? "Accueil" : "Connexion"} screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Connexion" component={Connexion} />
+                <Stack.Screen name="characters"  component={CharactersPage} />
                 <Stack.Screen name="Inscription" component={Inscription} />
                 <Stack.Screen name="Accueil" component={Accueil} />
             </Stack.Navigator>

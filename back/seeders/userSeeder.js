@@ -9,8 +9,8 @@ const users = [
         role: 'player',
     },
     {
-        username: 'admin_user',
-        password: 'adminpassword',  // Ce mot de passe sera hashé
+        username: 'ad',
+        password: 'ad',  // Ce mot de passe sera hashé
         email: 'admin@example.com',
         role: 'admin',
     },
