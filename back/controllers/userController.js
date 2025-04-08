@@ -1,6 +1,17 @@
 const db = require('../models');
+const {hash, compare} = require("bcrypt");
+const {sign} = require("jsonwebtoken");
 const { User } = db;  // Import du modèle User
-
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+// Fonction pour générer un token JWT
+const generateToken = (user) => {
+    return jwt.sign(
+        { id: user.id, username: user.username, role: user.role },
+        process.env.SECRET_KEY,  // Utiliser une clé secrète dans .env
+        { expiresIn: '24h' }     // Expiration du token (1 heure par exemple)
+    );
+};
 // Inscription d'un utilisateur
 exports.createUser = async (req, res) => {
     try {

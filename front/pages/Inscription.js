@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import { registerUser } from '../services/Auth';  // Importer la fonction d'inscription
 
 const Inscription = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (!username || !email || !password) {
             Alert.alert("Erreur", "Tous les champs sont obligatoires.");
             return;
         }
 
-        Alert.alert("Inscription réussie", `Bienvenue ${username} !`);
-        navigation.navigate('Connexion');
+        try {
+            await registerUser(username, email, password);  // Utiliser la fonction registerUser
+            Alert.alert("Inscription réussie", `Bienvenue ${username} !`);
+            navigation.navigate('Connexion');
+        } catch (error) {
+            if (error.response) {
+                Alert.alert("Erreur", error.response.data.error);
+            } else {
+                Alert.alert("Erreur", "Une erreur est survenue.");
+            }
+        }
     };
 
     return (
-        <ImageBackground
-            source={require('../assets/space.jpg')} // Remplace avec le chemin de ton image
-            style={styles.container}
-            resizeMode="cover"
-        >
+        <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
             <Text style={styles.title}>Inscription</Text>
 
             <TextInput

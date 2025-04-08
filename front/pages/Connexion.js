@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
-import axios from 'axios';  // Importer Axios
+import { loginUser } from '../services/Auth';
 
 const Connexion = ({ navigation }) => {
-    const [username, setUsername] = useState(''); // Utiliser username
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
@@ -13,23 +13,17 @@ const Connexion = ({ navigation }) => {
         }
 
         try {
-            // Remplace 'http://localhost:5000' par l'adresse IP de ton serveur si tu testes sur un appareil réel
-            const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/users/login`, {
-                username: username,  // Utilise le username
-                password: password
-            });
+            const { user } = await loginUser(username, password);
 
-            // Si la connexion est réussie, tu reçois un token dans la réponse
-            const { token, user } = response.data;
-
-            // Sauvegarder le token dans le stockage local ou un contexte global
-            // Par exemple : AsyncStorage.setItem('userToken', token);
             Alert.alert("Connexion réussie", `Bienvenue ${user.username} !`);
 
-            // Naviguer vers l'écran Accueil
-            navigation.navigate('Accueil');
+            // Rediriger vers Accueil après connexion
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Accueil' }],
+            });
+
         } catch (error) {
-            // Gérer les erreurs (exemple : utilisateur non trouvé, mauvais mot de passe)
             if (error.response) {
                 Alert.alert("Erreur", error.response.data.error);
             } else {
@@ -39,18 +33,14 @@ const Connexion = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground
-            source={require('../assets/space.jpg')} // Remplace avec le chemin de ton image
-            style={styles.container}
-            resizeMode="cover"
-        >
+        <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
             <Text style={styles.title}>Connexion</Text>
 
             <TextInput
                 style={styles.input}
-                placeholder="Nom d'utilisateur"  // Utiliser 'Nom d'utilisateur' au lieu de 'Email'
+                placeholder="Nom d'utilisateur"
                 autoCapitalize="none"
-                value={username}  // Utiliser username
+                value={username}
                 onChangeText={setUsername}
             />
 
