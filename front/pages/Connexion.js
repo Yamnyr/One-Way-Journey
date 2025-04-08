@@ -64,7 +64,7 @@ const Connexion = ({ navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Inscription')}>
-                <Text style={styles.link}>Pas encore de compte ? S'inscrire</Text>
+                <Text style={styles.link}>Pas encore de compte ? S'inscrire !</Text>
             </TouchableOpacity>
         </ImageBackground>
     );
@@ -114,5 +114,6 @@ const styles = StyleSheet.create({
         color: 'rgb(34, 186, 186)',
         textAlign: 'center',
         marginTop: 20,
+        fontFamily: 'Orbitron',
     },
 });

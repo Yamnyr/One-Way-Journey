@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity,Image, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode'; // Assure-toi d’avoir fait npm install jwt-decode
 import * as Font from 'expo-font';
@@ -65,7 +65,10 @@ const Accueil = ({ navigation }) => {
         >
             {/* Bouton Logout en haut à droite */}
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.logoutButtonText}>Logout</Text>
+            <Image 
+                source={require('../assets/logout.png')} // Assure-toi du chemin correct
+                style={styles.logoutImage} // Style pour dimensionner l'image
+            />
             </TouchableOpacity>
 
             <Text style={styles.title}>One Way Journey</Text>
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'rgb(183, 45, 230)',
-        fontSize: 27,
+        fontSize: 34,
         textAlign: 'center',
         marginBottom: 40,
         fontFamily: 'SixtyfourConvergence',
@@ -132,19 +135,21 @@ const styles = StyleSheet.create({
     logoutButton: {
         position: 'absolute',
         top: 20,
-        right: 20,
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        left: 15,
+        backgroundColor: 'rgba(151, 28, 172, 0)',
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
-        shadowColor: 'rgba(194, 152, 187, 0.71)',
+        shadowColor: 'rgba(225, 9, 207, 0.46)',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,
     },
-    logoutButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16,
+
+    logoutImage: {
+        opacity : (0.8),
+        width: 30, // Largeur de l'image
+        height: 30, // Hauteur de l'image
+        resizeMode: 'contain', // Garde les proportions
     },
 });
