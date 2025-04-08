@@ -111,30 +111,30 @@ const UserCharactersScreen = () => {
                                 style={styles.cardContent}
                             >
                                 <Text style={styles.characterName}>{item.name}</Text>
-                                <Text style={styles.characterText}>Espèce: {item.species}</Text>
+                                <Text style={styles.characterText}>Espèce : {item.species}</Text>
 
                                 {/* Stats du personnage */}
                                 <View style={styles.statsContainer}>
                                     <View style={styles.statsColumn}>
-                                        <Text style={styles.statItem}>❤️ Vie: {item.life || 0}</Text>
-                                        <Text style={styles.statItem}>✨ Charisme: {item.charisma || 0}</Text>
-                                        <Text style={styles.statItem}>🏃 Dextérité: {item.dexterity || 0}</Text>
+                                        <Text style={styles.statItem}>❤️ Vie : {item.life || 0}</Text>
+                                        <Text style={styles.statItem}>✨ Charisme : {item.charisma || 0}</Text>
+                                        <Text style={styles.statItem}>🏃 Dextérité : {item.dexterity || 0}</Text>
                                     </View>
                                     <View style={styles.statsColumn}>
-                                        <Text style={styles.statItem}>🧠 Intelligence: {item.intelligence || 0}</Text>
-                                        <Text style={styles.statItem}>🍀 Chance: {item.luck || 0}</Text>
-                                        <Text style={styles.statItem}>{item.is_alive ? "✅ En vie" : "☠️ Mort"}</Text>
+                                        <Text style={styles.statItem}>🧠 Intelligence : {item.intelligence || 0}</Text>
+                                        <Text style={styles.statItem}>🍀 Chance : {item.luck || 0}</Text>
+                                        <Text style={styles.statItem}>{item.is_alive ? "✅ En vie ! " : "☠️ Mort ..."}</Text>
                                     </View>
                                 </View>
 
                                 {/* Scénario actuel */}
                                 {item.currentScenarioId && (
-                                    <Text style={styles.scenarioText}>🎮 Scénario actuel: #{item.currentScenarioId}</Text>
+                                    <Text style={styles.scenarioText}>🎮 Scénario actuel : #{item.currentScenarioId}</Text>
                                 )}
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-                                <Text style={styles.buttonText}>❌ Supprimer</Text>
+                                <Text style={styles.buttonText}>Supprimer</Text>
                             </TouchableOpacity>
                         </View>
                     )}
@@ -143,7 +143,7 @@ const UserCharactersScreen = () => {
 
             {/* Bouton "Créer un personnage" */}
             <TouchableOpacity style={styles.createButton} onPress={() => setModalVisible(true)}>
-                <Text style={styles.createButtonText}>➕ Créer un personnage</Text>
+                <Text style={styles.createButtonText}>Créer un personnage</Text>
             </TouchableOpacity>
 
             {/* Modal de création de personnage */}
@@ -154,15 +154,17 @@ const UserCharactersScreen = () => {
                         <TextInput
                             style={styles.input}
                             placeholder="Nom du personnage"
-                            placeholderTextColor="gray"
+                            placeholderTextColor="rgba(255, 255, 255, 0.73)"
                             value={newCharacter.name}
                             onChangeText={(text) => setNewCharacter({ ...newCharacter, name: text })}
+                            
                         />
                         <Text style={styles.label}>Espèce :</Text>
                         <Picker
                             selectedValue={newCharacter.species}
                             onValueChange={(itemValue) => setNewCharacter({ ...newCharacter, species: itemValue })}
                             style={styles.picker}
+                            itemStyle={{ color: 'White' , fontFamily : 'Orbitron'}}
                         >
                             <Picker.Item label="Humain" value="humain" />
                             <Picker.Item label="vulcain" value="vulcain" />
@@ -193,14 +195,15 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        color: "rgb(183, 45, 230)",
+        color: "rgb(255, 0, 225)",
         fontSize: 27,
         textAlign: "center",
         marginVertical: 20,
         fontWeight: "bold",
-        textShadowColor: "rgba(255, 147, 239, 0.65)",
+        textShadowColor: "rgba(255, 147, 239, 0)",
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 17,
+        fontFamily : 'Orbitron',
     },
     emptyText: {
         textAlign: "center",
@@ -216,22 +219,24 @@ const styles = StyleSheet.create({
         padding: 18,
         borderRadius: 15,
         marginBottom: 15,
-        borderColor: "rgba(183, 45, 230, 0.4)",
+        borderColor: "rgba(115, 32, 143, 0.32)",
         borderWidth: 1,
-        shadowColor: "rgba(194, 152, 187, 0.71)",
+        shadowColor: "rgba(194, 152, 187, 0)",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.8,
         shadowRadius: 8,
     },
     characterName: {
+        fontFamily : 'Orbitron',
         fontSize: 20,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: "rgb(255, 0, 230)",
         marginBottom: 8,
     },
     characterText: {
         color: "white",
         marginBottom: 10,
+        fontFamily : 'Orbitron',
     },
 
     // Stats du personnage
@@ -239,7 +244,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginVertical: 10,
-        backgroundColor: "rgba(40, 20, 55, 0.7)",
+        backgroundColor: "rgba(40, 6, 65, 0)",
         borderRadius: 8,
         padding: 10,
     },
@@ -247,17 +252,22 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     statItem: {
-        color: "rgb(223, 182, 219)",
+        color: "rgb(255, 255, 255)",
         marginVertical: 3,
+        fontFamily : 'Orbitron',
+        fontSize: 12,
+
     },
     scenarioText: {
-        color: "rgb(223, 182, 219)",
+        color: "rgb(255, 255, 0)",
         marginVertical: 5,
         fontWeight: "bold",
+        fontFamily : 'Orbitron',
     },
 
     // Boutons génériques
     buttonText: {
+        fontFamily : 'Orbitron',
         color: "white",
         fontWeight: "bold",
     },
@@ -265,26 +275,31 @@ const styles = StyleSheet.create({
     // Boutons spécifiques
     deleteButton: {
         marginTop: 10,
-        backgroundColor: "rgba(230, 45, 70, 0.6)",
+        backgroundColor: "rgba(191, 26, 109, 0.6)",
         padding: 10,
         borderRadius: 10,
         alignItems: "center",
+        
     },
     createButton: {
-        backgroundColor: "rgba(169, 40, 216, 0.65)",
+        backgroundColor: "rgba(52, 8, 69, 0.71)",
         padding: 15,
         borderRadius: 15,
         alignItems: "center",
         marginTop: 20,
-        shadowColor: "rgba(194, 152, 187, 0.71)",
+        shadowColor: "rgba(194, 152, 187, 0)",
+        borderColor: "rgba(107, 31, 132, 0.32)",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,
+        borderWidth: 1,
+       
     },
     createButtonText: {
-        color: "rgb(223, 182, 219)",
+        color: "rgb(255, 255, 255)",
         fontSize: 18,
         fontWeight: "bold",
+        fontFamily : 'Orbitron',
     },
 
     // Modal
@@ -303,39 +318,47 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     modalTitle: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: "bold",
         marginBottom: 20,
         textAlign: "center",
-        color: "rgb(183, 45, 230)",
+        color: "rgb(255, 255, 255)",
+        fontFamily : 'Orbitron',
     },
 
     // Formulaire
     label: {
+        fontFamily : 'Orbitron',
         fontSize: 16,
         marginBottom: 8,
-        color: "rgb(223, 182, 219)",
+        color: "rgb(255, 255, 255)",
     },
     input: {
+        fontFamily : 'Orbitron',
         borderWidth: 1,
-        borderColor: "rgba(183, 45, 230, 0.4)",
-        backgroundColor: "rgba(30, 5, 40, 0.6)",
+        borderColor: "rgba(75, 23, 93, 0.51)",
+        backgroundColor: "rgba(86, 23, 112, 0.76)",
         padding: 12,
         borderRadius: 10,
         marginBottom: 15,
-        color: "white",
+        color: "rgb(255, 255, 255)",
+
     },
     picker: {
-        backgroundColor: "rgba(30, 5, 40, 0.6)",
+        fontFamily : 'Orbitron',
+        borderRadius: 10,
+        borderWidth: 0.5,
+        borderColor: "rgba(75, 23, 93, 0.51)",
+        backgroundColor: "rgba(86, 23, 112, 0.76)",
         marginBottom: 20,
-        color: "white",
     },
-
+    
     // Layout boutons
     buttonRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 15,
+
     },
     cancelButton: {
         backgroundColor: "rgba(80, 80, 80, 0.8)",
