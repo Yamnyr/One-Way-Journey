@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    Alert
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
 
 const Inscription = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -19,13 +12,16 @@ const Inscription = ({ navigation }) => {
             return;
         }
 
-        // TODO : Intégrer avec la BDD ou Firebase
         Alert.alert("Inscription réussie", `Bienvenue ${username} !`);
         navigation.navigate('Connexion');
     };
 
     return (
-        <View style={styles.container}>
+        <ImageBackground
+            source={require('../assets/space.jpg')} // Remplace avec le chemin de ton image
+            style={styles.container}
+            resizeMode="cover"
+        >
             <Text style={styles.title}>Inscription</Text>
 
             <TextInput
@@ -59,7 +55,7 @@ const Inscription = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Connexion')}>
                 <Text style={styles.link}>Déjà un compte ? Se connecter</Text>
             </TouchableOpacity>
-        </View>
+        </ImageBackground>
     );
 };
 
@@ -68,37 +64,44 @@ export default Inscription;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0c1b2a',
+        justifyContent: 'center',
         padding: 20,
-        justifyContent: 'center'
     },
     title: {
         fontSize: 32,
         color: '#fff',
         textAlign: 'center',
         marginBottom: 40,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'Orbitron',
+        textShadowColor: 'rgba(0, 255, 255, 0.5)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 15,
     },
     input: {
         backgroundColor: '#fff',
         padding: 15,
         borderRadius: 10,
-        marginBottom: 20
+        marginBottom: 20,
+        fontFamily: 'Orbitron',
+        fontSize: 16,
     },
     button: {
         backgroundColor: '#1e90ff',
         padding: 15,
         borderRadius: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 20,
     },
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: 'Orbitron',
     },
     link: {
         color: '#1e90ff',
         textAlign: 'center',
-        marginTop: 20
-    }
+        marginTop: 20,
+    },
 });
