@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        backgroundColor: '#1e90ff',
+        backgroundColor: 'rgba(34, 186, 186, 0.6)',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Orbitron',
     },
     link: {
-        color: '#1e90ff',
+        color: 'rgb(34, 186, 186)',
         textAlign: 'center',
         marginTop: 20,
     },
