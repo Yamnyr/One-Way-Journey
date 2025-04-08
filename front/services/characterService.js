@@ -15,3 +15,14 @@ export const getUserCharacters = async (token) => {
         throw error;
     }
 };
+export const deleteCharacter = async (characterId, token) => {
+    try {
+        await axios.delete(`${API_URL}/characters/${characterId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        return { success: true };
+    } catch (error) {
+        console.error('❌ Erreur lors de la suppression du personnage:', error);
+        throw error;
+    }
+};
