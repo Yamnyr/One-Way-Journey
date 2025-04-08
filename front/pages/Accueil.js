@@ -60,7 +60,7 @@ const Accueil = ({ navigation }) => {
         >
             <Text style={styles.title}>One Way Journey</Text>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Connexion')}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('characters')}>
                 <Text style={styles.buttonText}>Jouer</Text>
             </TouchableOpacity>
 
