@@ -12,7 +12,16 @@ const Character = sequelize.define('Character', {
     dexterity: { type: DataTypes.INTEGER, defaultValue: 10 },
     intelligence: { type: DataTypes.INTEGER, defaultValue: 10 },
     luck: { type: DataTypes.INTEGER, defaultValue: 10 },
-    is_alive: { type: DataTypes.BOOLEAN, defaultValue: true }
+    is_alive: { type: DataTypes.BOOLEAN, defaultValue: true },
+    currentScenarioId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        references: {
+            model: Scenario, // Associe la clé étrangère au modèle Scenario
+            key: 'id'
+        }
+    }
 }, { timestamps: true });
 
 User.hasMany(Character, { foreignKey: 'userId', onDelete: 'CASCADE' });

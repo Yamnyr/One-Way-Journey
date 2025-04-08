@@ -14,10 +14,6 @@ const Connexion = ({ navigation }) => {
 
         try {
             const { user } = await loginUser(username, password);
-
-            Alert.alert("Connexion réussie", `Bienvenue ${user.username} !`);
-
-            // Rediriger vers Accueil après connexion
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Accueil' }],
