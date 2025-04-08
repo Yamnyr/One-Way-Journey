@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    Alert
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
 
 const Connexion = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -18,13 +11,16 @@ const Connexion = ({ navigation }) => {
             return;
         }
 
-        // TODO: Intégrer vérification avec API / base de données
         Alert.alert("Connexion réussie", `Bienvenue ${email} !`);
-        navigation.navigate('Accueil'); // redirection après connexion
+        navigation.navigate('Accueil');
     };
 
     return (
-        <View style={styles.container}>
+        <ImageBackground
+            source={require('../assets/space.jpg')} // Remplace avec le chemin de ton image
+            style={styles.container}
+            resizeMode="cover"
+        >
             <Text style={styles.title}>Connexion</Text>
 
             <TextInput
@@ -51,7 +47,7 @@ const Connexion = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Inscription')}>
                 <Text style={styles.link}>Pas encore de compte ? S'inscrire</Text>
             </TouchableOpacity>
-        </View>
+        </ImageBackground>
     );
 };
 
@@ -60,37 +56,44 @@ export default Connexion;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0c1b2a',
+        justifyContent: 'center',
         padding: 20,
-        justifyContent: 'center'
     },
     title: {
         fontSize: 32,
         color: '#fff',
         textAlign: 'center',
         marginBottom: 40,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'Orbitron',
+        textShadowColor: 'rgba(0, 255, 255, 0.5)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 15,
     },
     input: {
         backgroundColor: '#fff',
         padding: 15,
         borderRadius: 10,
-        marginBottom: 20
+        marginBottom: 20,
+        fontFamily: 'Orbitron',
+        fontSize: 16,
     },
     button: {
         backgroundColor: '#1e90ff',
         padding: 15,
         borderRadius: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 20,
     },
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: 'Orbitron',
     },
     link: {
         color: '#1e90ff',
         textAlign: 'center',
-        marginTop: 20
-    }
+        marginTop: 20,
+    },
 });
