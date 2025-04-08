@@ -1,11 +1,12 @@
 const db = require('../models');
+const {hash} = require("bcrypt");
 const { User } = db;  // Import du modèle User
 
 // Inscription d'un utilisateur
 exports.createUser = async (req, res) => {
     try {
         const { username, password, email, role } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await hash(password, 10);
         const user = await db.User.create({ username, password: hashedPassword, email, role });
 
         // Générer un token pour l'utilisateur
