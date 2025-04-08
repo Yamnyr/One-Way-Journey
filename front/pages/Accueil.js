@@ -15,6 +15,7 @@ const fetchFonts = async () => {
 };
 
 const Accueil = ({ navigation }) => {
+    const [fontsLoaded, setFontsLoaded] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
