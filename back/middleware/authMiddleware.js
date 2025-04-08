@@ -27,3 +27,10 @@ exports.verifyRole = (roles) => {
         next();  // L'utilisateur a le bon rôle, on passe à la suite
     };
 };
+
+exports.verifyAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Accès interdit. Vous devez être un administrateur.' });
+    }
+    next();  // L'utilisateur est admin, donc on passe à la prochaine étape
+};
