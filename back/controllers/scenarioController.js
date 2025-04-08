@@ -78,3 +78,22 @@ exports.getScenarioWithChoices = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur lors de la récupération du scénario.' });
     }
 };
+
+// 2️⃣ Récupérer tous les scénarios avec leurs choix associés
+exports.getAllScenarios = async (req, res) => {
+    try {
+        // Récupère tous les scénarios avec leurs choix
+        const scenarios = await Scenario.findAll({
+            include: [{
+                model: Choice,
+                as: 'choices', // Correspond à l'alias défini dans les associations Sequelize
+                required: false
+            }]
+        });
+
+        res.status(200).json({ scenarios });
+    } catch (error) {
+        console.error('❌ Erreur lors de la récupération des scénarios :', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des scénarios.' });
+    }
+};

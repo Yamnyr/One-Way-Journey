@@ -8,45 +8,41 @@ import Connexion from './pages/Connexion';
 import Inscription from './pages/Inscription';
 import Accueil from './pages/Accueil';
 import CharactersPage from './pages/CharacterList';
-import ScenarioScreen from "./pages/Scenario";
+import Admin from './pages/Admin';
 
 const Stack = createStackNavigator();
 
 export default function App() {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const fetchAuthStatus = async () => {
-            const loggedIn = await checkUserToken();
-            setIsLoggedIn(loggedIn);
-            setIsLoading(false);
-        };
+  useEffect(() => {
+    const fetchAuthStatus = async () => {
+      const loggedIn = await checkUserToken();
+      setIsLoggedIn(loggedIn);
+      setIsLoading(false);
+    };
 
-        fetchAuthStatus();
-    }, []);
+    fetchAuthStatus();
+  }, []);
 
-    if (isLoading) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color="#1e90ff" />
-            </View>
-        );
-    }
-
+  if (isLoading) {
     return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName={isLoggedIn ? "Accueil" : "Connexion"} screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Connexion" component={Connexion} />
-                <Stack.Screen name="characters"  component={CharactersPage} />
-                <Stack.Screen name="Inscription" component={Inscription} />
-                <Stack.Screen name="Accueil" component={Accueil} />
-                <Stack.Screen
-                    name="Scenario"
-                    component={ScenarioScreen}
-                    options={{ headerShown: false }} // Ou avec un header si vous préférez
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#1e90ff" />
+      </View>
     );
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={isLoggedIn ? "Accueil" : "Connexion"} screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Connexion" component={Connexion} />
+        <Stack.Screen name="characters" component={CharactersPage} />
+        <Stack.Screen name="Admin" component={Admin} />
+        <Stack.Screen name="Inscription" component={Inscription} />
+        <Stack.Screen name="Accueil" component={Accueil} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }

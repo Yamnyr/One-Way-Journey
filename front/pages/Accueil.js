@@ -78,7 +78,7 @@ const Accueil = ({ navigation }) => {
             </TouchableOpacity>
 
             {isAdmin && (
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Inscription')}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Admin')}>
                     <Text style={styles.buttonText}>Gérer les scénarios</Text>
                 </TouchableOpacity>
             )}

@@ -10,4 +10,7 @@ router.post('/create', verifyToken, verifyAdmin, scenarioController.createScenar
 // 2️⃣ Route pour récupérer un scénario avec tous ses choix
 router.get('/:id', verifyToken, scenarioController.getScenarioWithChoices);
 
+// 3️⃣ Route pour récupérer tous les scénarios (seul un admin peut récupérer tous les scénarios)
+router.get('/', verifyToken, verifyAdmin, scenarioController.getAllScenarios);
+
 module.exports = router;
