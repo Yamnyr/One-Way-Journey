@@ -1,4 +1,4 @@
-import React, { useEffect, useState }, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode'; // Assure-toi d’avoir fait npm install jwt-decode
@@ -33,18 +33,13 @@ const Accueil = ({ navigation }) => {
             }
         };
 
-        checkRole();
-    }, []);
-
-    const [fontsLoaded, setFontsLoaded] = useState(false);
-
-    useEffect(() => {
         const loadFonts = async () => {
             await fetchFonts();
             setFontsLoaded(true);
         };
 
         loadFonts();
+        checkRole();
     }, []);
 
     if (!fontsLoaded) {
