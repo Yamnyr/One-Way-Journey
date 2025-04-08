@@ -5,7 +5,7 @@ const seedUsers = require('./seeders/userSeeder');
 const seedCharacters = require('./seeders/characterSeeder');
 const seedScenarios = require('./seeders/scenarioSeeder');
 const seedChoices = require('./seeders/choiceSeeder');
-const { verifyToken, verifyRole } = require('./middleware/authMiddleware'); // Import des middlewares
+const { verifyToken } = require('./middleware/authMiddleware'); // Import des middlewares
 const cors = require('cors');
 
 const app = express();
@@ -22,11 +22,6 @@ const choiceRoutes = require('./routes/choiceRoutes');
 
 // Routes d'utilisateur
 app.use('/users', userRoutes);
-
-// Exemple d'itinéraire qui nécessite une authentification et un rôle spécifique (admin)
-app.use('/admin', verifyToken, verifyRole(['admin']), (req, res) => {
-    res.json({ message: 'Bienvenue dans la zone admin, ' + req.user.username });
-});
 
 // Routes de personnage, scénario et choix qui nécessitent une authentification
 app.use('/characters', verifyToken, characterRoutes);

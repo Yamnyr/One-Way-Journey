@@ -2,7 +2,7 @@ const db = require('../models');
 
 const characters = [
     {
-        user_id: 1,  // Utilisateur 1 : john_doe
+        userId: 1,  // Utilisateur 1 : john_doe
         name: 'John the Brave',
         species: 'Human',
         life: 100,
@@ -12,7 +12,7 @@ const characters = [
         luck: 80,
     },
     {
-        user_id: 2,  // Utilisateur 2 : admin_user
+        userId: 2,  // Utilisateur 2 : admin_user
         name: 'Admin Lord',
         species: 'Elf',
         life: 120,
