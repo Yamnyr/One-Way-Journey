@@ -351,6 +351,7 @@ const styles = StyleSheet.create({
         borderColor: "rgba(75, 23, 93, 0.51)",
         backgroundColor: "rgba(86, 23, 112, 0.76)",
         marginBottom: 20,
+        color: "rgb(255, 255, 255)",
     },
     
     // Layout boutons
