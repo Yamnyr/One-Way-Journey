@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
-import axios from 'axios'; // Importer axios
+import { registerUser } from '../services/Auth';  // Importer la fonction d'inscription
 
 const Inscription = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -14,26 +14,12 @@ const Inscription = ({ navigation }) => {
         }
 
         try {
-            // Remplace 'http://localhost:3333' par l'adresse IP de ton serveur si tu testes sur un appareil réel
-            const response = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/users/register`, {
-                username,
-                email,
-                password,
-                role: 'player', // Si tu as un rôle par défaut
-            });
-
-            // Si l'inscription réussit, tu reçois un token et un utilisateur
-            const { token, user } = response.data;
-
-            // Sauvegarder le token dans un stockage local ou un contexte global
-            // Exemple : AsyncStorage.setItem('userToken', token);
-
-            Alert.alert("Inscription réussie", `Bienvenue ${user.username} !`);
+            await registerUser(username, email, password);  // Utiliser la fonction registerUser
+            Alert.alert("Inscription réussie", `Bienvenue ${username} !`);
             navigation.navigate('Connexion');
         } catch (error) {
-            // Gérer les erreurs
             if (error.response) {
-                Alert.alert("Erreur", error.response.data.error); // Afficher l'erreur venant de l'API
+                Alert.alert("Erreur", error.response.data.error);
             } else {
                 Alert.alert("Erreur", "Une erreur est survenue.");
             }
@@ -41,11 +27,7 @@ const Inscription = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground
-            source={require('../assets/space.jpg')} // Remplace avec le chemin de ton image
-            style={styles.container}
-            resizeMode="cover"
-        >
+        <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
             <Text style={styles.title}>Inscription</Text>
 
             <TextInput
