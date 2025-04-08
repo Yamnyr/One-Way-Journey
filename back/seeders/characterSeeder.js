@@ -1,8 +1,8 @@
 const db = require('../models');
 
-const scenarios = [
-    { id: 1, name: 'Default Scenario', description: 'Le premier scénario par défaut.' },
-];
+// const scenarios = [
+//     { id: 1, name: 'Default Scenario', description: 'Le premier scénario par défaut.' },
+// ];
 
 const characters = [
     {
@@ -31,8 +31,8 @@ const characters = [
 
 const seedData = async () => {
     try {
-        await db.Scenario.bulkCreate(scenarios, { ignoreDuplicates: true });
-        console.log('✅ Scénarios insérés avec succès !');
+        // await db.Scenario.bulkCreate(scenarios, { ignoreDuplicates: true });
+        // console.log('✅ Scénarios insérés avec succès !');
 
         await db.Character.bulkCreate(characters);
         console.log('✅ Personnages insérés avec succès !');

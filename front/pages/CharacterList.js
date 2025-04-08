@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import {
     View,
@@ -11,6 +13,8 @@ import {
     Modal,
     TextInput,
     Image,
+    Platform,
+    ScrollView,
 } from "react-native"
 import { getUserCharacters, deleteCharacter, createCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -24,9 +28,19 @@ const UserCharactersScreen = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [newCharacter, setNewCharacter] = useState({
         name: "",
-        species: "Humain", // Valeur par défaut
+        species: "humain", // Valeur par défaut
     })
     const navigation = useNavigation()
+
+    // Liste des espèces disponibles
+    const speciesList = [
+        { value: "humain", label: "Humain", emoji: "👨‍🚀" },
+        { value: "vulcain", label: "Vulcain", emoji: "🖖" },
+        { value: "cyborg", label: "Cyborg", emoji: "🤖" },
+        { value: "mutant", label: "Mutant", emoji: "👽" },
+        { value: "alien", label: "Alien", emoji: "👾" },
+        { value: "batman", label: "Batman", emoji: "🦇" },
+    ]
 
     useEffect(() => {
         fetchCharacters()
@@ -80,7 +94,7 @@ const UserCharactersScreen = () => {
             const createdCharacter = await createCharacter(newCharacter, token)
             setCharacters([...characters, createdCharacter]) // Ajoute le perso à la liste
             setModalVisible(false)
-            setNewCharacter({ name: "", species: "Humain" }) // Réinitialise le formulaire
+            setNewCharacter({ name: "", species: "humain" }) // Réinitialise le formulaire
         } catch (err) {
             Alert.alert("Erreur", "Impossible de créer ce personnage.")
         }
@@ -94,19 +108,61 @@ const UserCharactersScreen = () => {
         }
     }
 
+    const getRaceEmoji = (species) => {
+        const speciesLower = species.toLowerCase()
+        const found = speciesList.find((item) => item.value === speciesLower)
+        return found ? found.emoji : "❓"
+    }
+
+    // Rendu du sélecteur d'espèce en fonction de la plateforme
+    const renderSpeciesSelector = () => {
+        if (Platform.OS === "ios") {
+            // Utiliser le Picker sur iOS
+            return (
+                <Picker
+                    selectedValue={newCharacter.species}
+                    onValueChange={(itemValue) => setNewCharacter({ ...newCharacter, species: itemValue })}
+                    style={styles.picker}
+                    itemStyle={{ color: "white", fontFamily: "Orbitron-Regular" }}
+                >
+                    {speciesList.map((species) => (
+                        <Picker.Item key={species.value} label={`${species.label} ${species.emoji}`} value={species.value} />
+                    ))}
+                </Picker>
+            )
+        } else {
+            // Interface alternative pour Android et autres plateformes
+            return (
+                <ScrollView style={styles.speciesScrollView}>
+                    <View style={styles.speciesGrid}>
+                        {speciesList.map((species) => (
+                            <TouchableOpacity
+                                key={species.value}
+                                style={[styles.speciesButton, newCharacter.species === species.value && styles.speciesButtonSelected]}
+                                onPress={() => setNewCharacter({ ...newCharacter, species: species.value })}
+                            >
+                                <Text style={styles.speciesEmoji}>{species.emoji}</Text>
+                                <Text
+                                    style={[styles.speciesLabel, newCharacter.species === species.value && styles.speciesLabelSelected]}
+                                >
+                                    {species.label}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </ScrollView>
+            )
+        }
+    }
+
     if (loading) return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
 
     return (
         <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
-            <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('Accueil')}>
-                <Image 
-                    source={require('../assets/arrowB.png')}
-                    style={styles.buttonText2}
-                />
+            <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("Accueil")}>
+                <Image source={require("../assets/arrowB.png")} style={styles.buttonText2} />
             </TouchableOpacity>
             <Text style={styles.title}>Mes Personnages</Text>
-
-            
 
             {characters.length === 0 ? (
                 <Text style={styles.emptyText}>Vous n'avez aucun personnage pour le moment.</Text>
@@ -120,8 +176,13 @@ const UserCharactersScreen = () => {
                                 onPress={() => handleNavigateToScenario(item.currentScenarioId)}
                                 style={styles.cardContent}
                             >
-                                <Text style={styles.characterName}>{item.name}</Text>
-                                <Text style={styles.characterText}>Espèce : {item.species}</Text>
+                                <View style={styles.characterHeader}>
+                                    <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
+                                    <View style={styles.characterInfo}>
+                                        <Text style={styles.characterName}>{item.name}</Text>
+                                        <Text style={styles.characterText}>Espèce : {item.species}</Text>
+                                    </View>
+                                </View>
 
                                 {/* Stats du personnage */}
                                 <View style={styles.statsContainer}>
@@ -155,7 +216,6 @@ const UserCharactersScreen = () => {
             <TouchableOpacity style={styles.createButton} onPress={() => setModalVisible(true)}>
                 <Text style={styles.createButtonText}>Créer un personnage</Text>
             </TouchableOpacity>
-            
 
             {/* Modal de création de personnage */}
             <Modal visible={modalVisible} transparent animationType="slide">
@@ -168,22 +228,12 @@ const UserCharactersScreen = () => {
                             placeholderTextColor="rgba(255, 255, 255, 0.73)"
                             value={newCharacter.name}
                             onChangeText={(text) => setNewCharacter({ ...newCharacter, name: text })}
-                            
                         />
                         <Text style={styles.label}>Espèce :</Text>
-                        <Picker
-                            selectedValue={newCharacter.species}
-                            onValueChange={(itemValue) => setNewCharacter({ ...newCharacter, species: itemValue })}
-                            style={styles.picker}
-                            itemStyle={{ color: 'White' , fontFamily : 'Orbitron-Regular'}}
-                        >
-                            <Picker.Item label="Humain" value="humain" />
-                            <Picker.Item label="vulcain" value="vulcain" />
-                            <Picker.Item label="Cyborg" value="cyborg" />
-                            <Picker.Item label="Mutant" value="mutant" />
-                            <Picker.Item label="Alien" value="alien" />
-                            <Picker.Item label="Batman" value="batman" />
-                        </Picker>
+
+                        {/* Sélecteur d'espèce conditionnel */}
+                        {renderSpeciesSelector()}
+
                         <View style={styles.buttonRow}>
                             <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
                                 <Text style={styles.buttonText}>Annuler</Text>
@@ -214,7 +264,7 @@ const styles = StyleSheet.create({
         textShadowColor: "rgba(255, 147, 239, 0)",
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 17,
-        fontFamily : 'Orbitron-Bold',
+        fontFamily: "Orbitron-Bold",
     },
     emptyText: {
         textAlign: "center",
@@ -238,7 +288,7 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
     },
     characterName: {
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
         fontSize: 20,
         fontWeight: "bold",
         color: "rgb(255, 0, 230)",
@@ -247,7 +297,7 @@ const styles = StyleSheet.create({
     characterText: {
         color: "white",
         marginBottom: 10,
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
     },
 
     // Stats du personnage
@@ -265,20 +315,19 @@ const styles = StyleSheet.create({
     statItem: {
         color: "rgb(255, 255, 255)",
         marginVertical: 3,
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
         fontSize: 12,
-
     },
     scenarioText: {
         color: "rgb(255, 255, 0)",
         marginVertical: 5,
         fontWeight: "bold",
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
     },
 
     // Boutons génériques
     buttonText: {
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
         color: "white",
         fontWeight: "bold",
     },
@@ -290,7 +339,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         alignItems: "center",
-        
     },
     createButton: {
         backgroundColor: "rgba(52, 8, 69, 0.71)",
@@ -304,13 +352,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         shadowRadius: 5,
         borderWidth: 1,
-       
     },
     createButtonText: {
         color: "rgb(255, 255, 255)",
         fontSize: 18,
         fontWeight: "bold",
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
     },
 
     // Modal
@@ -327,6 +374,7 @@ const styles = StyleSheet.create({
         width: "85%",
         borderColor: "rgba(183, 45, 230, 0.6)",
         borderWidth: 1,
+        maxHeight: "80%",
     },
     modalTitle: {
         fontSize: 20,
@@ -334,18 +382,18 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: "center",
         color: "rgb(255, 255, 255)",
-        fontFamily : 'Orbitron-Bold',
+        fontFamily: "Orbitron-Bold",
     },
 
     // Formulaire
     label: {
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
         fontSize: 16,
         marginBottom: 8,
         color: "rgb(255, 255, 255)",
     },
     input: {
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
         borderWidth: 1,
         borderColor: "rgba(75, 23, 93, 0.51)",
         backgroundColor: "rgba(86, 23, 112, 0.76)",
@@ -353,10 +401,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 15,
         color: "rgb(255, 255, 255)",
-
     },
     picker: {
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
         borderRadius: 10,
         borderWidth: 0.5,
         borderColor: "rgba(75, 23, 93, 0.51)",
@@ -364,13 +411,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: "rgb(255, 255, 255)",
     },
-    
+
     // Layout boutons
     buttonRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 15,
-
     },
     cancelButton: {
         backgroundColor: "rgba(80, 80, 80, 0.8)",
@@ -379,7 +425,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         alignItems: "center",
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
     },
     confirmButton: {
         backgroundColor: "rgba(169, 40, 216, 0.65)",
@@ -388,31 +434,81 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         alignItems: "center",
-        fontFamily : 'Orbitron-Regular',
+        fontFamily: "Orbitron-Regular",
     },
     cardContent: {
         flex: 1,
     },
     Button2: {
-        position: 'absolute',
+        position: "absolute",
         top: 10,
         left: 11,
-        backgroundColor: 'rgb(255, 255, 255)',
+        backgroundColor: "rgb(255, 255, 255)",
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
-        shadowColor: 'rgba(225, 9, 207, 0.46)',
+        shadowColor: "rgba(225, 9, 207, 0.46)",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,
     },
 
     buttonText2: {
-        opacity : (0.8),
-        backgroundColor: 'rgba(255, 255, 255, 0)',
+        opacity: 0.8,
+        backgroundColor: "rgba(255, 255, 255, 0)",
         width: 30, // Largeur de l'image
         height: 30, // Hauteur de l'image
-        resizeMode: 'contain', // Garde les proportions
+        resizeMode: "contain", // Garde les proportions
+    },
+    characterHeader: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 10,
+    },
+    characterInfo: {
+        flex: 1,
+    },
+    raceEmoji: {
+        fontSize: 40,
+        marginRight: 15,
+    },
+
+    // Styles pour le sélecteur d'espèce alternatif (Android)
+    speciesScrollView: {
+        maxHeight: 200,
+        marginBottom: 15,
+    },
+    speciesGrid: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+    },
+    speciesButton: {
+        width: "48%",
+        backgroundColor: "rgba(60, 20, 80, 0.6)",
+        borderRadius: 10,
+        padding: 12,
+        marginBottom: 10,
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "rgba(115, 32, 143, 0.32)",
+    },
+    speciesButtonSelected: {
+        backgroundColor: "rgba(169, 40, 216, 0.65)",
+        borderColor: "rgba(255, 255, 255, 0.5)",
+    },
+    speciesEmoji: {
+        fontSize: 30,
+        marginBottom: 5,
+    },
+    speciesLabel: {
+        color: "white",
+        fontFamily: "Orbitron-Regular",
+        fontSize: 14,
+        textAlign: "center",
+    },
+    speciesLabelSelected: {
+        fontWeight: "bold",
     },
 })
 
