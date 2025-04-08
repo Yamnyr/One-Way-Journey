@@ -1,18 +1,41 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import axios from 'axios';  // Importer Axios
 
 const Connexion = ({ navigation }) => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState(''); // Utiliser username
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        if (!email || !password) {
+    const handleLogin = async () => {
+        if (!username || !password) {
             Alert.alert("Erreur", "Veuillez remplir tous les champs.");
             return;
         }
 
-        Alert.alert("Connexion réussie", `Bienvenue ${email} !`);
-        navigation.navigate('Accueil');
+        try {
+            // Remplace 'http://localhost:5000' par l'adresse IP de ton serveur si tu testes sur un appareil réel
+            const response = await axios.post('http://localhost:3000/users/login', {
+                username: username,  // Utilise le username
+                password: password
+            });
+
+            // Si la connexion est réussie, tu reçois un token dans la réponse
+            const { token, user } = response.data;
+
+            // Sauvegarder le token dans le stockage local ou un contexte global
+            // Par exemple : AsyncStorage.setItem('userToken', token);
+            Alert.alert("Connexion réussie", `Bienvenue ${user.username} !`);
+
+            // Naviguer vers l'écran Accueil
+            navigation.navigate('Accueil');
+        } catch (error) {
+            // Gérer les erreurs (exemple : utilisateur non trouvé, mauvais mot de passe)
+            if (error.response) {
+                Alert.alert("Erreur", error.response.data.error);
+            } else {
+                Alert.alert("Erreur", "Une erreur est survenue.");
+            }
+        }
     };
 
     return (
@@ -25,11 +48,10 @@ const Connexion = ({ navigation }) => {
 
             <TextInput
                 style={styles.input}
-                placeholder="Adresse email"
-                keyboardType="email-address"
+                placeholder="Nom d'utilisateur"  // Utiliser 'Nom d'utilisateur' au lieu de 'Email'
                 autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
+                value={username}  // Utiliser username
+                onChangeText={setUsername}
             />
 
             <TextInput

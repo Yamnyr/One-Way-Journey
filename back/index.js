@@ -6,10 +6,12 @@ const seedCharacters = require('./seeders/characterSeeder');
 const seedScenarios = require('./seeders/scenarioSeeder');
 const seedChoices = require('./seeders/choiceSeeder');
 const { verifyToken, verifyRole } = require('./middleware/authMiddleware'); // Import des middlewares
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 // Importation des routes
