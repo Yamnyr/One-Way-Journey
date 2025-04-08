@@ -15,10 +15,11 @@ const Choice = sequelize.define('Choice', {
     is_game_over: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, { timestamps: true });
 
-Scenario.hasMany(Choice, { foreignKey: 'scenarioId', onDelete: 'CASCADE' });
-Choice.belongsTo(Scenario, { foreignKey: 'scenarioId' });
+Scenario.hasMany(Choice, { as: 'choices', foreignKey: 'scenarioId', onDelete: 'CASCADE' });
+Choice.belongsTo(Scenario, { as: 'scenario', foreignKey: 'scenarioId' });
 
-Scenario.hasMany(Choice, { foreignKey: 'nextScenarioId', as: 'NextScenario' });
-Choice.belongsTo(Scenario, { foreignKey: 'nextScenarioId', as: 'NextScenario' });
+// For the nextScenario relationship
+Scenario.hasMany(Choice, { as: 'leadingChoices', foreignKey: 'nextScenarioId' });
+Choice.belongsTo(Scenario, { as: 'nextScenario', foreignKey: 'nextScenarioId' });
 
 module.exports = Choice;

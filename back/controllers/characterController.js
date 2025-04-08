@@ -81,3 +81,45 @@ exports.getUserCharacters = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur lors de la récupération des personnages.' });
     }
 };
+
+// 4️⃣ Mettre à jour un personnage
+exports.updateCharacter = async (req, res) => {
+    try {
+        const characterId = req.params.id;
+        const userId = req.user.id;
+        const { name, species, life, charisma, dexterity, intelligence, luck, currentScenarioId } = req.body;
+
+        // Chercher le personnage dans la base de données
+        const character = await Character.findOne({ where: { id: characterId } });
+
+        // Vérifier si le personnage existe
+        if (!character) {
+            return res.status(404).json({ message: 'Personnage non trouvé.' });
+        }
+
+        // Vérifier que l'utilisateur connecté est soit le propriétaire, soit un administrateur
+        if (character.userId !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Vous n\'avez pas la permission de modifier ce personnage.' });
+        }
+
+        // Mettre à jour les informations du personnage
+        character.name = name || character.name;
+        character.species = species || character.species;
+        character.life = life || character.life;
+        character.charisma = charisma || character.charisma;
+        character.dexterity = dexterity || character.dexterity;
+        character.intelligence = intelligence || character.intelligence;
+        character.luck = luck || character.luck;
+        character.currentScenarioId = currentScenarioId || character.currentScenarioId;
+
+        await character.save();
+
+        res.status(200).json({
+            message: 'Personnage mis à jour avec succès !',
+            character,
+        });
+    } catch (error) {
+        console.error('❌ Erreur lors de la mise à jour du personnage:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la mise à jour du personnage.' });
+    }
+};

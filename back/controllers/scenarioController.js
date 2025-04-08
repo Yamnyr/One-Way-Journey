@@ -22,7 +22,7 @@ exports.createScenario = async (req, res) => {
         // Créer les choix associés au scénario
         if (choices && choices.length > 0) {
             const choicePromises = choices.map(async (choice) => {
-                const { description, required_stat, required_value, result, next_scenario_id, effect_life, effect_charisma, effect_dexterity, effect_luck, is_game_over } = choice;
+                const { description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_luck, is_game_over } = choice;
 
                 await Choice.create({
                     scenarioId: scenario.id,
@@ -30,7 +30,7 @@ exports.createScenario = async (req, res) => {
                     required_stat,
                     required_value,
                     result,
-                    next_scenario_id,
+                    nextScenarioId,
                     effect_life,
                     effect_charisma,
                     effect_dexterity,
@@ -53,18 +53,18 @@ exports.createScenario = async (req, res) => {
     }
 };
 
-// 2️⃣ Récupérer un scénario avec tous ses choix
+// In scenarioController.js - getScenarioWithChoices method
 exports.getScenarioWithChoices = async (req, res) => {
     try {
         const scenarioId = req.params.id;
 
-        // Chercher le scénario avec son ID
+        // Now explicitly using the 'choices' alias
         const scenario = await Scenario.findOne({
             where: { id: scenarioId },
             include: [{
                 model: Choice,
-                as: 'choices',  // L'association entre Scenario et Choice
-                required: false  // Inclure les choix même si aucun choix n'existe
+                as: 'choices', // Now this matches the alias in the model
+                required: false
             }]
         });
 
