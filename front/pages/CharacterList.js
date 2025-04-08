@@ -10,6 +10,7 @@ import {
     ImageBackground,
     Modal,
     TextInput,
+    Image,
 } from "react-native"
 import { getUserCharacters, deleteCharacter, createCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -97,7 +98,16 @@ const UserCharactersScreen = () => {
 
     return (
         <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+            <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('Accueil')}>
+                <Image 
+                    source={require('../assets/arrowB.png')}
+                    style={styles.buttonText2}
+                />
+            </TouchableOpacity>
             <Text style={styles.title}>Mes Personnages</Text>
+
+            
+
             {characters.length === 0 ? (
                 <Text style={styles.emptyText}>Vous n'avez aucun personnage pour le moment.</Text>
             ) : (
@@ -145,6 +155,7 @@ const UserCharactersScreen = () => {
             <TouchableOpacity style={styles.createButton} onPress={() => setModalVisible(true)}>
                 <Text style={styles.createButtonText}>Créer un personnage</Text>
             </TouchableOpacity>
+            
 
             {/* Modal de création de personnage */}
             <Modal visible={modalVisible} transparent animationType="slide">
@@ -164,7 +175,7 @@ const UserCharactersScreen = () => {
                             selectedValue={newCharacter.species}
                             onValueChange={(itemValue) => setNewCharacter({ ...newCharacter, species: itemValue })}
                             style={styles.picker}
-                            itemStyle={{ color: 'White' , fontFamily : 'Orbitron'}}
+                            itemStyle={{ color: 'White' , fontFamily : 'Orbitron-Regular'}}
                         >
                             <Picker.Item label="Humain" value="humain" />
                             <Picker.Item label="vulcain" value="vulcain" />
@@ -203,7 +214,7 @@ const styles = StyleSheet.create({
         textShadowColor: "rgba(255, 147, 239, 0)",
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 17,
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Bold',
     },
     emptyText: {
         textAlign: "center",
@@ -227,7 +238,7 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
     },
     characterName: {
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
         fontSize: 20,
         fontWeight: "bold",
         color: "rgb(255, 0, 230)",
@@ -236,7 +247,7 @@ const styles = StyleSheet.create({
     characterText: {
         color: "white",
         marginBottom: 10,
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
     },
 
     // Stats du personnage
@@ -254,7 +265,7 @@ const styles = StyleSheet.create({
     statItem: {
         color: "rgb(255, 255, 255)",
         marginVertical: 3,
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
         fontSize: 12,
 
     },
@@ -262,12 +273,12 @@ const styles = StyleSheet.create({
         color: "rgb(255, 255, 0)",
         marginVertical: 5,
         fontWeight: "bold",
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
     },
 
     // Boutons génériques
     buttonText: {
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
         color: "white",
         fontWeight: "bold",
     },
@@ -299,7 +310,7 @@ const styles = StyleSheet.create({
         color: "rgb(255, 255, 255)",
         fontSize: 18,
         fontWeight: "bold",
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
     },
 
     // Modal
@@ -323,18 +334,18 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: "center",
         color: "rgb(255, 255, 255)",
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Bold',
     },
 
     // Formulaire
     label: {
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
         fontSize: 16,
         marginBottom: 8,
         color: "rgb(255, 255, 255)",
     },
     input: {
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
         borderWidth: 1,
         borderColor: "rgba(75, 23, 93, 0.51)",
         backgroundColor: "rgba(86, 23, 112, 0.76)",
@@ -345,7 +356,7 @@ const styles = StyleSheet.create({
 
     },
     picker: {
-        fontFamily : 'Orbitron',
+        fontFamily : 'Orbitron-Regular',
         borderRadius: 10,
         borderWidth: 0.5,
         borderColor: "rgba(75, 23, 93, 0.51)",
@@ -368,6 +379,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         alignItems: "center",
+        fontFamily : 'Orbitron-Regular',
     },
     confirmButton: {
         backgroundColor: "rgba(169, 40, 216, 0.65)",
@@ -376,9 +388,31 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         alignItems: "center",
+        fontFamily : 'Orbitron-Regular',
     },
     cardContent: {
         flex: 1,
+    },
+    Button2: {
+        position: 'absolute',
+        top: 10,
+        left: 11,
+        backgroundColor: 'rgb(255, 255, 255)',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        shadowColor: 'rgba(225, 9, 207, 0.46)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+    },
+
+    buttonText2: {
+        opacity : (0.8),
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        width: 30, // Largeur de l'image
+        height: 30, // Hauteur de l'image
+        resizeMode: 'contain', // Garde les proportions
     },
 })
 
