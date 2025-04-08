@@ -24,12 +24,19 @@ const Connexion = ({ navigation }) => {
             });
 
         } catch (error) {
-            if (error.response) {
-                Alert.alert("Erreur", error.response.data.error);
+            console.log("Erreur lors de la connexion :", error);
+        
+            if (error.code === 'ECONNABORTED') {
+                Alert.alert("Erreur", "Le serveur a mis trop de temps à répondre. Veuillez réessayer.");
+            } else if (error.response) {
+                Alert.alert("Erreur", error.response.data.error || "Erreur serveur.");
+            } else if (error.request) {
+                Alert.alert("Erreur", "Problème de connexion au serveur.");
             } else {
-                Alert.alert("Erreur", "Une erreur est survenue.");
+                Alert.alert("Erreur", "Une erreur inattendue est survenue.");
             }
         }
+        
     };
 
     return (
