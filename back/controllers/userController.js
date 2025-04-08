@@ -1,15 +1,5 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const db = require('../models');
-
-// Fonction pour générer un token JWT
-const generateToken = (user) => {
-    return jwt.sign(
-        { id: user.id, username: user.username, role: user.role },
-        process.env.SECRET_KEY,  // Utiliser une clé secrète dans .env
-        { expiresIn: '1h' }     // Expiration du token (1 heure par exemple)
-    );
-};
+const { User } = db;  // Import du modèle User
 
 // Inscription d'un utilisateur
 exports.createUser = async (req, res) => {
@@ -53,11 +43,45 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-// Récupérer tous les utilisateurs
+// Récupérer tous les utilisateurs (accessible uniquement par les administrateurs)
 exports.getAllUsers = async (req, res) => {
     try {
+        // Vérifier que l'utilisateur est un administrateur
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès interdit. Vous devez être un administrateur.' });
+        }
+
+        // Récupérer tous les utilisateurs
         const users = await db.User.findAll();
-        res.json(users);
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Supprimer un utilisateur (accessible uniquement par les administrateurs)
+exports.deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        // Vérifier que l'utilisateur est un administrateur
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès interdit. Vous devez être un administrateur.' });
+        }
+
+        // Chercher l'utilisateur dans la base de données
+        const user = await db.User.findOne({ where: { id: userId } });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        // Supprimer l'utilisateur
+        await user.destroy();
+
+        res.status(200).json({
+            message: 'Utilisateur supprimé avec succès !',
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
