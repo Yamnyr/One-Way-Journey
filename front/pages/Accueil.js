@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, ActivityIndi
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode'; // Assure-toi d’avoir fait npm install jwt-decode
 import * as Font from 'expo-font';
+import { logoutUser } from '../services/Auth'; // Si tu as un fichier service pour le logout
 
 const fetchFonts = async () => {
     await Font.loadAsync({
@@ -43,8 +44,12 @@ const Accueil = ({ navigation }) => {
         checkRole();
     }, []);
 
+    const handleLogout = async () => {
+        await logoutUser(); // Déconnexion
+        navigation.navigate('Connexion'); // Redirige vers la page de connexion après la déconnexion
+    };
+
     if (!fontsLoaded) {
-        // Affiche un indicateur de chargement pendant que les polices sont chargées
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#ffffff" />
@@ -58,6 +63,11 @@ const Accueil = ({ navigation }) => {
             style={styles.container}
             resizeMode="cover"
         >
+            {/* Bouton Logout en haut à droite */}
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+
             <Text style={styles.title}>One Way Journey</Text>
 
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Connexion')}>
@@ -100,7 +110,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, // Ajoute de l'espace latéral
         flexWrap: 'wrap', // Permet au texte de passer à la ligne si nécessaire
     },
-
     button: {
         backgroundColor: 'rgba(169, 40, 216, 0.65)',
         padding: 15,
@@ -118,5 +127,24 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
         fontFamily: 'Orbitron-Bold',
+    },
+    // Style pour le bouton Logout en haut à droite
+    logoutButton: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        shadowColor: 'rgba(194, 152, 187, 0.71)',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+    },
+    logoutButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 });
