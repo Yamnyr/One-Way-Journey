@@ -1,22 +1,27 @@
 const express = require('express');
-const db = require('./models'); // Importation de tous les modèles
+const bodyParser = require('body-parser');
+const db = require('./models'); // Import des modèles
 
 const app = express();
-const port = 3000;
+const port = 3333;
 
-// Synchronisation avec MySQL
-db.sequelize.sync({ force: true }) // Force la recréation de la base (à désactiver en prod)
-    .then(async () => {
-        console.log('✅ Base de données synchronisée');
-    })
-    .catch((error) => {
-        console.error('❌ Erreur de synchronisation de la base de données :', error);
-    });
+app.use(bodyParser.json());
 
-// Route de test
-app.get('/', (req, res) => {
-    res.send('Hello, Express with Sequelize!');
-});
+// Importation des routes
+const userRoutes = require('./routes/userRoutes');
+const characterRoutes = require('./routes/characterRoutes');
+const scenarioRoutes = require('./routes/scenarioRoutes');
+const choiceRoutes = require('./routes/choiceRoutes');
+
+app.use('/users', userRoutes);
+app.use('/characters', characterRoutes);
+app.use('/scenarios', scenarioRoutes);
+app.use('/choices', choiceRoutes);
+
+// Synchronisation de la base de données
+db.sequelize.sync({ force: true }) // ⚠️ Attention : force: true réinitialise la BDD à chaque lancement
+    .then(() => console.log('✅ Base de données synchronisée'))
+    .catch(error => console.error('❌ Erreur de synchronisation de la base de données:', error));
 
 app.listen(port, () => {
     console.log(`✅ Serveur démarré sur http://localhost:${port}`);
