@@ -1,34 +1,52 @@
 const db = require('../models');
 const { User, Character } = db;  // Import des modèles User et Character
 
-// 1️⃣ Créer un personnage
+// Définition des stats par race
+const raceStats = {
+    humain: { life: 100, charisma: 70, dexterity: 80, intelligence: 90, luck: 60 },
+    vulcain: { life: 110, charisma: 50, dexterity: 85, intelligence: 120, luck: 40 },
+    cyborg: { life: 150, charisma: 30, dexterity: 100, intelligence: 130, luck: 20 },
+    mutant: { life: 130, charisma: 40, dexterity: 90, intelligence: 70, luck: 80 },
+    alien: { life: 120, charisma: 60, dexterity: 95, intelligence: 110, luck: 50 },
+    batman: { life: 100, charisma: 85, dexterity: 110, intelligence: 140, luck: 70 }
+};
+
+// 🔹 Créer un personnage avec stats automatiques selon la race
 exports.createCharacter = async (req, res) => {
     try {
-        // Récupérer l'ID de l'utilisateur connecté (via le middleware)
         const userId = req.user.id;
-        const { name, species, life, charisma, dexterity, intelligence, luck } = req.body;
+        const { name, species } = req.body;
 
-        // Créer un personnage lié à l'utilisateur
+        // Vérifier si la race est valide
+        if (!raceStats[species]) {
+            return res.status(400).json({ message: "Race invalide. Choisissez parmi: humain, vulcain, cyborg, mutant, alien, batman." });
+        }
+
+        // Appliquer les stats en fonction de la race
+        const { life, charisma, dexterity, intelligence, luck } = raceStats[species];
+
+        // Créer le personnage
         const character = await Character.create({
-            userId: userId,
+            userId,
             name,
             species,
             life,
             charisma,
             dexterity,
             intelligence,
-            luck,
+            luck
         });
 
         res.status(201).json({
-            message: 'Personnage créé avec succès !',
-            character,
+            message: '✅ Personnage créé avec succès !',
+            character
         });
     } catch (error) {
         console.error('❌ Erreur lors de la création du personnage:', error);
         res.status(500).json({ message: 'Erreur serveur lors de la création du personnage.' });
     }
 };
+
 
 // 2️⃣ Supprimer un personnage
 exports.deleteCharacter = async (req, res) => {
