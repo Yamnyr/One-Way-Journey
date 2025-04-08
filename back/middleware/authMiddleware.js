@@ -19,14 +19,14 @@ exports.verifyToken = (req, res, next) => {
 };
 
 // Middleware pour vérifier le rôle de l'utilisateur
-exports.verifyRole = (roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
-            return res.status(403).json({ error: 'Accès interdit, rôle non autorisé' });
-        }
-        next();  // L'utilisateur a le bon rôle, on passe à la suite
-    };
-};
+// exports.verifyRole = (roles) => {
+//     return (req, res, next) => {
+//         if (!roles.includes(req.user.role)) {
+//             return res.status(403).json({ error: 'Accès interdit, rôle non autorisé' });
+//         }
+//         next();  // L'utilisateur a le bon rôle, on passe à la suite
+//     };
+// };
 
 exports.verifyAdmin = (req, res, next) => {
     if (req.user.role !== 'admin') {
