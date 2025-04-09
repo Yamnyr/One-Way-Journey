@@ -220,7 +220,7 @@ const UserCharactersScreen = () => {
 
                                 {/* Scénario actuel */}
                                 {item.currentScenarioId && (
-                                    <Text style={styles.scenarioText}>🎮 Scénario actuel : #{item.currentScenarioId}</Text>
+                                    <Text style={styles.scenarioText}>🎮 Scénario actuel : {item.Scenario.title}</Text>
                                 )}
                             </TouchableOpacity>
 
