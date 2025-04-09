@@ -127,3 +127,61 @@ exports.deleteScenario = async (req, res) => {
     }
 };
 
+// 4️⃣ Mettre à jour un scénario avec ses choix associés
+exports.updateScenario = async (req, res) => {
+    try {
+        const scenarioId = req.params.id;
+        const { title, description, type, is_final, choices } = req.body;
+
+        // Vérifier si le scénario existe
+        const scenario = await Scenario.findByPk(scenarioId);
+        if (!scenario) {
+            return res.status(404).json({ message: 'Scénario non trouvé.' });
+        }
+
+        // Mettre à jour le scénario
+        await scenario.update({
+            title,
+            description,
+            type,
+            is_final
+        });
+
+        // Supprimer les anciens choix associés (s'ils existent)
+        await Choice.destroy({ where: { scenarioId } });
+
+        // Ajouter les nouveaux choix associés (si fournis)
+        if (choices && choices.length > 0) {
+            const choicePromises = choices.map(async (choice) => {
+                const { description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_luck, is_game_over } = choice;
+
+                await Choice.create({
+                    scenarioId: scenario.id,
+                    description,
+                    required_stat,
+                    required_value,
+                    result,
+                    nextScenarioId,
+                    effect_life,
+                    effect_charisma,
+                    effect_dexterity,
+                    effect_luck,
+                    is_game_over,
+                });
+            });
+
+            // Attendre que tous les choix soient créés
+            await Promise.all(choicePromises);
+        }
+
+        res.status(200).json({
+            message: 'Scénario mis à jour avec succès !',
+            scenario,
+        });
+    } catch (error) {
+        console.error('❌ Erreur lors de la mise à jour du scénario:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la mise à jour du scénario.' });
+    }
+};
+
+

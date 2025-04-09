@@ -16,4 +16,7 @@ router.get('/', verifyToken, verifyAdmin, scenarioController.getAllScenarios);
 // 4️⃣ Route pour supprimer un scénario (seul un admin peut supprimer un scénario)
 router.delete('/:id', verifyToken, verifyAdmin, scenarioController.deleteScenario);
 
+// 5️⃣ Route pour mettre à jour un scénario (seul un admin peut mettre à jour un scénario)
+router.put('/:id', verifyToken, verifyAdmin, scenarioController.updateScenario);
+
 module.exports = router;
