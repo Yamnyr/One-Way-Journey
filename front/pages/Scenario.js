@@ -203,7 +203,7 @@ const ScenarioScreen = ({ route, navigation }) => {
             style={styles.container}
             resizeMode="cover"
         >
-            <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("Accueil")}>
+            <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("characters")}>
                 <Image source={require("../assets/arrowB.png")} style={styles.buttonText2} />
             </TouchableOpacity>
             {character && (

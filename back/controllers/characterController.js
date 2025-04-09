@@ -79,14 +79,20 @@ exports.deleteCharacter = async (req, res) => {
     }
 };
 
-// 3️⃣ Voir la liste des personnages de l'utilisateur connecté
+const Scenario = require('../models/Scenario');
+
 exports.getUserCharacters = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        // Chercher tous les personnages de l'utilisateur connecté
+        // Chercher tous les personnages de l'utilisateur avec leur scénario actuel
         const characters = await Character.findAll({
             where: { userId: userId },
+            include: {
+                model: Scenario,
+                as: 'Scenario', // Peut être nécessaire si l'alias est défini
+                attributes: ['id', 'title'], // Récupère uniquement l'id et le titre
+            },
         });
 
         if (characters.length === 0) {
