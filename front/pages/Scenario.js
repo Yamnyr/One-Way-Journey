@@ -1,17 +1,12 @@
+"use client"
+
 import { useEffect, useState } from "react"
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    ImageBackground,
-    ScrollView,
-    ActivityIndicator,
-    Alert,
-} from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView, ActivityIndicator } from "react-native"
 import { getScenarioById } from "../services/scenarioService"
 import { getCharacterById, updateCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import ResultModal from "../components/ResultModal"
+import GameOverScreen from "../components/GameOverScreen"
 
 const ScenarioScreen = ({ route, navigation }) => {
     const { scenarioId } = route.params
@@ -20,6 +15,12 @@ const ScenarioScreen = ({ route, navigation }) => {
     const [error, setError] = useState(null)
     const [character, setCharacter] = useState(null)
     const [characterId, setCharacterId] = useState(null)
+    const [resultModalVisible, setResultModalVisible] = useState(false)
+    const [currentResult, setCurrentResult] = useState("")
+    const [statChanges, setStatChanges] = useState([])
+    const [isGameOver, setIsGameOver] = useState(false)
+    const [nextScenarioId, setNextScenarioId] = useState(null)
+    const [showGameOverScreen, setShowGameOverScreen] = useState(false)
 
     useEffect(() => {
         fetchData()
@@ -49,6 +50,11 @@ const ScenarioScreen = ({ route, navigation }) => {
 
             const scenarioData = await getScenarioById(scenarioId, token)
             setScenario(scenarioData)
+
+            // Check if this is a final scenario (game over)
+            if (scenarioData.is_final) {
+                setShowGameOverScreen(true)
+            }
         } catch (err) {
             console.error("Erreur lors du chargement des données:", err)
             setError("Erreur lors du chargement des données.")
@@ -66,10 +72,10 @@ const ScenarioScreen = ({ route, navigation }) => {
 
     const handleChoiceSelection = async (choice) => {
         if (!checkStatRequirement(choice)) {
-            Alert.alert(
-                "Stat insuffisante",
-                `Vous avez besoin de ${choice.required_value} en ${choice.required_stat} pour cette action.`,
-            )
+            setCurrentResult(`Vous avez besoin de ${choice.required_value} en ${choice.required_stat} pour cette action.`)
+            setStatChanges([])
+            setIsGameOver(false)
+            setResultModalVisible(true)
             return
         }
 
@@ -78,12 +84,29 @@ const ScenarioScreen = ({ route, navigation }) => {
 
             if (character) {
                 const updatedStats = { ...character }
+                const changes = []
 
-                updatedStats.life += choice.effect_life || 0
-                updatedStats.charisma += choice.effect_charisma || 0
-                updatedStats.dexterity += choice.effect_dexterity || 0
-                updatedStats.intelligence += choice.effect_intelligence || 0
-                updatedStats.luck += choice.effect_luck || 0
+                // Collect stat changes for display
+                if (choice.effect_life) {
+                    updatedStats.life += choice.effect_life
+                    changes.push({ stat: "life", value: choice.effect_life, icon: "❤️" })
+                }
+                if (choice.effect_charisma) {
+                    updatedStats.charisma += choice.effect_charisma
+                    changes.push({ stat: "charisma", value: choice.effect_charisma, icon: "✨" })
+                }
+                if (choice.effect_dexterity) {
+                    updatedStats.dexterity += choice.effect_dexterity
+                    changes.push({ stat: "dexterity", value: choice.effect_dexterity, icon: "🏃" })
+                }
+                if (choice.effect_intelligence) {
+                    updatedStats.intelligence += choice.effect_intelligence
+                    changes.push({ stat: "intelligence", value: choice.effect_intelligence, icon: "🧠" })
+                }
+                if (choice.effect_luck) {
+                    updatedStats.luck += choice.effect_luck
+                    changes.push({ stat: "luck", value: choice.effect_luck, icon: "🍀" })
+                }
 
                 updatedStats.currentScenarioId = choice.is_game_over ? null : choice.nextScenarioId
 
@@ -93,28 +116,34 @@ const ScenarioScreen = ({ route, navigation }) => {
 
                 await updateCharacter(characterId, updatedStats, token)
                 setCharacter(updatedStats)
-            }
 
-            Alert.alert("Résultat", choice.result, [
-                {
-                    text: "Continuer",
-                    onPress: () => {
-                        if (choice.is_game_over) {
-                            Alert.alert("Game Over", "Votre aventure s'arrête ici.", [
-                                { text: "Retour", onPress: () => navigation.navigate("characters")},
-                            ])
-                        } else if (choice.nextScenarioId) {
-                            navigation.replace("Scenario", { scenarioId: choice.nextScenarioId })
-                        } else {
-                            navigation.goBack()
-                        }
-                    },
-                },
-            ])
+                // Set up the result modal
+                setCurrentResult(choice.result)
+                setStatChanges(changes)
+                setIsGameOver(choice.is_game_over)
+                setNextScenarioId(choice.nextScenarioId)
+                setResultModalVisible(true)
+            }
         } catch (error) {
             console.error("Erreur lors de la mise à jour du personnage:", error)
-            Alert.alert("Erreur", "Impossible de mettre à jour le personnage.")
+            setCurrentResult("Impossible de mettre à jour le personnage.")
+            setStatChanges([])
+            setResultModalVisible(true)
         }
+    }
+
+    const handleContinue = () => {
+        setResultModalVisible(false)
+
+        if (isGameOver) {
+            navigation.navigate("characters")
+        } else if (nextScenarioId) {
+            navigation.replace("Scenario", { scenarioId: nextScenarioId })
+        }
+    }
+
+    const handleReturnFromGameOver = () => {
+        navigation.navigate("characters")
     }
 
     if (loading) {
@@ -133,6 +162,15 @@ const ScenarioScreen = ({ route, navigation }) => {
                     <Text style={styles.buttonText}>Retour</Text>
                 </TouchableOpacity>
             </ImageBackground>
+        )
+    }
+
+    if (showGameOverScreen) {
+        return (
+            <GameOverScreen
+                message={scenario.description || "Votre aventure s'arrête ici."}
+                onReturn={handleReturnFromGameOver}
+            />
         )
     }
 
@@ -195,6 +233,14 @@ const ScenarioScreen = ({ route, navigation }) => {
                 <Text style={styles.buttonText}>Retour</Text>
             </TouchableOpacity>
 
+            {/* Result Modal */}
+            <ResultModal
+                visible={resultModalVisible}
+                result={currentResult}
+                statChanges={statChanges}
+                isGameOver={isGameOver}
+                onContinue={handleContinue}
+            />
         </ImageBackground>
     )
 }
