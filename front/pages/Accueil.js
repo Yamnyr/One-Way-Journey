@@ -109,19 +109,19 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        color: 'rgb(183, 45, 230)',
+        color: 'rgb(219, 4, 198)',
         fontSize: 34,
         textAlign: 'center',
         marginBottom: 40,
         fontFamily: 'SixtyfourConvergence',
-        textShadowColor: 'rgba(255, 147, 239, 0.65)',
+        textShadowColor: 'rgba(175, 132, 168, 0.65)',
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 17,
         paddingHorizontal: 20, // Ajoute de l'espace latéral
         flexWrap: 'wrap', // Permet au texte de passer à la ligne si nécessaire
     },
     button: {
-        backgroundColor: 'rgba(169, 40, 216, 0.65)',
+        backgroundColor: 'rgba(218, 9, 218, 0.65)',
         padding: 15,
         borderRadius: 15,
         width: '80%',
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
-        shadowColor: 'rgba(225, 9, 207, 0.46)',
+        shadowColor: 'rgba(202, 14, 187, 0.46)',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,
