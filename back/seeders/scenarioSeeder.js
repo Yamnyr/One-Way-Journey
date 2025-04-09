@@ -4,7 +4,7 @@ const db = require('../models');
 const scenarios = [
     {
         title: 'Le réveil dans la station spatiale',
-        description: 'Tu te réveilles dans une station spatiale abandonnée. Une alarme retentit. Que veux-tu faire ?',
+        description: 'Tu te réveilles dans une station spatiale abandonnée. Une alarme retentit.',
         type: 'choice',
         is_final: false,
     },
@@ -22,7 +22,7 @@ const scenarios = [
     },
     {
         title: 'La station explose',
-        description: 'Un signal étrange provenant de l\'intérieur du vaisseau te parvient. Tu décodes un message crypté. Que fais-tu ?',
+        description: 'La Station explose tu es mort !',
         type: 'destiny',
         is_final: true,
     },
@@ -171,13 +171,13 @@ const scenarios = [
     },
     {
         title: 'La planète morte',
-        description: 'Tu explores une planète morte où aucune vie n\'a survécu. Mais quelque chose semble encore bouger dans l\'ombre...',
+        description: ' Tu explores une planète morte où aucune vie n\'a survécu. Mais quelque chose semble encore bouger dans l\'ombre...',
         type: 'choice',
         is_final: false,
     },
     {
         title: 'La planète morte.',
-        description: 'Tu explores une planète morte où aucune vie n\'a survécu. Mais quelque chose semble encore bouger dans l\'ombre...',
+        description: '. Tu explores une planète morte où aucune vie n\'a survécu. Mais quelque chose semble encore bouger dans l\'ombre...',
         type: 'choice',
         is_final: false,
     },

@@ -191,9 +191,11 @@ const ScenarioScreen = ({ route, navigation }) => {
             <GameOverScreen
                 message={scenario.description || "Votre aventure s'arrête ici."}
                 onReturn={handleReturnFromGameOver}
+                isSuccess={character?.life > 0}
             />
         )
     }
+
 
     return (
         // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
@@ -214,7 +216,7 @@ const ScenarioScreen = ({ route, navigation }) => {
                             <Text style={styles.statBadge}>🏃 Dextérité: {character.dexterity}</Text>
                         </View>
                         <View style={styles.statsColumn}>
-                            <Text style={styles.statBadge}>🧠 Intelligence: {character.intelligence}</Text>
+                            <Text style={styles.statBadge}>🧠 Intellect: {character.intelligence}</Text>
                             <Text style={styles.statBadge}>🍀 Chance: {character.luck}</Text>
                             <Text style={styles.statBadge}>{character.is_alive ? "✅ En vie" : "☠️ Mort"}</Text>
                         </View>
@@ -288,6 +290,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: "center",
         marginTop: 50,
+        fontFamily: 'Orbitron-Regular',
     },
     characterStatsContainer: {
         backgroundColor: "rgba(30, 15, 40, 0.85)",
@@ -296,11 +299,12 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
+        fontFamily: 'Orbitron-Regular',
     },
     characterName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 5,
         textAlign: "center",
     },
@@ -321,6 +325,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 5,
         marginHorizontal: 2,
+        fontFamily: 'Orbitron-Regular',
     },
     scenarioContainer: {
         backgroundColor: "rgba(30, 15, 40, 0.85)",
@@ -333,11 +338,13 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.8,
         shadowRadius: 8,
+        fontFamily: 'Orbitron-Regular',
     },
     title: {
+        fontFamily: 'Orbitron-Regular',
         fontSize: 24,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 15,
         textAlign: "center",
         textShadowColor: "rgba(183, 45, 230, 0.65)",
@@ -345,7 +352,8 @@ const styles = StyleSheet.create({
         textShadowRadius: 10,
     },
     description: {
-        fontSize: 18,
+        fontFamily: 'Orbitron-Regular',
+        fontSize: 15,
         color: "white",
         marginBottom: 20,
         lineHeight: 24,
@@ -354,9 +362,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     choicesTitle: {
-        fontSize: 20,
+        fontFamily: 'Orbitron-Regular',
+        fontSize: 18,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 15,
     },
     choiceButton: {
@@ -372,13 +381,16 @@ const styles = StyleSheet.create({
         borderColor: "rgba(183, 45, 230, 0.1)",
     },
     choiceText: {
+        fontFamily: 'Orbitron-Regular',
         color: "white",
         fontSize: 16,
     },
     disabledChoiceText: {
+        fontFamily: 'Orbitron-Regular',
         color: "rgba(255, 255, 255, 0.5)",
     },
     requirementText: {
+        fontFamily: 'Orbitron-Regular',
         color: "rgba(223, 182, 219, 0.7)",
         fontSize: 14,
         marginTop: 5,
@@ -399,6 +411,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
     },
     buttonText: {
+        fontFamily: 'Orbitron-Regular',
         color: "white",
         fontWeight: "bold",
         fontSize: 16,
@@ -409,6 +422,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     buttonText2: {
+        fontFamily: 'Orbitron-Regular',
         opacity: 0.8,
         backgroundColor: "rgba(255, 255, 255, 0)",
         width: 30,

@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        color: "rgb(255, 0, 225)",
+        color: 'rgb(219, 4, 198)',
         fontSize: 27,
         textAlign: "center",
         marginVertical: 20,
@@ -752,7 +752,7 @@ const styles = StyleSheet.create({
         fontFamily: "Orbitron-Regular",
         fontSize: 20,
         fontWeight: "bold",
-        color: "rgb(255, 0, 230)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 5,
     },
     metaInfoContainer: {

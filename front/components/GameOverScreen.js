@@ -1,18 +1,25 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 
-const GameOverScreen = ({ message, onReturn }) => {
+const GameOverScreen = ({ message, onReturn, isSuccess }) => {
+
     return (
-        <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <View style={styles.content}>
-                <Text style={styles.gameOverTitle}>GAME OVER</Text>
+                <Text style={[styles.gameOverTitle, isSuccess ? styles.congratsTitle : styles.gameOverText]}>
+                    {isSuccess ? "CONGRATS" : "GAME OVER"}
+                </Text>
+
                 <Text style={styles.message}>{message}</Text>
 
                 <TouchableOpacity style={styles.returnButton} onPress={onReturn}>
                     <Text style={styles.buttonText}>Retour aux personnages</Text>
                 </TouchableOpacity>
             </View>
-        </ImageBackground>
+        </View>
     );
 };
 
@@ -63,6 +70,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "Orbitron-Regular",
     },
+    gameOverText: {
+        color: "rgb(255, 0, 0)",
+        textShadowColor: "rgba(255, 0, 0, 0.5)",
+    },
+    congratsTitle: {
+        color: "rgb(0, 255, 0)",
+        textShadowColor: "rgba(0, 255, 0, 0.5)",
+    },
+
 });
 
 export default GameOverScreen;

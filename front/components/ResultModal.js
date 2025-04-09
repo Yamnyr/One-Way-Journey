@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     resultTitle: {
         fontSize: 24,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 20,
         textAlign: "center",
         fontFamily: "Orbitron-Bold",
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     statsTitle: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 10,
         fontFamily: "Orbitron-Regular",
     },
