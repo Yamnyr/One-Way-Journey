@@ -28,3 +28,12 @@ export const deleteScenario = async (token, scenarioId) => {
     });
     return response.data;
 }
+
+export const updateScenario = async (token, scenarioId, scenarioData) => {
+    const response = await axios.put(`${API_URL}/scenarios/${scenarioId}`, scenarioData, {
+        headers: {
+            Authorization: `Bearer ${token}`, // Envoi du token dans le header
+        }
+    });
+    return response.data;
+};

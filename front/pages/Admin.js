@@ -3,7 +3,6 @@ import {
     View,
     Text,
     StyleSheet,
-    ImageBackground,
     TouchableOpacity,
     FlatList,
     ActivityIndicator,
@@ -13,7 +12,7 @@ import {
     ScrollView,
     TextInput,
 } from 'react-native'
-import { getAllScenarios, createScenario, deleteScenario } from '../services/adminService'
+import { getAllScenarios, createScenario, deleteScenario, updateScenario } from '../services/adminService'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Picker } from '@react-native-picker/picker'
@@ -31,6 +30,14 @@ const Admin = () => {
         choices: [],
         is_final: false
     })
+    const [updateScenarioData, setUpdateScenarioData] = useState({
+        title: '',
+        description: '',
+        type: '',
+        is_final: false,
+        choices: []
+    });
+    const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
 
 
     useEffect(() => {
@@ -111,6 +118,33 @@ const Admin = () => {
         updatedChoices.splice(index, 1)
         setNewScenario({ ...newScenario, choices: updatedChoices })
     }
+
+    const handleUpdateScenario = (scenario) => {
+        setUpdateScenarioData(scenario)
+        setUpdateModalVisible(true)
+    }
+
+    const handleUpdateScenarioSave = async () => {
+        try {
+            const token = await AsyncStorage.getItem("userToken")
+            if (!token) {
+                setError("Token non trouvé. Veuillez vous reconnecter.")
+                setLoading(false)
+                return
+            }
+            const response = await updateScenario(token, updateScenarioData.id, updateScenarioData);
+            const updatedScenarios = scenarios.map(scenario =>
+                scenario.id === updateScenarioData.id ? { ...scenario, ...updateScenarioData } : scenario
+            );
+
+            setScenarios(updatedScenarios);
+            setUpdateModalVisible(false);
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du scénario:', error);
+            setError('Une erreur est survenue lors de la mise à jour du scénario.');
+        }
+    };
+
 
     const handleBack = () => {
         navigation.navigate("Accueil")
@@ -199,7 +233,7 @@ const Admin = () => {
                 <View style={styles.buttonRow}>
                     <TouchableOpacity
                         style={styles.editButton}
-                        onPress={() => Alert.alert("Info", "Édition du scénario à venir")}>
+                        onPress={() => handleUpdateScenario(item)}>
                         <Text style={styles.buttonText}>Modifier</Text>
                     </TouchableOpacity>
 
@@ -214,19 +248,15 @@ const Admin = () => {
     }
 
     if (loading) return (
-        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
-
         <View
             style={styles.container}
             resizeMode="cover"
         >
             <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
-            {/*</ImageBackground>*/}
         </View>
     )
 
     return (
-        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
         <View
             style={styles.container}
             resizeMode="cover"
@@ -262,235 +292,388 @@ const Admin = () => {
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', padding: 20 }}>
-                    <ScrollView style={{ backgroundColor: '#fff', borderRadius: 10, padding: 20 }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Créer un scénario</Text>
-
-                        <TextInput
-                            placeholder="Titre"
-                            value={newScenario.title}
-                            onChangeText={(text) => setNewScenario({ ...newScenario, title: text })}
-                            style={{ borderBottomWidth: 1, marginBottom: 10 }}
-                        />
-
-                        <TextInput
-                            placeholder="Description"
-                            multiline
-                            value={newScenario.description}
-                            onChangeText={(text) => setNewScenario({ ...newScenario, description: text })}
-                            style={{ borderBottomWidth: 1, marginBottom: 10 }}
-                        />
-
-                        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-                            <Text style={{ marginRight: 10 }}>Scénario final :</Text>
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Créer un scénario</Text>
                             <TouchableOpacity
-                                onPress={() => setNewScenario({ ...newScenario, is_final: !newScenario.is_final })}
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                    borderWidth: 1,
-                                    borderColor: '#333',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    backgroundColor: newScenario.is_final ? '#6200ee' : 'transparent',
-                                    borderRadius: 4
-                                }}
+                                onPress={() => setModalVisible(false)}
+                                style={styles.closeButton}
                             >
-                                {newScenario.is_final && <Text style={{ color: 'white' }}>✓</Text>}
+                                <Text style={styles.closeButtonText}>✕</Text>
                             </TouchableOpacity>
                         </View>
 
-                        <Text style={{ marginBottom: 10 }}>Type :</Text>
-                        <Picker
-                            selectedValue={newScenario.type}
-                            onValueChange={(itemValue) => setNewScenario({ ...newScenario, type: itemValue })}
-                            style={{ marginBottom: 10 }}
-                        >
-                            <Picker.Item label="Destiny" value="destiny" />
-                            <Picker.Item label="Choice" value="choice" />
-
-                        </Picker>
-
-                        {/* Affichage conditionnel de la section "Ajouter un choix" */}
-                        {newScenario.type === "choice" && (
-                            <TouchableOpacity
-                                onPress={addChoice}
-                                style={{
-                                    backgroundColor: '#ccc',
-                                    padding: 10,
-                                    marginVertical: 10,
-                                    borderRadius: 10
-                                }}
-                            >
-                                <Text>➕ Ajouter un choix</Text>
-                            </TouchableOpacity>
-                        )}
-
-                        {newScenario.choices.map((choice, idx) => (
-                            <View key={idx} style={{ marginBottom: 15, borderBottomWidth: 1, paddingBottom: 10 }}>
-                                <Text style={{ fontWeight: 'bold' }}>Choix {idx + 1}</Text>
+                        <ScrollView style={styles.modalScrollView}>
+                            <View style={styles.formGroup}>
+                                <Text style={styles.formLabel}>Titre</Text>
                                 <TextInput
-                                    placeholder="Description"
-                                    value={choice.description}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].description = text
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                    placeholder="Entrez le titre du scénario"
+                                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                    value={newScenario.title}
+                                    onChangeText={(text) => setNewScenario({ ...newScenario, title: text })}
+                                    style={styles.formInput}
                                 />
-                                <TextInput
-                                    placeholder="Stat requise (ex: charisma, dexterity)"
-                                    value={choice.required_stat}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].required_stat = text
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
+                            </View>
 
+                            <View style={styles.formGroup}>
+                                <Text style={styles.formLabel}>Description</Text>
                                 <TextInput
-                                    placeholder="Valeur requise"
-                                    keyboardType="numeric"
-                                    value={choice.required_value?.toString()}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].required_value = text
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                    placeholder="Décrivez votre scénario"
+                                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                    multiline
+                                    numberOfLines={4}
+                                    value={newScenario.description}
+                                    onChangeText={(text) => setNewScenario({ ...newScenario, description: text })}
+                                    style={[styles.formInput, styles.textArea]}
                                 />
+                            </View>
 
-                                <TextInput
-                                    placeholder="Résultat affiché"
-                                    value={choice.result}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].result = text
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
-
-                                <TextInput
-                                    placeholder="Effet sur la vie (ex: -10, +5)"
-                                    keyboardType="numeric"
-                                    value={choice.effect_life?.toString()}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].effect_life = Number(text)
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
-
-                                <TextInput
-                                    placeholder="Effet sur le charisme"
-                                    keyboardType="numeric"
-                                    value={choice.effect_charisma?.toString()}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].effect_charisma = Number(text)
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
-
-                                <TextInput
-                                    placeholder="Effet sur la dextérité"
-                                    keyboardType="numeric"
-                                    value={choice.effect_dexterity?.toString()}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].effect_dexterity = Number(text)
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
-
-                                <TextInput
-                                    placeholder="Effet sur la chance"
-                                    keyboardType="numeric"
-                                    value={choice.effect_luck?.toString()}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].effect_luck = Number(text)
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
-                                    <Text style={{ marginRight: 10 }}>Fin de partie ?</Text>
+                            <View style={styles.formGroup}>
+                                <View style={styles.checkboxContainer}>
+                                    <Text style={styles.formLabel}>Scénario final</Text>
                                     <TouchableOpacity
-                                        onPress={() => {
-                                            const updated = [...newScenario.choices]
-                                            updated[idx].is_game_over = !updated[idx].is_game_over
-                                            setNewScenario({ ...newScenario, choices: updated })
-                                        }}
-                                        style={{
-                                            width: 24,
-                                            height: 24,
-                                            borderWidth: 1,
-                                            borderColor: '#333',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            backgroundColor: choice.is_game_over ? 'red' : 'transparent',
-                                            borderRadius: 4
-                                        }}
+                                        onPress={() => setNewScenario({ ...newScenario, is_final: !newScenario.is_final })}
+                                        style={[
+                                            styles.checkbox,
+                                            newScenario.is_final && styles.checkboxChecked
+                                        ]}
                                     >
-                                        {choice.is_game_over && <Text style={{ color: 'white' }}>✓</Text>}
+                                        {newScenario.is_final && <Text style={styles.checkboxMark}>✓</Text>}
                                     </TouchableOpacity>
                                 </View>
-
-                                <TextInput
-                                    placeholder="ID du prochain scénario"
-                                    keyboardType="numeric"
-                                    value={choice.nextScenarioId?.toString()}
-                                    onChangeText={(text) => {
-                                        const updated = [...newScenario.choices]
-                                        updated[idx].nextScenarioId = text ? Number(text) : null
-                                        setNewScenario({ ...newScenario, choices: updated })
-                                    }}
-                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
-                                />
-
-                                <TouchableOpacity
-                                    onPress={() => removeChoice(idx)}
-                                    style={{
-                                        backgroundColor: '#cc0000',
-                                        padding: 8,
-                                        borderRadius: 6,
-                                        marginTop: 10,
-                                        alignSelf: 'flex-start'
-                                    }}
-                                >
-                                    <Text style={{ color: 'white' }}>🗑️ Supprimer ce choix</Text>
-                                </TouchableOpacity>
-
                             </View>
-                        ))}
-                    </ScrollView>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                        <TouchableOpacity
-                            onPress={() => setModalVisible(false)}
-                            style={{ backgroundColor: '#888', padding: 10, borderRadius: 10 }}
-                        >
-                            <Text style={{ color: '#fff' }}>Annuler</Text>
-                        </TouchableOpacity>
+                            <View style={styles.formGroup}>
+                                <Text style={styles.formLabel}>Type</Text>
+                                <View style={styles.pickerContainer}>
+                                    <Picker
+                                        selectedValue={newScenario.type}
+                                        onValueChange={(itemValue) => setNewScenario({ ...newScenario, type: itemValue })}
+                                        style={styles.picker}
+                                        dropdownIconColor="rgb(255, 0, 225)"
+                                    >
+                                        <Picker.Item label="Sélectionnez un type" value="" />
+                                        <Picker.Item label="Destiny" value="destiny" />
+                                        <Picker.Item label="Choice" value="choice" />
+                                    </Picker>
+                                </View>
+                            </View>
 
-                        <TouchableOpacity
-                            onPress={handleCreateScenario}
-                            style={{ backgroundColor: '#008000', padding: 10, borderRadius: 10 }}
-                        >
-                            <Text style={{ color: '#fff' }}>Créer</Text>
-                        </TouchableOpacity>
+                            {/* Affichage conditionnel de la section "Ajouter un choix" */}
+                            {newScenario.type === "choice" && (
+                                <TouchableOpacity
+                                    onPress={addChoice}
+                                    style={styles.addChoiceButton}
+                                >
+                                    <Text style={styles.addChoiceButtonText}>➕ Ajouter un choix</Text>
+                                </TouchableOpacity>
+                            )}
+
+                            {newScenario.choices.map((choice, idx) => (
+                                <View key={idx} style={styles.choiceFormContainer}>
+                                    <View style={styles.choiceFormHeader}>
+                                        <Text style={styles.choiceFormTitle}>Choix {idx + 1}</Text>
+                                        <TouchableOpacity
+                                            onPress={() => removeChoice(idx)}
+                                            style={styles.removeChoiceButton}
+                                        >
+                                            <Text style={styles.removeChoiceButtonText}>🗑️</Text>
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={styles.formGroup}>
+                                        <Text style={styles.formLabel}>Description</Text>
+                                        <TextInput
+                                            placeholder="Description du choix"
+                                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                            value={choice.description}
+                                            onChangeText={(text) => {
+                                                const updated = [...newScenario.choices]
+                                                updated[idx].description = text
+                                                setNewScenario({ ...newScenario, choices: updated })
+                                            }}
+                                            style={styles.formInput}
+                                        />
+                                    </View>
+
+                                    <View style={styles.formGroup}>
+                                        <Text style={styles.formLabel}>Stat requise</Text>
+                                        <TextInput
+                                            placeholder="Ex: charisma, dexterity"
+                                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                            value={choice.required_stat}
+                                            onChangeText={(text) => {
+                                                const updated = [...newScenario.choices]
+                                                updated[idx].required_stat = text
+                                                setNewScenario({ ...newScenario, choices: updated })
+                                            }}
+                                            style={styles.formInput}
+                                        />
+                                    </View>
+
+                                    <View style={styles.formGroup}>
+                                        <Text style={styles.formLabel}>Valeur requise</Text>
+                                        <TextInput
+                                            placeholder="Valeur minimale requise"
+                                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                            keyboardType="numeric"
+                                            value={choice.required_value?.toString()}
+                                            onChangeText={(text) => {
+                                                const updated = [...newScenario.choices]
+                                                updated[idx].required_value = text
+                                                setNewScenario({ ...newScenario, choices: updated })
+                                            }}
+                                            style={styles.formInput}
+                                        />
+                                    </View>
+
+                                    <View style={styles.formGroup}>
+                                        <Text style={styles.formLabel}>Résultat affiché</Text>
+                                        <TextInput
+                                            placeholder="Texte affiché après le choix"
+                                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                            value={choice.result}
+                                            onChangeText={(text) => {
+                                                const updated = [...newScenario.choices]
+                                                updated[idx].result = text
+                                                setNewScenario({ ...newScenario, choices: updated })
+                                            }}
+                                            style={styles.formInput}
+                                        />
+                                    </View>
+
+                                    <Text style={styles.effectsGroupTitle}>Effets sur les statistiques</Text>
+
+                                    <View style={styles.statsGrid}>
+                                        <View style={styles.statItem}>
+                                            <Text style={styles.statLabel}>❤️ Vie</Text>
+                                            <TextInput
+                                                placeholder="+/-"
+                                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                                keyboardType="numeric"
+                                                value={choice.effect_life?.toString()}
+                                                onChangeText={(text) => {
+                                                    const updated = [...newScenario.choices]
+                                                    updated[idx].effect_life = Number(text)
+                                                    setNewScenario({ ...newScenario, choices: updated })
+                                                }}
+                                                style={styles.statInput}
+                                            />
+                                        </View>
+
+                                        <View style={styles.statItem}>
+                                            <Text style={styles.statLabel}>✨ Charisme</Text>
+                                            <TextInput
+                                                placeholder="+/-"
+                                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                                keyboardType="numeric"
+                                                value={choice.effect_charisma?.toString()}
+                                                onChangeText={(text) => {
+                                                    const updated = [...newScenario.choices]
+                                                    updated[idx].effect_charisma = Number(text)
+                                                    setNewScenario({ ...newScenario, choices: updated })
+                                                }}
+                                                style={styles.statInput}
+                                            />
+                                        </View>
+
+                                        <View style={styles.statItem}>
+                                            <Text style={styles.statLabel}>🏃 Dextérité</Text>
+                                            <TextInput
+                                                placeholder="+/-"
+                                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                                keyboardType="numeric"
+                                                value={choice.effect_dexterity?.toString()}
+                                                onChangeText={(text) => {
+                                                    const updated = [...newScenario.choices]
+                                                    updated[idx].effect_dexterity = Number(text)
+                                                    setNewScenario({ ...newScenario, choices: updated })
+                                                }}
+                                                style={styles.statInput}
+                                            />
+                                        </View>
+
+                                        <View style={styles.statItem}>
+                                            <Text style={styles.statLabel}>🍀 Chance</Text>
+                                            <TextInput
+                                                placeholder="+/-"
+                                                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                                keyboardType="numeric"
+                                                value={choice.effect_luck?.toString()}
+                                                onChangeText={(text) => {
+                                                    const updated = [...newScenario.choices]
+                                                    updated[idx].effect_luck = Number(text)
+                                                    setNewScenario({ ...newScenario, choices: updated })
+                                                }}
+                                                style={styles.statInput}
+                                            />
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.formGroup}>
+                                        <View style={styles.checkboxContainer}>
+                                            <Text style={styles.formLabel}>Fin de partie</Text>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    const updated = [...newScenario.choices]
+                                                    updated[idx].is_game_over = !updated[idx].is_game_over
+                                                    setNewScenario({ ...newScenario, choices: updated })
+                                                }}
+                                                style={[
+                                                    styles.checkbox,
+                                                    choice.is_game_over && styles.checkboxGameOver
+                                                ]}
+                                            >
+                                                {choice.is_game_over && <Text style={styles.checkboxMark}>✓</Text>}
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.formGroup}>
+                                        <Text style={styles.formLabel}>ID du prochain scénario</Text>
+                                        <TextInput
+                                            placeholder="Laissez vide si fin de partie"
+                                            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                            keyboardType="numeric"
+                                            value={choice.nextScenarioId?.toString()}
+                                            onChangeText={(text) => {
+                                                const updated = [...newScenario.choices]
+                                                updated[idx].nextScenarioId = text ? Number(text) : null
+                                                setNewScenario({ ...newScenario, choices: updated })
+                                            }}
+                                            style={styles.formInput}
+                                        />
+                                    </View>
+                                </View>
+                            ))}
+                        </ScrollView>
+
+                        <View style={styles.modalFooter}>
+                            <TouchableOpacity
+                                onPress={() => setModalVisible(false)}
+                                style={styles.cancelButton}
+                            >
+                                <Text style={styles.cancelButtonText}>Annuler</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={handleCreateScenario}
+                                style={styles.saveButton}
+                            >
+                                <Text style={styles.saveButtonText}>Créer</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </Modal>
-            {/*</ImageBackground>*/}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isUpdateModalVisible}
+                onRequestClose={() => setUpdateModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Mettre à jour le scénario</Text>
+                            <TouchableOpacity
+                                onPress={() => setUpdateModalVisible(false)}
+                                style={styles.closeButton}
+                            >
+                                <Text style={styles.closeButtonText}>✕</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <ScrollView style={styles.modalScrollView}>
+                            <View style={styles.formGroup}>
+                                <Text style={styles.formLabel}>Titre</Text>
+                                <TextInput
+                                    placeholder="Entrez le titre du scénario"
+                                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                    value={updateScenarioData.title}
+                                    onChangeText={(text) => setUpdateScenarioData({ ...updateScenarioData, title: text })}
+                                    style={styles.formInput}
+                                />
+                            </View>
+
+                            <View style={styles.formGroup}>
+                                <Text style={styles.formLabel}>Description</Text>
+                                <TextInput
+                                    placeholder="Décrivez votre scénario"
+                                    placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                    multiline
+                                    numberOfLines={4}
+                                    value={updateScenarioData.description}
+                                    onChangeText={(text) => setUpdateScenarioData({ ...updateScenarioData, description: text })}
+                                    style={[styles.formInput, styles.textArea]}
+                                />
+                            </View>
+
+                            <View style={styles.formGroup}>
+                                <View style={styles.checkboxContainer}>
+                                    <Text style={styles.formLabel}>Scénario final</Text>
+                                    <TouchableOpacity
+                                        onPress={() => setUpdateScenarioData({ ...updateScenarioData, is_final: !updateScenarioData.is_final })}
+                                        style={[styles.checkbox, updateScenarioData.is_final && styles.checkboxChecked]}
+                                    >
+                                        {updateScenarioData.is_final && <Text style={styles.checkboxMark}>✓</Text>}
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                            <View style={styles.formGroup}>
+                                <Text style={styles.formLabel}>Type</Text>
+                                <View style={styles.pickerContainer}>
+                                    <Picker
+                                        selectedValue={updateScenarioData.type}
+                                        onValueChange={(itemValue) => setUpdateScenarioData({ ...updateScenarioData, type: itemValue })}
+                                        style={styles.picker}
+                                        dropdownIconColor="rgb(255, 0, 225)"
+                                    >
+                                        <Picker.Item label="Sélectionnez un type" value="" />
+                                        <Picker.Item label="Destiny" value="destiny" />
+                                        <Picker.Item label="Choice" value="choice" />
+                                    </Picker>
+                                </View>
+                            </View>
+
+                            {/* Affichage conditionnel des choix */}
+                            {updateScenarioData.type === "choice" && updateScenarioData.choices.map((choice, idx) => (
+                                <View key={idx} style={styles.choiceFormContainer}>
+                                    <TextInput
+                                        placeholder="Description du choix"
+                                        value={choice.description}
+                                        onChangeText={(text) => {
+                                            const updatedChoices = [...updateScenarioData.choices];
+                                            updatedChoices[idx].description = text;
+                                            setUpdateScenarioData({ ...updateScenarioData, choices: updatedChoices });
+                                        }}
+                                        style={styles.formInput}
+                                    />
+                                    {/* Ajoute ici tous les autres champs pour les choix */}
+                                </View>
+                            ))}
+                        </ScrollView>
+
+                        <View style={styles.modalFooter}>
+                            <TouchableOpacity
+                                onPress={() => setUpdateModalVisible(false)}
+                                style={styles.cancelButton}
+                            >
+                                <Text style={styles.cancelButtonText}>Annuler</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={() => handleUpdateScenarioSave()}
+                                style={styles.saveButton}
+                            >
+                                <Text style={styles.saveButtonText}>Sauvegarder</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View >
     )
 }
@@ -726,6 +909,247 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         fontFamily: "Orbitron-Regular",
+    },
+
+    // Styles pour la modal
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.85)',
+        justifyContent: 'center',
+        padding: 10, // Réduit pour donner plus d'espace à la modal
+    },
+    modalContainer: {
+        backgroundColor: 'rgba(30, 15, 40, 0.95)',
+        borderRadius: 15,
+        borderColor: "rgba(115, 32, 143, 0.5)",
+        borderWidth: 1,
+        shadowColor: "rgb(255, 0, 225)",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        maxHeight: '95%', // Augmenté pour prendre plus d'espace
+        width: '95%', // Augmenté pour être plus large
+        alignSelf: 'center', // Centré horizontalement
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(115, 32, 143, 0.5)',
+        padding: 20, // Augmenté
+    },
+    modalTitle: {
+        color: "rgb(255, 0, 225)",
+        fontSize: 24, // Augmenté
+        fontWeight: "bold",
+        fontFamily: "Orbitron-Bold",
+    },
+    closeButton: {
+        width: 36, // Augmenté
+        height: 36, // Augmenté
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 0, 225, 0.2)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: 'white',
+        fontSize: 18, // Augmenté
+        fontWeight: 'bold',
+    },
+    modalScrollView: {
+        padding: 20, // Augmenté
+        maxHeight: '75%', // Augmenté pour permettre plus de contenu visible
+    },
+    modalFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20, // Augmenté
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(115, 32, 143, 0.5)',
+    },
+
+    // Styles pour le formulaire
+    formGroup: {
+        marginBottom: 20, // Augmenté
+    },
+    formLabel: {
+        color: 'white',
+        fontFamily: "Orbitron-Regular",
+        fontSize: 16, // Augmenté
+        marginBottom: 8, // Augmenté
+    },
+    formInput: {
+        backgroundColor: 'rgba(60, 20, 80, 0.3)',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(115, 32, 143, 0.5)',
+        color: 'white',
+        padding: 15, // Augmenté
+        fontFamily: "Orbitron-Regular",
+        fontSize: 16, // Augmenté
+        minHeight: 50, // Hauteur minimale ajoutée
+    },
+    textArea: {
+        minHeight: 100, // Augmenté
+        textAlignVertical: 'top',
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 10, // Ajouté pour plus d'espace
+    },
+    checkbox: {
+        width: 30, // Augmenté
+        height: 30, // Augmenté
+        borderWidth: 1,
+        borderColor: 'rgba(115, 32, 143, 0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        borderRadius: 6, // Augmenté
+    },
+    checkboxChecked: {
+        backgroundColor: 'rgba(255, 0, 225, 0.7)',
+    },
+    checkboxGameOver: {
+        backgroundColor: 'rgba(255, 0, 0, 0.7)',
+    },
+    checkboxMark: {
+        color: 'white',
+        fontSize: 18, // Augmenté
+    },
+    pickerContainer: {
+        backgroundColor: 'rgba(60, 20, 80, 0.3)',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(115, 32, 143, 0.5)',
+        overflow: 'hidden',
+        marginBottom: 10, // Ajouté
+    },
+    picker: {
+        color: 'white',
+        height: 60, // Augmenté
+        fontSize: 16, // Ajouté pour être cohérent
+    },
+
+    // Styles pour les choix
+    addChoiceButton: {
+        backgroundColor: 'rgba(115, 32, 143, 0.5)',
+        padding: 16, // Augmenté
+        borderRadius: 10,
+        alignItems: 'center',
+        marginVertical: 20, // Augmenté
+        borderWidth: 1,
+        borderColor: 'rgba(255, 0, 225, 0.3)',
+        shadowColor: "rgb(255, 0, 225)",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
+    addChoiceButtonText: {
+        color: 'white',
+        fontFamily: "Orbitron-Regular",
+        fontSize: 18, // Augmenté
+    },
+    choiceFormContainer: {
+        backgroundColor: 'rgba(40, 6, 65, 0.4)',
+        borderRadius: 10,
+        padding: 20, // Augmenté
+        marginBottom: 25, // Augmenté
+        borderWidth: 1,
+        borderColor: 'rgba(115, 32, 143, 0.3)',
+    },
+    choiceFormHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20, // Augmenté
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(115, 32, 143, 0.3)',
+        paddingBottom: 15, // Augmenté
+    },
+    choiceFormTitle: {
+        color: 'rgb(255, 0, 225)',
+        fontFamily: "Orbitron-Bold",
+        fontSize: 18, // Augmenté
+    },
+    removeChoiceButton: {
+        backgroundColor: 'rgba(255, 0, 0, 0.3)',
+        width: 36, // Augmenté
+        height: 36, // Augmenté
+        borderRadius: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    removeChoiceButtonText: {
+        fontSize: 18, // Augmenté
+    },
+    effectsGroupTitle: {
+        color: 'rgb(255, 0, 225)',
+        fontFamily: "Orbitron-Regular",
+        fontSize: 16, // Augmenté
+        marginTop: 15, // Augmenté
+        marginBottom: 15, // Augmenté
+    },
+    statsGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginBottom: 20, // Augmenté
+    },
+    statItem: {
+        width: '48%',
+        marginBottom: 15, // Augmenté
+    },
+    statLabel: {
+        color: 'white',
+        fontFamily: "Orbitron-Regular",
+        fontSize: 14, // Augmenté
+        marginBottom: 8, // Augmenté
+    },
+    statInput: {
+        backgroundColor: 'rgba(60, 20, 80, 0.3)',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(115, 32, 143, 0.5)',
+        color: 'white',
+        padding: 12, // Augmenté
+        fontFamily: "Orbitron-Regular",
+        fontSize: 16, // Augmenté
+        minHeight: 45, // Hauteur minimale ajoutée
+    },
+
+    // Boutons de la modal
+    cancelButton: {
+        backgroundColor: 'rgba(100, 100, 100, 0.6)',
+        padding: 15, // Augmenté
+        borderRadius: 10,
+        flex: 1,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: 'white',
+        fontFamily: "Orbitron-Regular",
+        fontWeight: 'bold',
+        fontSize: 16, // Augmenté
+    },
+    saveButton: {
+        backgroundColor: 'rgba(0, 200, 100, 0.6)',
+        padding: 15, // Augmenté
+        borderRadius: 10,
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontFamily: "Orbitron-Regular",
+        fontWeight: 'bold',
+        fontSize: 16, // Augmenté
     },
 })
 
