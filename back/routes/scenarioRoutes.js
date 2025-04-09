@@ -13,4 +13,7 @@ router.get('/:id', verifyToken, scenarioController.getScenarioWithChoices);
 // 3️⃣ Route pour récupérer tous les scénarios (seul un admin peut récupérer tous les scénarios)
 router.get('/', verifyToken, verifyAdmin, scenarioController.getAllScenarios);
 
+// 4️⃣ Route pour supprimer un scénario (seul un admin peut supprimer un scénario)
+router.delete('/:id', verifyToken, verifyAdmin, scenarioController.deleteScenario);
+
 module.exports = router;

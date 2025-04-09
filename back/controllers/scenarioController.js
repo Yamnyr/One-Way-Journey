@@ -97,3 +97,33 @@ exports.getAllScenarios = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur lors de la récupération des scénarios.' });
     }
 };
+
+// 3️⃣ Supprimer un scénario avec ses choix
+exports.deleteScenario = async (req, res) => {
+    try {
+        // Vérification que l'utilisateur est administrateur
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès interdit. Seul un administrateur peut supprimer un scénario.' });
+        }
+
+        const scenarioId = req.params.id;
+
+        // Vérifier si le scénario existe
+        const scenario = await Scenario.findByPk(scenarioId);
+        if (!scenario) {
+            return res.status(404).json({ message: 'Scénario non trouvé.' });
+        }
+
+        // Supprimer les choix associés au scénario
+        await Choice.destroy({ where: { scenarioId } });
+
+        // Supprimer le scénario
+        await Scenario.destroy({ where: { id: scenarioId } });
+
+        res.status(200).json({ message: 'Scénario supprimé avec succès.' });
+    } catch (error) {
+        console.error('❌ Erreur lors de la suppression du scénario:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la suppression du scénario.' });
+    }
+};
+
