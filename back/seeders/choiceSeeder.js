@@ -1,3 +1,4 @@
+// choiceSeeder.js - version optimisée
 const db = require('../models');
 
 const choices = [
@@ -185,7 +186,7 @@ const choices = [
         nextScenarioId: 4,         // Choisir une direction
     },
     {
-        scenarioId: 2,  // Scénario 2 : Le message crypté
+        scenarioId: 2,
         description: 'Tenter de répondre au message',
         required_stat: 'intelligence',
         required_value: 70,
@@ -497,45 +498,25 @@ const finalChoices = [
         scenarioId: 5,  // Le trou noir
         description: 'Tenter de s\'échapper du trou noir',
         required_stat: 'intelligence',
-        required_value: 90,
-        result: 'Tu calcules une trajectoire impossible pour t\'échapper, mais la gravité est trop forte.',
-        effect_intelligence: 30,   // Calculs incroyables
-        effect_life: -50,          // Dommages physiques graves
-        is_game_over: true,        // Fin du jeu
-        nextScenarioId: null,
+        required_value: 60,
+        result: 'Tu accèdes à une mémoire ancienne.',
+        effect_intelligence: 15,
+        nextScenarioId: 5,
     },
     {
-        scenarioId: 14, // Le supernova
-        description: 'Essayer de se protéger derrière une planète',
+        scenarioId: 20,
+        description: 'Revenir à la station',
         required_stat: 'luck',
-        required_value: 80,
-        result: 'Tu te places derrière une planète gazeuse, qui absorbe une partie de l\'explosion.',
-        effect_luck: 20,           // Chance incroyable
-        effect_life: -40,          // Quand même très dangereux
-        effect_dexterity: 15,      // Manœuvres spatiales impressionnantes
-        is_game_over: true,        // Fin du jeu
-        nextScenarioId: null,
+        required_value: 85,
+        result: 'Une boucle temporelle s\'active.',
+        effect_luck: 20,
+        nextScenarioId: 1,
     },
-    {
-        scenarioId: 7,  // Les trous de ver instables
-        description: 'Se laisser emporter par le courant spatial',
-        required_stat: 'courage',
-        required_value: 75,
-        result: 'Tu es projeté à travers la galaxie vers un lieu inconnu et mystérieux.',
-        effect_courage: 25,        // Acte de bravoure extrême
-        effect_luck: -15,          // Destination aléatoire dangereuse
-        effect_life: -20,          // Voyage traumatisant
-        is_game_over: false,       // Continue le jeu
-        nextScenarioId: 12,        // La planète morte
-    }
 ];
-
-// Combinaison des tableaux de choix
-const allChoices = [...choices, ...finalChoices];
 
 const seedChoices = async () => {
     try {
-        for (let choiceData of allChoices) {
+        for (let choiceData of choices) {
             await db.Choice.create(choiceData);
         }
         console.log('✅ Choix insérés avec succès !');

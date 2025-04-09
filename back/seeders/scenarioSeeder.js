@@ -1,3 +1,4 @@
+// Mise à jour du fichier scenarioSeeder.js avec 20 scénarios
 const db = require('../models');
 
 const scenarios = [

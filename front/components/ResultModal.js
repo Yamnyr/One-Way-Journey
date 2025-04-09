@@ -1,43 +1,30 @@
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native"
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 
-interface StatChange {
-    stat: string
-    value: number
-    icon: string
-}
-
-interface ResultModalProps {
-    visible: boolean
-    result: string
-    statChanges: StatChange[]
-    isGameOver: boolean
-    onContinue: () => void
-}
-
-const ResultModal = ({ visible, result, statChanges, isGameOver, onContinue }: ResultModalProps) => {
+const ResultModal = ({ visible, result, statChanges, isGameOver, onContinue }) => {
     // Map stat names to readable format
-    const getStatName = (stat: string) => {
-        const statMap: Record<string, string> = {
+    const getStatName = (stat) => {
+        const statMap = {
             life: "Vie",
             charisma: "Charisme",
             dexterity: "Dextérité",
             intelligence: "Intelligence",
             luck: "Chance",
-        }
-        return statMap[stat] || stat
-    }
+        };
+        return statMap[stat] || stat;
+    };
 
     // Get icon for stat
-    const getStatIcon = (stat: string) => {
-        const iconMap: Record<string, string> = {
+    const getStatIcon = (stat) => {
+        const iconMap = {
             life: "❤️",
             charisma: "✨",
             dexterity: "🏃",
             intelligence: "🧠",
             luck: "🍀",
-        }
-        return iconMap[stat] || "📊"
-    }
+        };
+        return iconMap[stat] || "📊";
+    };
 
     return (
         <Modal visible={visible} transparent animationType="fade">
@@ -75,14 +62,17 @@ const ResultModal = ({ visible, result, statChanges, isGameOver, onContinue }: R
                         </View>
                     )}
 
-                    <TouchableOpacity style={[styles.continueButton, isGameOver && styles.gameOverButton]} onPress={onContinue}>
+                    <TouchableOpacity
+                        style={[styles.continueButton, isGameOver && styles.gameOverButton]}
+                        onPress={onContinue}
+                    >
                         <Text style={styles.buttonText}>{isGameOver ? "Retour aux personnages" : "Continuer"}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </Modal>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -186,6 +176,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "Orbitron-Regular",
     },
-})
+});
 
-export default ResultModal
+export default ResultModal;

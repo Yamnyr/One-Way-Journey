@@ -148,20 +148,32 @@ const ScenarioScreen = ({ route, navigation }) => {
 
     if (loading) {
         return (
-            <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+            // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+
+            <View
+                style={styles.container}
+                resizeMode="cover"
+            >
                 <ActivityIndicator size="large" color="#b72de6" style={styles.loader} />
-            </ImageBackground>
+            {/*</ImageBackground>*/}
+            </View>
         )
     }
 
     if (error || !scenario) {
         return (
-            <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+            // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+
+            <View
+                style={styles.container}
+                resizeMode="cover"
+            >
                 <Text style={styles.errorText}>{error || "Scénario non trouvé"}</Text>
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                     <Text style={styles.buttonText}>Retour</Text>
                 </TouchableOpacity>
-            </ImageBackground>
+            {/*</ImageBackground>*/}
+            </View>
         )
     }
 
@@ -175,7 +187,11 @@ const ScenarioScreen = ({ route, navigation }) => {
     }
 
     return (
-        <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <ScrollView style={styles.scrollView}>
                 {character && (
                     <View style={styles.characterStatsContainer}>
@@ -241,7 +257,8 @@ const ScenarioScreen = ({ route, navigation }) => {
                 isGameOver={isGameOver}
                 onContinue={handleContinue}
             />
-        </ImageBackground>
+        {/*</ImageBackground>*/}
+        </View>
     )
 }
 

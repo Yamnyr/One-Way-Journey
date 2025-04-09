@@ -27,7 +27,11 @@ const Inscription = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
+        // <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <Text style={styles.title}>Inscription</Text>
 
             <TextInput
@@ -61,7 +65,8 @@ const Inscription = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Connexion')}>
                 <Text style={styles.link}>Déjà un compte ? Se connecter !</Text>
             </TouchableOpacity>
-        </ImageBackground>
+        {/*</ImageBackground>*/}
+        </View>
     );
 };
 

@@ -1,74 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity,Image, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode'; // Assure-toi d’avoir fait npm install jwt-decode
-import * as Font from 'expo-font';
-import { logoutUser } from '../services/Auth'; // Si tu as un fichier service pour le logout
+import { useEffect, useState } from "react"
+import { View, Text, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { jwtDecode } from "jwt-decode" // Assure-toi d'avoir fait npm install jwt-decode
+import * as Font from "expo-font"
+import { logoutUser } from "../services/Auth" // Si tu as un fichier service pour le logout
+import { useMusic } from "../contexts/MusicContext"
 
 const fetchFonts = async () => {
     await Font.loadAsync({
-        'Orbitron-Regular': require('../assets/fonts/Orbitron-Regular.ttf'),
-        'Orbitron-Medium': require('../assets/fonts/Orbitron-Medium.ttf'),
-        'Orbitron-Bold': require('../assets/fonts/Orbitron-Bold.ttf'),
-        'SixtyfourConvergence': require('../assets/fonts/SixtyfourConvergence.ttf'),
-        'BrunoAce-Regular': require('../assets/fonts/BrunoAce-Regular.ttf'),
-    });
-};
+        "Orbitron-Regular": require("../assets/fonts/Orbitron-Regular.ttf"),
+        "Orbitron-Medium": require("../assets/fonts/Orbitron-Medium.ttf"),
+        "Orbitron-Bold": require("../assets/fonts/Orbitron-Bold.ttf"),
+        SixtyfourConvergence: require("../assets/fonts/SixtyfourConvergence.ttf"),
+        "BrunoAce-Regular": require("../assets/fonts/BrunoAce-Regular.ttf"),
+    })
+}
 
 const Accueil = ({ navigation }) => {
-    const [fontsLoaded, setFontsLoaded] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [fontsLoaded, setFontsLoaded] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const { isMusicPlaying, toggleMusic } = useMusic() // ✅ hook utilisé dans le composant
 
     useEffect(() => {
         const checkRole = async () => {
             try {
-                const token = await AsyncStorage.getItem('userToken');
+                const token = await AsyncStorage.getItem("userToken")
                 if (token) {
-                    const decoded = jwtDecode(token);
-                    console.log(decoded);
-                    if (decoded.role === 'admin') {
-                        setIsAdmin(true);
+                    const decoded = jwtDecode(token)
+                    console.log(decoded)
+                    if (decoded.role === "admin") {
+                        setIsAdmin(true)
                     }
                 }
             } catch (error) {
-                console.error('Erreur lors de la vérification du rôle :', error);
+                console.error("Erreur lors de la vérification du rôle :", error)
             }
-        };
+        }
 
         const loadFonts = async () => {
-            await fetchFonts();
-            setFontsLoaded(true);
-        };
+            await fetchFonts()
+            setFontsLoaded(true)
+        }
 
-        loadFonts();
-        checkRole();
-    }, []);
+        loadFonts()
+        checkRole()
+    }, [])
 
     const handleLogout = async () => {
-        await logoutUser(); // Déconnexion
-        navigation.navigate('Connexion'); // Redirige vers la page de connexion après la déconnexion
-    };
+        await logoutUser() // Déconnexion
+        navigation.navigate("Connexion") // Redirige vers la page de connexion après la déconnexion
+    }
 
     if (!fontsLoaded) {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#ffffff" />
             </View>
-        );
+        )
     }
 
     return (
-        <ImageBackground
-            source={require('../assets/space.jpg')}
+        <View
             style={styles.container}
             resizeMode="cover"
         >
             {/* Bouton Logout en haut à droite */}
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Image 
-                source={require('../assets/logout.png')} // Assure-toi du chemin correct
-                style={styles.logoutImage} // Style pour dimensionner l'image
-            />
+                <Image
+                    source={require('../assets/logout.png')} // Assure-toi du chemin correct
+                    style={styles.logoutImage} // Style pour dimensionner l'image
+                />
             </TouchableOpacity>
 
             <Text style={styles.title}>One Way Journey</Text>
@@ -82,7 +83,13 @@ const Accueil = ({ navigation }) => {
                     <Text style={styles.buttonText}>Gérer les scénarios</Text>
                 </TouchableOpacity>
             )}
-        </ImageBackground>
+            <TouchableOpacity onPress={toggleMusic} style={styles.musicButton}>
+                <Text style={styles.buttonText}>
+                    {isMusicPlaying ? '🔊 Couper le son' : '🔈 Remettre le son'}
+                </Text>
+            </TouchableOpacity>
+
+        </View>
     );
 };
 
@@ -152,4 +159,13 @@ const styles = StyleSheet.create({
         height: 30, // Hauteur de l'image
         resizeMode: 'contain', // Garde les proportions
     },
+    musicButton: {
+        position: 'absolute',
+        bottom: 30,
+        right: 20,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: 10,
+        borderRadius: 10,
+    },
+
 });
