@@ -1,7 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView, ActivityIndicator } from "react-native"
+import React, { useEffect, useState } from "react"
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    ImageBackground,
+    ScrollView,
+    ActivityIndicator,
+    Image
+} from "react-native"
 import { getScenarioById } from "../services/scenarioService"
 import { getCharacterById, updateCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -192,25 +201,27 @@ const ScenarioScreen = ({ route, navigation }) => {
             style={styles.container}
             resizeMode="cover"
         >
-            <ScrollView style={styles.scrollView}>
-                {character && (
-                    <View style={styles.characterStatsContainer}>
-                        <Text style={styles.characterName}>{character.name}</Text>
-                        <View style={styles.statsGrid}>
-                            <View style={styles.statsColumn}>
-                                <Text style={styles.statBadge}>❤️ Vie: {character.life}</Text>
-                                <Text style={styles.statBadge}>✨ Charisme: {character.charisma}</Text>
-                                <Text style={styles.statBadge}>🏃 Dextérité: {character.dexterity}</Text>
-                            </View>
-                            <View style={styles.statsColumn}>
-                                <Text style={styles.statBadge}>🧠 Intelligence: {character.intelligence}</Text>
-                                <Text style={styles.statBadge}>🍀 Chance: {character.luck}</Text>
-                                <Text style={styles.statBadge}>{character.is_alive ? "✅ En vie" : "☠️ Mort"}</Text>
-                            </View>
+            <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("Accueil")}>
+                <Image source={require("../assets/arrowB.png")} style={styles.buttonText2} />
+            </TouchableOpacity>
+            {character && (
+                <View style={styles.characterStatsContainer}>
+                    <Text style={styles.characterName}>{character.name}</Text>
+                    <View style={styles.statsGrid}>
+                        <View style={styles.statsColumn}>
+                            <Text style={styles.statBadge}>❤️ Vie: {character.life}</Text>
+                            <Text style={styles.statBadge}>✨ Charisme: {character.charisma}</Text>
+                            <Text style={styles.statBadge}>🏃 Dextérité: {character.dexterity}</Text>
+                        </View>
+                        <View style={styles.statsColumn}>
+                            <Text style={styles.statBadge}>🧠 Intelligence: {character.intelligence}</Text>
+                            <Text style={styles.statBadge}>🍀 Chance: {character.luck}</Text>
+                            <Text style={styles.statBadge}>{character.is_alive ? "✅ En vie" : "☠️ Mort"}</Text>
                         </View>
                     </View>
-                )}
-
+                </View>
+            )}
+            <ScrollView style={styles.scrollView}>
                 <View style={styles.scenarioContainer}>
                     <Text style={styles.title}>{scenario.title}</Text>
                     <Text style={styles.description}>{scenario.description}</Text>
@@ -245,10 +256,6 @@ const ScenarioScreen = ({ route, navigation }) => {
                 </View>
             </ScrollView>
 
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("characters")}>
-                <Text style={styles.buttonText}>Retour</Text>
-            </TouchableOpacity>
-
             {/* Result Modal */}
             <ResultModal
                 visible={resultModalVisible}
@@ -265,7 +272,8 @@ const ScenarioScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 70
     },
     scrollView: {
         flex: 1,
@@ -283,7 +291,7 @@ const styles = StyleSheet.create({
     },
     characterStatsContainer: {
         backgroundColor: "rgba(30, 15, 40, 0.85)",
-        padding: 15,
+        padding: 10,
         borderRadius: 15,
         marginBottom: 15,
         borderColor: "rgba(183, 45, 230, 0.4)",
@@ -293,7 +301,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         color: "rgb(223, 182, 219)",
-        marginBottom: 10,
+        marginBottom: 5,
         textAlign: "center",
     },
     statsGrid: {
@@ -394,6 +402,23 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "bold",
         fontSize: 16,
+    }, button2: {
+        position: "absolute",
+        top: 20,
+        left: 20,
+        zIndex: 10,
+    },
+    buttonText2: {
+        opacity: 0.8,
+        backgroundColor: "rgba(255, 255, 255, 0)",
+        width: 30,
+        height: 30,
+        resizeMode: "contain",
+    },
+    buttonRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginTop: 15,
     },
 })
 
