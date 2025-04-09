@@ -191,9 +191,11 @@ const ScenarioScreen = ({ route, navigation }) => {
             <GameOverScreen
                 message={scenario.description || "Votre aventure s'arrête ici."}
                 onReturn={handleReturnFromGameOver}
+                isSuccess={character?.life > 0}
             />
         )
     }
+
 
     return (
         // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
@@ -302,7 +304,7 @@ const styles = StyleSheet.create({
     characterName: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 5,
         textAlign: "center",
     },
@@ -342,7 +344,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Orbitron-Regular',
         fontSize: 24,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 15,
         textAlign: "center",
         textShadowColor: "rgba(183, 45, 230, 0.65)",
@@ -363,7 +365,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Orbitron-Regular',
         fontSize: 18,
         fontWeight: "bold",
-        color: "rgb(223, 182, 219)",
+        color: 'rgb(219, 4, 198)',
         marginBottom: 15,
     },
     choiceButton: {
