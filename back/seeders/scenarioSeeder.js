@@ -14,8 +14,47 @@ const scenarios = [
         is_final: false,
     },
     {
+        title: 'Une réparation nécessaire',
+        description: 'La station est sur le point d\'exploser que faire ?',
+        type: 'choice',
+        is_final: false,
+    },
+    {
+        title: 'La station explose',
+        description: 'Un signal étrange provenant de l\'intérieur du vaisseau te parvient. Tu décodes un message crypté. Que fais-tu ?',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
         title: 'L\'attaque des créatures de l\'ombre',
-        description: 'Des créatures sombres et insidieuses attaquent la station. Que veux-tu faire pour te défendre ?',
+        description: 'Des créatures sombres et insidieuses attaquent . Que veux-tu faire pour te défendre ?',
+        type: 'choice',
+        is_final: false,
+    },
+    {
+        title: 'Mort dans l\'agonie',
+        description: 'Des créatures sombres et insidieuses vous ont tué ...',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Un voyage infini',
+        description: 'Vous voguez à l\'infini dans l\'immensité de l\'espace... ',
+        type: 'desiny',
+        is_final: true,
+    },
+
+    {
+        title: 'Je rentre dans le vaisseau',
+        description: 'Avec votre petite capsule vous rentrez dans le vaisseau fantôme.',
+        type: 'choice',
+        is_final: false,
+    },
+
+
+    {
+        title: 'Choisir une direction',
+        description: 'Dans l\'espace vous poouvez vous diriger ou aller vous ?',
         type: 'choice',
         is_final: false,
     },
@@ -44,8 +83,21 @@ const scenarios = [
         is_final: false,
     },
     {
+        title: 'Direction la Terre !',
+        description: 'Après un beau combat vous trouvez comment piloter le vaisseau et vous rentrez chez vous !.',
+        type: 'choice',
+        is_final: true,
+    },
+    {
         title: 'Le retour sur Terre',
         description: 'Après des années dans l\'espace, tu vois enfin la Terre apparaître au loin. Mais elle semble différente.',
+        type: 'choice',
+        is_final: false,
+    },
+
+    {
+        title: 'Maison ou pas Maison',
+        description: 'Les aliens veulent t\'aider demande leurs de rentrer chez toi ! ',
         type: 'choice',
         is_final: false,
     },
@@ -56,6 +108,49 @@ const scenarios = [
         is_final: false,
     },
     {
+        title: 'Just a chill clone',
+        description: 'Une vie Chill entre clone',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Communication alien',
+        description: 'Des aliens cherche à entrer en contact, ca à l\'aire important a changer',
+        type: 'destiny',
+        is_final: false,
+    },
+    {
+        title: 'Echec fuite',
+        description: 'L\'alien etant trop lourd tu ne reussi pas a fuir assez vite vous mourrez ...',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Win fuite',
+        description: 'Vous parvenez a fuire avec l\'alien lorsque vous recevez un signal',
+        type: 'destiny',
+        is_final: true,
+    },
+
+    {
+        title: 'Just a Bruler',
+        description: 'hummm mergez',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Home sweet Home',
+        description: 'Vous rentrez sur terre !',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'La peste',
+        description: 'Vous toussez de plus en plus vous trouverez une solution sur terre ?',
+        type: 'destiny',
+        is_final: False,
+    },
+    {
         title: 'Le virus galactique',
         description: 'Un virus inconnu se répand dans l\'espace, menaçant de détruire toute forme de vie. Comment l\'arrêter ?',
         type: 'choice',
@@ -63,12 +158,24 @@ const scenarios = [
     },
     {
         title: 'La flotte ennemie',
-        description: 'Une flotte de vaisseaux ennemis arrive à grande vitesse. Que fais-tu pour te défendre ?',
+        description: 'Une flotte de vaisseaux ennemis arrive à grande vitesse. laisser un VU c\'est pas ouf...',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Une nouvelle vie',
+        description: 'Les aliens vous trouve super charismatique tellement qu\'il vous propose différention.',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'La planète morte',
+        description: 'Tu explores une planète morte où aucune vie n\'a survécu. Mais quelque chose semble encore bouger dans l\'ombre...',
         type: 'choice',
         is_final: false,
     },
     {
-        title: 'La planète morte',
+        title: 'La planète morte.',
         description: 'Tu explores une planète morte où aucune vie n\'a survécu. Mais quelque chose semble encore bouger dans l\'ombre...',
         type: 'choice',
         is_final: false,
@@ -80,8 +187,21 @@ const scenarios = [
         is_final: true,
     },
     {
-        title: 'Le supernova',
+        title: 'La supernova',
         description: 'Une étoile proche devient supernova, menaçant de tout annihiler.',
+        type: 'destiny',
+        is_final: true,
+    },
+
+    {
+        title: 'Une Planete Morte',
+        description: 'Une étoile proche devient supernova, menaçant de tout annihiler.',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'asteroide',
+        description: 'Des Miliers d\'asteroide font droit sur vous !.',
         type: 'destiny',
         is_final: true,
     }
