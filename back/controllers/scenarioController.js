@@ -9,14 +9,14 @@ exports.createScenario = async (req, res) => {
             return res.status(403).json({ message: 'Accès interdit. Seul un administrateur peut créer un scénario.' });
         }
 
-        const { title, description, type, choices } = req.body;
+        const { title, description, type, is_final, choices } = req.body;
 
         // Créer le scénario
         const scenario = await Scenario.create({
             title,
             description,
             type,
-            is_final: false,  // Le scénario peut être marqué comme final selon le besoin
+            is_final
         });
 
         // Créer les choix associés au scénario

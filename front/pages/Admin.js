@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useEffect, useState } from 'react'
 import {
     View,
@@ -11,17 +9,29 @@ import {
     ActivityIndicator,
     Image,
     Alert,
-    ScrollView
+    Modal,
+    ScrollView,
+    TextInput,
 } from 'react-native'
-import { getAllScenarios, deleteScenario } from '../services/adminService'
+import { getAllScenarios, createScenario, deleteScenario } from '../services/adminService'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Picker } from '@react-native-picker/picker'
 
 const Admin = () => {
     const navigation = useNavigation()
     const [scenarios, setScenarios] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [newScenario, setNewScenario] = useState({
+        title: '',
+        description: '',
+        type: '',
+        choices: [],
+        is_final: false
+    })
+
 
     useEffect(() => {
         fetchScenarios()
@@ -45,6 +55,38 @@ const Admin = () => {
             setLoading(false)
         }
     }
+
+    const handleCreateScenario = async () => {
+        try {
+            const token = await AsyncStorage.getItem("userToken")
+            await createScenario(token, newScenario)
+            setModalVisible(false)
+            fetchScenarios()
+            setNewScenario({ title: '', description: '', type: '', choices: [], is_final: false })
+        } catch (err) {
+            Alert.alert("Erreur", "Impossible de créer le scénario.")
+            console.error(err)
+        }
+    }
+
+    const addChoice = () => {
+        setNewScenario({
+            ...newScenario,
+            choices: [...newScenario.choices, {
+                description: '',
+                required_stat: '',
+                required_value: '',
+                result: '',
+                effect_life: 0,
+                effect_charisma: 0,
+                effect_dexterity: 0,
+                effect_luck: 0,
+                is_game_over: false,
+                nextScenarioId: null
+            }]
+        })
+    }
+
 
     const handleDelete = async (scenarioId) => {
         Alert.alert("Confirmation", "Êtes-vous sûr de vouloir supprimer ce scénario ?", [
@@ -174,7 +216,7 @@ const Admin = () => {
             resizeMode="cover"
         >
             <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
-        {/*</ImageBackground>*/}
+            {/*</ImageBackground>*/}
         </View>
     )
 
@@ -205,11 +247,117 @@ const Admin = () => {
 
             <TouchableOpacity
                 style={styles.createButton}
-                onPress={() => navigation.navigate("CreateScenario")}>
+                onPress={() => setModalVisible(true)}>
                 <Text style={styles.createButtonText}>Créer un scénario</Text>
             </TouchableOpacity>
-        {/*</ImageBackground>*/}
-        </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', padding: 20 }}>
+                    <ScrollView style={{ backgroundColor: '#fff', borderRadius: 10, padding: 20 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Créer un scénario</Text>
+
+                        <TextInput
+                            placeholder="Titre"
+                            value={newScenario.title}
+                            onChangeText={(text) => setNewScenario({ ...newScenario, title: text })}
+                            style={{ borderBottomWidth: 1, marginBottom: 10 }}
+                        />
+
+                        <TextInput
+                            placeholder="Description"
+                            multiline
+                            value={newScenario.description}
+                            onChangeText={(text) => setNewScenario({ ...newScenario, description: text })}
+                            style={{ borderBottomWidth: 1, marginBottom: 10 }}
+                        />
+
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+                            <Text style={{ marginRight: 10 }}>Scénario final :</Text>
+                            <TouchableOpacity
+                                onPress={() => setNewScenario({ ...newScenario, is_final: !newScenario.is_final })}
+                                style={{
+                                    width: 24,
+                                    height: 24,
+                                    borderWidth: 1,
+                                    borderColor: '#333',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    backgroundColor: newScenario.is_final ? '#6200ee' : 'transparent',
+                                    borderRadius: 4
+                                }}
+                            >
+                                {newScenario.is_final && <Text style={{ color: 'white' }}>✓</Text>}
+                            </TouchableOpacity>
+                        </View>
+
+                        <Text style={{ marginBottom: 10 }}>Type :</Text>
+                        <Picker
+                            selectedValue={newScenario.type}
+                            onValueChange={(itemValue) => setNewScenario({ ...newScenario, type: itemValue })}
+                            style={{ marginBottom: 10 }}
+                        >
+                            <Picker.Item label="Destiny" value="destiny" />
+                            <Picker.Item label="Choice" value="choice" />
+
+                        </Picker>
+
+                        {/* Affichage conditionnel de la section "Ajouter un choix" */}
+                        {newScenario.type === "choice" && (
+                            <TouchableOpacity
+                                onPress={addChoice}
+                                style={{
+                                    backgroundColor: '#ccc',
+                                    padding: 10,
+                                    marginVertical: 10,
+                                    borderRadius: 10
+                                }}
+                            >
+                                <Text>➕ Ajouter un choix</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {newScenario.choices.map((choice, idx) => (
+                            <View key={idx} style={{ marginBottom: 15, borderBottomWidth: 1, paddingBottom: 10 }}>
+                                <Text style={{ fontWeight: 'bold' }}>Choix {idx + 1}</Text>
+                                <TextInput
+                                    placeholder="Description"
+                                    value={choice.description}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].description = text
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+                                {/* Tu peux ajouter plus de champs comme required_stat, etc. de la même façon ici */}
+                            </View>
+                        ))}
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                            <TouchableOpacity
+                                onPress={() => setModalVisible(false)}
+                                style={{ backgroundColor: '#888', padding: 10, borderRadius: 10 }}
+                            >
+                                <Text style={{ color: '#fff' }}>Annuler</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={handleCreateScenario}
+                                style={{ backgroundColor: '#008000', padding: 10, borderRadius: 10 }}
+                            >
+                                <Text style={{ color: '#fff' }}>Créer</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </View>
+            </Modal>
+            {/*</ImageBackground>*/}
+        </View >
     )
 }
 
