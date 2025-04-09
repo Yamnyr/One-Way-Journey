@@ -12,17 +12,18 @@ import Accueil from "./pages/Accueil"
 import CharactersPage from "./pages/CharacterList"
 import Admin from "./pages/Admin"
 import ScenarioScreen from "./pages/Scenario"
+import AppWrapper from "./components/AppWrapper"
 
 const Stack = createStackNavigator()
+import { DefaultTheme } from '@react-navigation/native';
 
-// Composant d'arrière-plan global
-const BackgroundContainer = ({ children }) => {
-    return (
-        <ImageBackground source={require("./assets/space.jpg")} style={styles.backgroundImage} resizeMode="cover">
-            {children}
-        </ImageBackground>
-    )
-}
+const MyCustomTheme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        background: 'transparent', // 👈 C'est ça qui règle ton souci
+    },
+};
 
 export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -37,25 +38,18 @@ export default function App() {
     }, [])
 
     return (
-        <BackgroundContainer>
-            <NavigationContainer>
+        <NavigationContainer theme={MyCustomTheme}>
+            <AppWrapper>
                 <Stack.Navigator initialRouteName={isLoggedIn ? "Accueil" : "Connexion"} screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="Connexion" component={Connexion} />
                     <Stack.Screen name="characters" component={CharactersPage} />
                     <Stack.Screen name="Admin" component={Admin} />
                     <Stack.Screen name="Inscription" component={Inscription} />
                     <Stack.Screen name="Accueil" component={Accueil} />
-                    <Stack.Screen name="Scenario" component={ScenarioScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Scenario" component={ScenarioScreen} />
                 </Stack.Navigator>
-            </NavigationContainer>
-        </BackgroundContainer>
+            </AppWrapper>
+        </NavigationContainer>
+
     )
 }
-
-const styles = StyleSheet.create({
-    backgroundImage: {
-        flex: 1,
-        width: "100%",
-        height: "100%",
-    },
-})

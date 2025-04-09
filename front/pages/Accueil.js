@@ -58,8 +58,7 @@ const Accueil = ({ navigation }) => {
     }
 
     return (
-        <ImageBackground
-            source={require('../assets/space.jpg')}
+        <View
             style={styles.container}
             resizeMode="cover"
         >
@@ -82,7 +81,7 @@ const Accueil = ({ navigation }) => {
                     <Text style={styles.buttonText}>Gérer les scénarios</Text>
                 </TouchableOpacity>
             )}
-        </ImageBackground>
+        </View>
     );
 };
 

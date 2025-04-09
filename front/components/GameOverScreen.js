@@ -1,11 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native"
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 
-interface GameOverScreenProps {
-    message: string
-    onReturn: () => void
-}
-
-const GameOverScreen = ({ message, onReturn }: GameOverScreenProps) => {
+const GameOverScreen = ({ message, onReturn }) => {
     return (
         <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
             <View style={styles.content}>
@@ -17,8 +13,8 @@ const GameOverScreen = ({ message, onReturn }: GameOverScreenProps) => {
                 </TouchableOpacity>
             </View>
         </ImageBackground>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -67,6 +63,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "Orbitron-Regular",
     },
-})
+});
 
-export default GameOverScreen
+export default GameOverScreen;

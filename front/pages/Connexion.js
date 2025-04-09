@@ -36,7 +36,11 @@ const Connexion = ({ navigation }) => {
     };
 
     return (
-        <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
+        // <ImageBackground source={require('../assets/space.jpg')} style={styles.container} resizeMode="cover">
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <Text style={styles.title}>Connexion</Text>
 
             <TextInput
@@ -62,7 +66,8 @@ const Connexion = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Inscription')}>
                 <Text style={styles.link}>Pas encore de compte ? S'inscrire !</Text>
             </TouchableOpacity>
-        </ImageBackground>
+        {/*</ImageBackground>*/}
+        </View>
     );
 };
 

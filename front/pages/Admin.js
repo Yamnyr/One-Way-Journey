@@ -167,13 +167,23 @@ const Admin = () => {
     }
 
     if (loading) return (
-        <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
-        </ImageBackground>
+        {/*</ImageBackground>*/}
+        </View>
     )
 
     return (
-        <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <TouchableOpacity style={styles.button2} onPress={handleBack}>
                 <Image source={require("../assets/arrowB.png")} style={styles.buttonText2} />
             </TouchableOpacity>
@@ -198,7 +208,8 @@ const Admin = () => {
                 onPress={() => navigation.navigate("CreateScenario")}>
                 <Text style={styles.createButtonText}>Créer un scénario</Text>
             </TouchableOpacity>
-        </ImageBackground>
+        {/*</ImageBackground>*/}
+        </View>
     )
 }
 

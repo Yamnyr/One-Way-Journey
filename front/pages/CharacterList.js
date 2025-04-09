@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     View,
     Text,
@@ -163,10 +163,25 @@ const UserCharactersScreen = () => {
         }
     }
 
-    if (loading) return <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+    if (loading) return (
+        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
+            <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
+            {/*</ImageBackground>*/}
+        </View>
+    )
 
     return (
-        <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+
+        <View
+            style={styles.container}
+            resizeMode="cover"
+        >
             <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("Accueil")}>
                 <Image source={require("../assets/arrowB.png")} style={styles.buttonText2} />
             </TouchableOpacity>
@@ -250,7 +265,8 @@ const UserCharactersScreen = () => {
                     </View>
                 </View>
             </Modal>
-        </ImageBackground>
+        {/*</ImageBackground>*/}
+        </View>
     )
 }
 
