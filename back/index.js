@@ -35,8 +35,8 @@ db.sequelize.sync({ force: true }) // ⚠️ Attention : force: true réinitiali
 
         // Exécution des seeders
         await seedUsers();
-        await seedCharacters();
         await seedScenarios();
+        await seedCharacters();
         await seedChoices();
     })
     .catch(error => console.error('❌ Erreur de synchronisation de la base de données:', error));

@@ -14,7 +14,6 @@ const characters = [
         dexterity: 60,
         intelligence: 70,
         luck: 80,
-        currentScenarioId: 1, // S'assurer que ce scénario existe
     },
     {
         userId: 2,
@@ -25,15 +24,11 @@ const characters = [
         dexterity: 80,
         intelligence: 100,
         luck: 70,
-        currentScenarioId: 1, // S'assurer que ce scénario existe
     },
 ];
 
 const seedData = async () => {
     try {
-        // await db.Scenario.bulkCreate(scenarios, { ignoreDuplicates: true });
-        // console.log('✅ Scénarios insérés avec succès !');
-
         await db.Character.bulkCreate(characters);
         console.log('✅ Personnages insérés avec succès !');
     } catch (error) {

@@ -15,5 +15,7 @@ router.get('/', verifyToken, characterController.getUserCharacters);
 
 // 4️⃣ Route pour mettre à jour un personnage
 router.put('/:id', verifyToken, characterController.updateCharacter);  // Ajout de la route pour mettre à jour un personnage
+// 4️⃣ Route pour mettre à jour un personnage
+router.get('/:id', verifyToken, characterController.getCharacter);  // Ajout de la route pour mettre à jour un personnage
 
 module.exports = router;

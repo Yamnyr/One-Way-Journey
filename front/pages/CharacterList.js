@@ -100,9 +100,17 @@ const UserCharactersScreen = () => {
         }
     }
 
-    const handleNavigateToScenario = (scenarioId) => {
-        if (scenarioId) {
-            navigation.navigate("Scenario", { scenarioId })
+    const handleNavigateToScenario = async (character) => {
+        if (character.currentScenarioId) {
+            try {
+                // Stocker l'ID du personnage dans AsyncStorage
+                await AsyncStorage.setItem("currentCharacterId", character.id.toString())
+                // Naviguer vers la page Scenario avec l'ID du scénario
+                navigation.navigate("Scenario", { scenarioId: character.currentScenarioId })
+            } catch (error) {
+                console.error("Erreur lors du stockage de l'ID du personnage:", error)
+                Alert.alert("Erreur", "Impossible de charger le scénario.")
+            }
         } else {
             Alert.alert("Information", "Ce personnage n'a pas de scénario actif.")
         }
@@ -172,10 +180,7 @@ const UserCharactersScreen = () => {
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.characterCard}>
-                            <TouchableOpacity
-                                onPress={() => handleNavigateToScenario(item.currentScenarioId)}
-                                style={styles.cardContent}
-                            >
+                            <TouchableOpacity onPress={() => handleNavigateToScenario(item)} style={styles.cardContent}>
                                 <View style={styles.characterHeader}>
                                     <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
                                     <View style={styles.characterInfo}>
@@ -319,7 +324,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     scenarioText: {
-        color: "rgb(255, 255, 0)",
+        color: "rgb(255, 0, 230)",
         marginVertical: 5,
         fontWeight: "bold",
         fontFamily: "Orbitron-Regular",

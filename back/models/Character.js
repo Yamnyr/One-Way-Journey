@@ -15,13 +15,12 @@ const Character = sequelize.define('Character', {
     is_alive: { type: DataTypes.BOOLEAN, defaultValue: true },
     currentScenarioId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 1,
+        defaultValue: 1, // 👈 Définition du scénario par défaut
         references: {
-            model: Scenario, // Associe la clé étrangère au modèle Scenario
-            key: 'id'
-        }
-    }
+            model: Scenario,
+            key: 'id',
+        },
+    },
 }, { timestamps: true });
 
 User.hasMany(Character, { foreignKey: 'userId', onDelete: 'CASCADE' });

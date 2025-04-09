@@ -10,6 +10,7 @@ import {
     Alert,
 } from "react-native"
 import { getScenarioById } from "../services/scenarioService"
+import { getCharacterById, updateCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const ScenarioScreen = ({ route, navigation }) => {
@@ -18,12 +19,13 @@ const ScenarioScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [character, setCharacter] = useState(null)
+    const [characterId, setCharacterId] = useState(null)
 
     useEffect(() => {
-        fetchScenario()
+        fetchData()
     }, [scenarioId])
 
-    const fetchScenario = async () => {
+    const fetchData = async () => {
         setLoading(true)
         try {
             const token = await AsyncStorage.getItem("userToken")
@@ -33,56 +35,86 @@ const ScenarioScreen = ({ route, navigation }) => {
                 return
             }
 
-            // Récupérer les données du personnage si nécessaire (pour vérifier les stats)
-            // Cette partie dépend de votre implémentation
-            // const characterData = await AsyncStorage.getItem('currentCharacter');
-            // if (characterData) {
-            //     setCharacter(JSON.parse(characterData));
-            // }
+            const currentCharacterId = await AsyncStorage.getItem("currentCharacterId")
+            if (!currentCharacterId) {
+                setError("Personnage non trouvé. Veuillez sélectionner un personnage.")
+                setLoading(false)
+                return
+            }
 
-            const data = await getScenarioById(scenarioId, token)
-            setScenario(data)
+            setCharacterId(currentCharacterId)
+
+            const characterData = await getCharacterById(currentCharacterId, token)
+            setCharacter(characterData)
+
+            const scenarioData = await getScenarioById(scenarioId, token)
+            setScenario(scenarioData)
         } catch (err) {
-            console.error("Erreur lors du chargement du scénario:", err)
-            setError("Erreur lors du chargement du scénario.")
+            console.error("Erreur lors du chargement des données:", err)
+            setError("Erreur lors du chargement des données.")
         } finally {
             setLoading(false)
         }
     }
 
-    const handleChoiceSelection = (choice) => {
-        // Vérifier si le personnage a les stats requises
-        // Cette partie dépend de votre implémentation
-        // if (character && choice.required_stat && choice.required_value) {
-        //     if (character[choice.required_stat] < choice.required_value) {
-        //         Alert.alert(
-        //             "Stat insuffisante",
-        //             `Vous avez besoin de ${choice.required_value} en ${choice.required_stat} pour cette action.`
-        //         );
-        //         return;
-        //     }
-        // }
+    const checkStatRequirement = (choice) => {
+        if (!character || !choice.required_stat || !choice.required_value) {
+            return true
+        }
+        return character[choice.required_stat] >= choice.required_value
+    }
 
-        // Afficher le résultat du choix
-        Alert.alert("Résultat", choice.result, [
-            {
-                text: "Continuer",
-                onPress: () => {
-                    // Si le choix mène à un game over
-                    if (choice.is_game_over) {
-                        Alert.alert("Game Over", "Votre aventure s'arrête ici.", [
-                            { text: "Retour", onPress: () => navigation.goBack() },
-                        ])
-                    }
-                    // Sinon, naviguer vers le prochain scénario
-                    else if (choice.nextScenarioId) {
-                        navigation.replace("Scenario", { scenarioId: choice.nextScenarioId })
-                    } else {
-                        navigation.goBack()
-                    }
+    const handleChoiceSelection = async (choice) => {
+        if (!checkStatRequirement(choice)) {
+            Alert.alert(
+                "Stat insuffisante",
+                `Vous avez besoin de ${choice.required_value} en ${choice.required_stat} pour cette action.`,
+            )
+            return
+        }
+
+        try {
+            const token = await AsyncStorage.getItem("userToken")
+
+            if (character) {
+                const updatedStats = { ...character }
+
+                updatedStats.life += choice.effect_life || 0
+                updatedStats.charisma += choice.effect_charisma || 0
+                updatedStats.dexterity += choice.effect_dexterity || 0
+                updatedStats.intelligence += choice.effect_intelligence || 0
+                updatedStats.luck += choice.effect_luck || 0
+
+                updatedStats.currentScenarioId = choice.is_game_over ? null : choice.nextScenarioId
+
+                if (choice.is_game_over) {
+                    updatedStats.is_alive = false
+                }
+
+                await updateCharacter(characterId, updatedStats, token)
+                setCharacter(updatedStats)
+            }
+
+            Alert.alert("Résultat", choice.result, [
+                {
+                    text: "Continuer",
+                    onPress: () => {
+                        if (choice.is_game_over) {
+                            Alert.alert("Game Over", "Votre aventure s'arrête ici.", [
+                                { text: "Retour", onPress: () => navigation.navigate("characters")},
+                            ])
+                        } else if (choice.nextScenarioId) {
+                            navigation.replace("Scenario", { scenarioId: choice.nextScenarioId })
+                        } else {
+                            navigation.goBack()
+                        }
+                    },
                 },
-            },
-        ])
+            ])
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du personnage:", error)
+            Alert.alert("Erreur", "Impossible de mettre à jour le personnage.")
+        }
     }
 
     if (loading) {
@@ -107,6 +139,24 @@ const ScenarioScreen = ({ route, navigation }) => {
     return (
         <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
             <ScrollView style={styles.scrollView}>
+                {character && (
+                    <View style={styles.characterStatsContainer}>
+                        <Text style={styles.characterName}>{character.name}</Text>
+                        <View style={styles.statsGrid}>
+                            <View style={styles.statsColumn}>
+                                <Text style={styles.statBadge}>❤️ Vie: {character.life}</Text>
+                                <Text style={styles.statBadge}>✨ Charisme: {character.charisma}</Text>
+                                <Text style={styles.statBadge}>🏃 Dextérité: {character.dexterity}</Text>
+                            </View>
+                            <View style={styles.statsColumn}>
+                                <Text style={styles.statBadge}>🧠 Intelligence: {character.intelligence}</Text>
+                                <Text style={styles.statBadge}>🍀 Chance: {character.luck}</Text>
+                                <Text style={styles.statBadge}>{character.is_alive ? "✅ En vie" : "☠️ Mort"}</Text>
+                            </View>
+                        </View>
+                    </View>
+                )}
+
                 <View style={styles.scenarioContainer}>
                     <Text style={styles.title}>{scenario.title}</Text>
                     <Text style={styles.description}>{scenario.description}</Text>
@@ -115,28 +165,36 @@ const ScenarioScreen = ({ route, navigation }) => {
                         <View style={styles.choicesContainer}>
                             <Text style={styles.choicesTitle}>Que veux-tu faire ?</Text>
 
-                            {scenario.choices.map((choice) => (
-                                <TouchableOpacity
-                                    key={choice.id}
-                                    style={styles.choiceButton}
-                                    onPress={() => handleChoiceSelection(choice)}
-                                >
-                                    <Text style={styles.choiceText}>{choice.description}</Text>
-                                    {choice.required_stat && choice.required_value && (
-                                        <Text style={styles.requirementText}>
-                                            Requiert: {choice.required_stat} {choice.required_value}+
+                            {scenario.choices.map((choice) => {
+                                const isStatSufficient = checkStatRequirement(choice)
+
+                                return (
+                                    <TouchableOpacity
+                                        key={choice.id}
+                                        style={[styles.choiceButton, !isStatSufficient && styles.disabledChoiceButton]}
+                                        onPress={() => handleChoiceSelection(choice)}
+                                        disabled={!isStatSufficient}
+                                    >
+                                        <Text style={[styles.choiceText, !isStatSufficient && styles.disabledChoiceText]}>
+                                            {choice.description}
                                         </Text>
-                                    )}
-                                </TouchableOpacity>
-                            ))}
+                                        {choice.required_stat && choice.required_value && (
+                                            <Text style={[styles.requirementText, !isStatSufficient && styles.failedRequirementText]}>
+                                                Requiert: {choice.required_stat} {choice.required_value}+
+                                            </Text>
+                                        )}
+                                    </TouchableOpacity>
+                                )
+                            })}
                         </View>
                     )}
                 </View>
             </ScrollView>
 
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("characters")}>
                 <Text style={styles.buttonText}>Retour</Text>
             </TouchableOpacity>
+
         </ImageBackground>
     )
 }
@@ -159,6 +217,39 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: "center",
         marginTop: 50,
+    },
+    characterStatsContainer: {
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
+        padding: 15,
+        borderRadius: 15,
+        marginBottom: 15,
+        borderColor: "rgba(183, 45, 230, 0.4)",
+        borderWidth: 1,
+    },
+    characterName: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "rgb(223, 182, 219)",
+        marginBottom: 10,
+        textAlign: "center",
+    },
+    statsGrid: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginTop: 10,
+    },
+    statsColumn: {
+        flex: 1,
+    },
+    statBadge: {
+        backgroundColor: "rgba(40, 20, 55, 0.7)",
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 10,
+        color: "white",
+        fontSize: 14,
+        marginBottom: 5,
+        marginHorizontal: 2,
     },
     scenarioContainer: {
         backgroundColor: "rgba(30, 15, 40, 0.85)",
@@ -205,15 +296,25 @@ const styles = StyleSheet.create({
         borderColor: "rgba(183, 45, 230, 0.3)",
         borderWidth: 1,
     },
+    disabledChoiceButton: {
+        backgroundColor: "rgba(40, 20, 55, 0.4)",
+        borderColor: "rgba(183, 45, 230, 0.1)",
+    },
     choiceText: {
         color: "white",
         fontSize: 16,
+    },
+    disabledChoiceText: {
+        color: "rgba(255, 255, 255, 0.5)",
     },
     requirementText: {
         color: "rgba(223, 182, 219, 0.7)",
         fontSize: 14,
         marginTop: 5,
         fontStyle: "italic",
+    },
+    failedRequirementText: {
+        color: "rgba(255, 100, 100, 0.7)",
     },
     backButton: {
         backgroundColor: "rgba(169, 40, 216, 0.65)",
