@@ -67,7 +67,7 @@ const choices = [
         result: 'Vous reussissez assez rapidement à vous cacher derriere une planète.',
         effect_intelligence: 15,   
         effect_luck: 5,           
-        nextScenarioId:28,         //Une Planete Morte
+        nextScenarioId:32,         //Une Planete Morte
     },
     {
         scenarioId: 31,  
@@ -83,7 +83,7 @@ const choices = [
     //Une Planete Morte
 
     {
-        scenarioId: 28,  
+        scenarioId: 32,  
         description: 'La planète semble avoir souffert mais peut etre qu\'il y a encore des êtres vivant ?',
         required_stat: 'dexterity',
         required_value: 80,
@@ -92,17 +92,17 @@ const choices = [
         effect_luck: 5,           
         nextScenarioId:29,         //La planète morte.
     },
-    {
-        scenarioId: 28,  
-        description: 'Tenter de réparer la station',
-        required_stat: 'intelligence',
-        required_value: 70,
-        result: 'Vous avez reparé la station, sur les écrans un message d\'alerte s\'affiche',
-        effect_intelligence: 15,   
-        effect_luck: 10,   
-        effect_dexterity: 5,      
-        nextScenarioId:4,         //La supernova
-    },
+    // {
+    //     scenarioId: 32,  
+    //     description: 'Tenter de réparer la station',
+    //     required_stat: 'intelligence',
+    //     required_value: 70,
+    //     result: 'Vous avez reparé la station, sur les écrans un message d\'alerte s\'affiche',
+    //     effect_intelligence: 15,   
+    //     effect_luck: 10,   
+    //     effect_dexterity: 5,      
+    //     nextScenarioId:4,         //La supernova
+    // },
 
     //La planète morte.
     {
@@ -294,7 +294,7 @@ const choices = [
         nextScenarioId: 35,         // 35 Président des aliens
     },
     {
-        scenarioId: 2,  
+        scenarioId: 27,  
         description: 'Faire prosperer le réarmemant démographic Alien',
         required_stat: '',
         required_value: 0,
