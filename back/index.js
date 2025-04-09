@@ -13,6 +13,19 @@ const port = 3333;
 
 app.use(cors());
 app.use(bodyParser.json());
+const mysql = require('mysql2/promise');
+
+async function createDatabaseIfNotExists() {
+    const connection = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD
+    });
+
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\`;`);
+    console.log(`📁 Base de données "${process.env.DB_NAME}" vérifiée/créée`);
+    await connection.end();
+}
 
 // Importation des routes
 const userRoutes = require('./routes/userRoutes');
@@ -29,7 +42,8 @@ app.use('/scenarios', verifyToken, scenarioRoutes);
 app.use('/choices', verifyToken, choiceRoutes);
 
 // Synchronisation de la base de données et exécution des seeders
-db.sequelize.sync({ force: true }) // ⚠️ Attention : force: true réinitialise la BDD à chaque lancement
+createDatabaseIfNotExists()
+    .then(() => db.sequelize.sync({ force: true })) // ⚠️ "force: true" réinitialise tout à chaque lancement
     .then(async () => {
         console.log('✅ Base de données synchronisée');
 

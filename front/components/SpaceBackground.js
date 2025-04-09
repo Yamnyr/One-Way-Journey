@@ -336,6 +336,7 @@ const styles = StyleSheet.create({
         borderRadius: 9999,
     },
     content: {
+        marginTop: 20,
         flex: 1,
         position: "relative",
         backgroundColor: "transparent",

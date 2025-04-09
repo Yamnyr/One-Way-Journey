@@ -21,7 +21,7 @@ const Connexion = ({ navigation }) => {
 
         } catch (error) {
             console.log("Erreur lors de la connexion :", error);
-        
+
             if (error.code === 'ECONNABORTED') {
                 Alert.alert("Erreur", "Le serveur a mis trop de temps à répondre. Veuillez réessayer.");
             } else if (error.response) {
@@ -32,7 +32,7 @@ const Connexion = ({ navigation }) => {
                 Alert.alert("Erreur", "Une erreur inattendue est survenue.");
             }
         }
-        
+
     };
 
     return (
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 32,
-        color: 'fff',
+        color: '#fff',
         textAlign: "center",
         marginBottom: 40,
         fontWeight: "bold",
