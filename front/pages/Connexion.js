@@ -83,22 +83,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-<<<<<<< HEAD
-        color: 'rgb(219, 4, 198)',
-        fontSize: 27,
+        fontSize: 32,
+        color: 'fff',
         textAlign: "center",
-        marginBottom: 30,
+        marginBottom: 40,
         fontWeight: "bold",
         textShadowColor: "rgba(255, 147, 239, 0)",
-=======
-        fontSize: 32,
-        color: '#fff',
-        textAlign: 'center',
-        marginBottom: 40,
-        fontWeight: 'bold',
-        fontFamily: 'Orbitron-Regular',
-        textShadowColor: 'rgba(0, 255, 255, 0.5)',
->>>>>>> b6152a46219196f1ffe59fd0a94bac8db6bd45da
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 17,
         fontFamily: "Orbitron-Bold",
