@@ -62,7 +62,7 @@ const scenarios = [
     {
         title: 'Le vaisseau fantôme',
         description: 'En explorant, tu tombes sur un vaisseau fantôme flottant dans le vide sidéral.',
-        type: 'destiny',
+        type: 'choice',
         is_final: false,
     },
     {
@@ -80,13 +80,13 @@ const scenarios = [
     {
         title: 'Les trous de ver instables',
         description: 'Les trous de ver sont instables et tu te retrouves projeté dans un autre coin de la galaxie.',
-        type: 'destiny',
+        type: 'choice',
         is_final: false,
     },
     {
         title: 'Direction la Terre !',
         description: 'Après un beau combat vous trouvez comment piloter le vaisseau et vous rentrez chez vous !.',
-        type: 'choice',
+        type: 'destiny',
         is_final: true,
     },
     {
@@ -117,7 +117,7 @@ const scenarios = [
     {
         title: 'Communication alien',
         description: 'Des aliens cherche à entrer en contact, ca à l\'aire important a changer',
-        type: 'destiny',
+        type: 'choice',
         is_final: false,
     },
     {
@@ -129,8 +129,8 @@ const scenarios = [
     {
         title: 'Win fuite',
         description: 'Vous parvenez a fuire avec l\'alien lorsque vous recevez un signal',
-        type: 'destiny',
-        is_final: true,
+        type: 'choice',
+        is_final: false,
     },
 
     {
@@ -149,7 +149,7 @@ const scenarios = [
         title: 'La peste',
         description: 'Vous toussez de plus en plus vous trouverez une solution sur terre ?',
         type: 'destiny',
-        is_final: false,
+        is_final: true,
     },
     {
         title: 'Le virus galactique',
@@ -166,8 +166,8 @@ const scenarios = [
     {
         title: 'Une nouvelle vie',
         description: 'Les aliens vous trouve super charismatique tellement qu\'il vous propose différention.',
-        type: 'destiny',
-        is_final: true,
+        type: 'choice',
+        is_final: false,
     },
     {
         title: 'La planète morte',
@@ -190,19 +190,43 @@ const scenarios = [
     {
         title: 'La supernova',
         description: 'Une étoile proche devient supernova, menaçant de tout annihiler.',
-        type: 'destiny',
-        is_final: true,
+        type: 'choice',
+        is_final: false,
     },
 
     {
         title: 'Une Planete Morte',
         description: 'Une étoile proche devient supernova, menaçant de tout annihiler.',
-        type: 'destiny',
-        is_final: true,
+        type: 'choice',
+        is_final: false,
     },
     {
         title: 'asteroide',
         description: 'Des Miliers d\'asteroide font droit sur vous !.',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Run',
+        description: 'Dans l\'urgence un choix s\'impose ! Que faire ?',
+        type: 'choice',
+        is_final: false,
+    },
+    {
+        title: 'Président des aliens',
+        description: 'Vous vivez une vie grandiose en montant les échellons de votre carriere politique !',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Heureux evenement',
+        description: 'Vous apprecier enormement vos ami les aliens tellement que vous faite 500 bébés !',
+        type: 'destiny',
+        is_final: true,
+    },
+    {
+        title: 'Mort',
+        description: 'Dans la vie il faut être poli sinon on meurt !',
         type: 'destiny',
         is_final: true,
     }

@@ -69,6 +69,25 @@ const Admin = () => {
         }
     }
 
+    const handleDelete = async (scenarioId) => {
+        Alert.alert("Confirmation", "Êtes-vous sûr de vouloir supprimer ce scénario ?", [
+            { text: "Annuler", style: "cancel" },
+            {
+                text: "Supprimer",
+                style: "destructive",
+                onPress: async () => {
+                    try {
+                        const token = await AsyncStorage.getItem("userToken")
+                        await deleteScenario(token, scenarioId)
+                        setScenarios(scenarios.filter((s) => s.id !== scenarioId))
+                    } catch (err) {
+                        Alert.alert("Erreur", "Impossible de supprimer ce scénario.")
+                    }
+                },
+            },
+        ])
+    }
+
     const addChoice = () => {
         setNewScenario({
             ...newScenario,
@@ -87,24 +106,10 @@ const Admin = () => {
         })
     }
 
-
-    const handleDelete = async (scenarioId) => {
-        Alert.alert("Confirmation", "Êtes-vous sûr de vouloir supprimer ce scénario ?", [
-            { text: "Annuler", style: "cancel" },
-            {
-                text: "Supprimer",
-                style: "destructive",
-                onPress: async () => {
-                    try {
-                        const token = await AsyncStorage.getItem("userToken")
-                        await deleteScenario(token, scenarioId)
-                        setScenarios(scenarios.filter((s) => s.id !== scenarioId))
-                    } catch (err) {
-                        Alert.alert("Erreur", "Impossible de supprimer ce scénario.")
-                    }
-                },
-            },
-        ])
+    const removeChoice = (index) => {
+        const updatedChoices = [...newScenario.choices]
+        updatedChoices.splice(index, 1)
+        setNewScenario({ ...newScenario, choices: updatedChoices })
     }
 
     const handleBack = () => {
@@ -334,26 +339,155 @@ const Admin = () => {
                                     }}
                                     style={{ borderBottomWidth: 1, marginBottom: 5 }}
                                 />
-                                {/* Tu peux ajouter plus de champs comme required_stat, etc. de la même façon ici */}
+                                <TextInput
+                                    placeholder="Stat requise (ex: charisma, dexterity)"
+                                    value={choice.required_stat}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].required_stat = text
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TextInput
+                                    placeholder="Valeur requise"
+                                    keyboardType="numeric"
+                                    value={choice.required_value?.toString()}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].required_value = text
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TextInput
+                                    placeholder="Résultat affiché"
+                                    value={choice.result}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].result = text
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TextInput
+                                    placeholder="Effet sur la vie (ex: -10, +5)"
+                                    keyboardType="numeric"
+                                    value={choice.effect_life?.toString()}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].effect_life = Number(text)
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TextInput
+                                    placeholder="Effet sur le charisme"
+                                    keyboardType="numeric"
+                                    value={choice.effect_charisma?.toString()}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].effect_charisma = Number(text)
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TextInput
+                                    placeholder="Effet sur la dextérité"
+                                    keyboardType="numeric"
+                                    value={choice.effect_dexterity?.toString()}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].effect_dexterity = Number(text)
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TextInput
+                                    placeholder="Effet sur la chance"
+                                    keyboardType="numeric"
+                                    value={choice.effect_luck?.toString()}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].effect_luck = Number(text)
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                                    <Text style={{ marginRight: 10 }}>Fin de partie ?</Text>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            const updated = [...newScenario.choices]
+                                            updated[idx].is_game_over = !updated[idx].is_game_over
+                                            setNewScenario({ ...newScenario, choices: updated })
+                                        }}
+                                        style={{
+                                            width: 24,
+                                            height: 24,
+                                            borderWidth: 1,
+                                            borderColor: '#333',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            backgroundColor: choice.is_game_over ? 'red' : 'transparent',
+                                            borderRadius: 4
+                                        }}
+                                    >
+                                        {choice.is_game_over && <Text style={{ color: 'white' }}>✓</Text>}
+                                    </TouchableOpacity>
+                                </View>
+
+                                <TextInput
+                                    placeholder="ID du prochain scénario"
+                                    keyboardType="numeric"
+                                    value={choice.nextScenarioId?.toString()}
+                                    onChangeText={(text) => {
+                                        const updated = [...newScenario.choices]
+                                        updated[idx].nextScenarioId = text ? Number(text) : null
+                                        setNewScenario({ ...newScenario, choices: updated })
+                                    }}
+                                    style={{ borderBottomWidth: 1, marginBottom: 5 }}
+                                />
+
+                                <TouchableOpacity
+                                    onPress={() => removeChoice(idx)}
+                                    style={{
+                                        backgroundColor: '#cc0000',
+                                        padding: 8,
+                                        borderRadius: 6,
+                                        marginTop: 10,
+                                        alignSelf: 'flex-start'
+                                    }}
+                                >
+                                    <Text style={{ color: 'white' }}>🗑️ Supprimer ce choix</Text>
+                                </TouchableOpacity>
+
                             </View>
                         ))}
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-                            <TouchableOpacity
-                                onPress={() => setModalVisible(false)}
-                                style={{ backgroundColor: '#888', padding: 10, borderRadius: 10 }}
-                            >
-                                <Text style={{ color: '#fff' }}>Annuler</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                onPress={handleCreateScenario}
-                                style={{ backgroundColor: '#008000', padding: 10, borderRadius: 10 }}
-                            >
-                                <Text style={{ color: '#fff' }}>Créer</Text>
-                            </TouchableOpacity>
-                        </View>
                     </ScrollView>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
+                        <TouchableOpacity
+                            onPress={() => setModalVisible(false)}
+                            style={{ backgroundColor: '#888', padding: 10, borderRadius: 10 }}
+                        >
+                            <Text style={{ color: '#fff' }}>Annuler</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={handleCreateScenario}
+                            style={{ backgroundColor: '#008000', padding: 10, borderRadius: 10 }}
+                        >
+                            <Text style={{ color: '#fff' }}>Créer</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Modal>
             {/*</ImageBackground>*/}
