@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 10,
         color: "white",
-        fontSize: 14,
+        fontSize: 12,
         marginBottom: 5,
         marginHorizontal: 2,
         fontFamily: 'Orbitron-Regular',

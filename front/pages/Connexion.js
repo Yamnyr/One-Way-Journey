@@ -46,6 +46,7 @@ const Connexion = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Nom d'utilisateur"
+                placeholderTextColor="rgba(255,255,255,0.6)"
                 autoCapitalize="none"
                 value={username}
                 onChangeText={setUsername}
@@ -54,10 +55,12 @@ const Connexion = ({ navigation }) => {
             <TextInput
                 style={styles.input}
                 placeholder="Mot de passe"
+                placeholderTextColor="rgba(255,255,255,0.6)"
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
             />
+
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Se connecter</Text>
@@ -76,45 +79,51 @@ export default Connexion;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         padding: 20,
+        justifyContent: 'center',
     },
     title: {
-        fontSize: 32,
-        color: '#fff',
-        textAlign: 'center',
-        marginBottom: 40,
-        fontWeight: 'bold',
-        fontFamily: 'Orbitron',
-        textShadowColor: 'rgba(0, 255, 255, 0.5)',
+        color: 'rgb(219, 4, 198)',
+        fontSize: 27,
+        textAlign: "center",
+        marginBottom: 30,
+        fontWeight: "bold",
+        textShadowColor: "rgba(255, 147, 239, 0)",
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 15,
+        textShadowRadius: 17,
+        fontFamily: "Orbitron-Bold",
     },
     input: {
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(60, 20, 80, 0.3)',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(218, 9, 218, 0.65)',
+        color: 'white',
         padding: 15,
-        borderRadius: 10,
         marginBottom: 20,
-        fontFamily: 'Orbitron',
+        fontFamily: 'Orbitron-Regular',
         fontSize: 16,
     },
     button: {
-        backgroundColor: 'rgba(34, 186, 186, 0.6)',
+        backgroundColor: 'rgba(218, 9, 218, 0.65)',
         padding: 15,
-        borderRadius: 10,
+        borderRadius: 15,
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 10,
+        // borderColor: 'rgba(107, 31, 132, 0.32)',
+        borderWidth: 1,
     },
     buttonText: {
-        color: '#fff',
+        color: 'white',
+        fontSize: 18,
         fontWeight: 'bold',
-        fontSize: 16,
-        fontFamily: 'Orbitron',
+        fontFamily: 'Orbitron-Regular',
     },
     link: {
-        color: 'rgb(34, 186, 186)',
+        color: 'rgb(223, 182, 219)',
         textAlign: 'center',
         marginTop: 20,
-        fontFamily: 'Orbitron',
+        fontFamily: 'Orbitron-Regular',
+        fontStyle: 'italic',
     },
 });

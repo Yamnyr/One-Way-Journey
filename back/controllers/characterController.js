@@ -11,7 +11,6 @@ const raceStats = {
     batman: { life: 100, charisma: 85, dexterity: 110, intelligence: 140, luck: 70 }
 };
 
-// 🔹 Créer un personnage avec stats automatiques selon la race
 exports.createCharacter = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -37,9 +36,17 @@ exports.createCharacter = async (req, res) => {
             luck
         });
 
+        // Recharger avec le scénario associé
+        const characterWithScenario = await Character.findByPk(character.id, {
+            include: {
+                model: Scenario,
+                attributes: ['id', 'title']
+            }
+        });
+
         res.status(201).json({
             message: '✅ Personnage créé avec succès !',
-            character
+            character: characterWithScenario
         });
     } catch (error) {
         console.error('❌ Erreur lors de la création du personnage:', error);

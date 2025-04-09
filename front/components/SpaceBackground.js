@@ -97,21 +97,17 @@ const Nebula = ({ style, colors }) => {
 
 // Planète simple sans animation
 const Planet = ({ size, top, left }) => {
-    // Choisir aléatoirement entre couleur bleu ou rouge
-    const planetColor = Math.random() > 0.5 ?
-        "rgba(124, 180, 255, 0.9)" : // Bleu pour les planètes gazeuses
-        "rgba(165, 113, 100, 0.9)";  // Rougeâtre pour les planètes rocheuses
+    const planetColor = "rgba(144, 93, 255, 0.85)"; // violet doux
 
     return (
         <View style={{ position: 'absolute', top, left }}>
-            {/* La planète */}
             <View style={[styles.planet, { width: size, height: size, backgroundColor: planetColor }]}>
-                {/* Surface détaillée */}
                 <View style={[styles.planetSurface, { opacity: 0.4 }]} />
             </View>
         </View>
     );
 };
+
 
 // Générateur d'étoiles simplifié
 const generateStars = (count, dimensions) => {
