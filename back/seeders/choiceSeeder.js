@@ -53,7 +53,7 @@ const choices = [
         required_value: 0,
         result: 'BOOM !',
         effect_intelligence: 15,   
-        effect_life: -9999, 
+        effect_life: -999, 
         nextScenarioId:4,         // la station explose
     },
     
@@ -75,9 +75,7 @@ const choices = [
         required_stat: 'intelligence',
         required_value: 70,
         result: 'Vous avez reparé la station, sur les écrans un message d\'alerte s\'affiche',
-        effect_intelligence: 15,   
-        effect_luck: 10,   
-        effect_dexterity: 5,      
+        effect_life: -999,         
         nextScenarioId:4,         //boom
     },
     //Une Planete Morte
@@ -111,10 +109,6 @@ const choices = [
         required_stat: '',
         required_value: 0,
         result: 'Tu vois un alien mourant qui dit "il y en a d\'autre fuyer !" en pointant le ciel .',        
-        effect_dexterity: 999, 
-        effect_intelligence: 999,     
-        effect_life: 999,          
-        effect_luck: 999,  
         nextScenarioId: 34,         //Run
     },
 
@@ -466,9 +460,7 @@ const choices = [
         description: 'Se méfier des clones',
         required_stat: '',
         required_value: 0,
-        result: 'Les clones t\'apprecient pas ils te mettent dans un vaisseau et mettent l\'auto pilote droit vers le soleil.',  
-        effect_dexterity: -999, 
-        effect_intelligence: -999,     
+        result: 'Les clones t\'apprecient pas ils te mettent dans un vaisseau et mettent l\'auto pilote droit vers le soleil.',    
         effect_life: -999,          
         effect_luck: -999,       
         nextScenarioId:22,         // Just a Bruler X
@@ -481,10 +473,8 @@ const choices = [
         required_stat: '',
         required_value: 0,
         result: 'Tu vois un alien mourant qui dit "il y en a d\'autre fuyer !" en pointant le ciel .',        
-        effect_dexterity: 999, 
-        effect_intelligence: 999,     
-        effect_life: 999,          
-        effect_luck: 999,  
+        effect_life: -999,          
+        effect_luck: -999,   
         nextScenarioId: 33,         //asteroide
     },
 
