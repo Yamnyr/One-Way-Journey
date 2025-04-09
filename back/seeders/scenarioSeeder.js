@@ -1,3 +1,4 @@
+// Mise à jour du fichier scenarioSeeder.js avec 20 scénarios
 const db = require('../models');
 
 const scenarios = [
@@ -84,7 +85,43 @@ const scenarios = [
         description: 'Une étoile proche devient supernova, menaçant de tout annihiler.',
         type: 'destiny',
         is_final: true,
-    }
+    },
+    {
+        title: 'L\'intelligence artificielle défectueuse',
+        description: 'Une IA contrôle une partie du vaisseau et commence à devenir instable.',
+        type: 'choice',
+        is_final: false,
+    },
+    {
+        title: 'Le portail quantique',
+        description: 'Un portail quantique s\'ouvre devant toi, menant à une dimension inconnue.',
+        type: 'destiny',
+        is_final: false,
+    },
+    {
+        title: 'Les ruines extraterrestres',
+        description: 'Tu explores des ruines abandonnées par une civilisation avancée.',
+        type: 'choice',
+        is_final: false,
+    },
+    {
+        title: 'La tempête cosmique',
+        description: 'Une tempête d\'énergie cosmique approche à grande vitesse.',
+        type: 'destiny',
+        is_final: false,
+    },
+    {
+        title: 'Le cristal vivant',
+        description: 'Un gigantesque cristal semblant vivant te communique des visions étranges.',
+        type: 'choice',
+        is_final: false,
+    },
+    {
+        title: 'L\'hologramme du passé',
+        description: 'Un hologramme révèle des événements tragiques de l\'histoire de la station.',
+        type: 'choice',
+        is_final: false,
+    },
 ];
 
 const seedScenarios = async () => {

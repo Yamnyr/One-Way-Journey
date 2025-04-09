@@ -5,12 +5,13 @@ const Scenario = require('./Scenario');
 const Choice = sequelize.define('Choice', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     description: { type: DataTypes.TEXT, allowNull: false },
-    required_stat: { type: DataTypes.STRING(50), allowNull: true },  // Ex: 'charisma'
+    required_stat: { type: DataTypes.ENUM('charisma', 'dexterity', 'intelligence', 'luck'), allowNull: true },
     required_value: { type: DataTypes.INTEGER, allowNull: true },
     result: { type: DataTypes.TEXT, allowNull: false },
     effect_life: { type: DataTypes.INTEGER, defaultValue: 0 },
     effect_charisma: { type: DataTypes.INTEGER, defaultValue: 0 },
     effect_dexterity: { type: DataTypes.INTEGER, defaultValue: 0 },
+    effect_intelligence: { type: DataTypes.INTEGER, defaultValue: 0 },
     effect_luck: { type: DataTypes.INTEGER, defaultValue: 0 },
     is_game_over: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, { timestamps: true });
