@@ -12,8 +12,8 @@ import Accueil from "./pages/Accueil";
 import CharactersPage from "./pages/CharacterList";
 import Admin from "./pages/Admin";
 import ScenarioScreen from "./pages/Scenario";
-import AppWrapper from "./components/AppWrapper";
 import {MusicProvider} from "./contexts/MusicContext";
+import SpaceBackground from "./components/SpaceBackground";
 
 // Ignore warning
 LogBox.ignoreLogs(['Cannot update a component']);
@@ -64,7 +64,7 @@ export default function App() {
     return (
         <MusicProvider>
             <NavigationContainer theme={MyCustomTheme}>
-                <AppWrapper>
+                <SpaceBackground>
                     <Stack.Navigator initialRouteName={isLoggedIn ? "Accueil" : "Connexion"} screenOptions={{ headerShown: false }}>
                         <Stack.Screen name="Connexion" component={Connexion} />
                         <Stack.Screen name="characters" component={CharactersPage} />
@@ -73,7 +73,7 @@ export default function App() {
                         <Stack.Screen name="Accueil" component={Accueil} />
                         <Stack.Screen name="Scenario" component={ScenarioScreen} />
                     </Stack.Navigator>
-                </AppWrapper>
+                </SpaceBackground>
             </NavigationContainer>
         </MusicProvider>
     );
