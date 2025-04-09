@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 40,
         fontWeight: 'bold',
-        fontFamily: 'Orbitron',
+        fontFamily: 'Orbitron-Regular',
         textShadowColor: 'rgba(0, 255, 255, 0.5)',
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 15,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginBottom: 20,
-        fontFamily: 'Orbitron',
+        fontFamily: 'Orbitron-Regular',
         fontSize: 16,
     },
     button: {
