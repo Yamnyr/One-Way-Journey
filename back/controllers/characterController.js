@@ -121,14 +121,19 @@ exports.updateCharacter = async (req, res) => {
         }
 
         // Mettre à jour les informations du personnage
-        character.name = name || character.name;
-        character.species = species || character.species;
-        character.life = life || character.life;
-        character.charisma = charisma || character.charisma;
-        character.dexterity = dexterity || character.dexterity;
-        character.intelligence = intelligence || character.intelligence;
-        character.luck = luck || character.luck;
-        character.currentScenarioId = currentScenarioId || character.currentScenarioId;
+        character.name = name ?? character.name;
+        character.species = species ?? character.species;
+        character.life = life ?? character.life;
+        character.charisma = charisma ?? character.charisma;
+        character.dexterity = dexterity ?? character.dexterity;
+        character.intelligence = intelligence ?? character.intelligence;
+        character.luck = luck ?? character.luck;
+        character.currentScenarioId = currentScenarioId ?? character.currentScenarioId;
+
+        // Vérifier si la vie est à 0 ou moins, et mettre à jour is_alive
+        if (life !== undefined && life <= 0) {
+            character.is_alive = false;
+        }
 
         await character.save();
 
@@ -141,6 +146,7 @@ exports.updateCharacter = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur lors de la mise à jour du personnage.' });
     }
 };
+
 
 
 // 🔍 Récupérer un personnage spécifique
