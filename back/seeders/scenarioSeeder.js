@@ -149,7 +149,7 @@ const scenarios = [
         title: 'La peste',
         description: 'Vous toussez de plus en plus vous trouverez une solution sur terre ?',
         type: 'destiny',
-        is_final: False,
+        is_final: false,
     },
     {
         title: 'Le virus galactique',
