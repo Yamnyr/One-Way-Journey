@@ -1,17 +1,23 @@
 Pour le suvit des choix de couleurs entre les pages :
 Pour la page Admin :
+
     title: 
         color: 'rgb(219, 4, 198)',
+
     emptyText: 
         color: "rgb(223, 182, 219)",
+
     errorText: 
         color: "rgb(255, 100, 100)",
+
     buttonText2: 
         backgroundColor: "rgba(255, 255, 255, 0)",
+
     createButton: 
         backgroundColor: "rgba(52, 8, 69, 0.71)",
         shadowColor: "rgba(194, 152, 187, 0)",
         borderColor: "rgba(107, 31, 132, 0.32)",
+        
     createButtonText: 
         color: "rgb(255, 255, 255)",
 
