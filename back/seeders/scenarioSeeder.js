@@ -161,7 +161,7 @@ const scenarios = [
         title: 'La flotte ennemie',
         description: 'Une flotte de vaisseaux ennemis arrive à grande vitesse. laisser un VU c\'est pas ouf...',
         type: 'destiny',
-        is_final: false,
+        is_final: true,
     },
     {
         title: 'Une nouvelle vie',
