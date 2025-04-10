@@ -123,7 +123,7 @@ const UpdateUserModal = ({ visible, userData, onClose, onSuccess }) => {
                                     selectedValue={updateData.role}
                                     onValueChange={(itemValue) => !isSubmitting && setUpdateData({ ...updateData, role: itemValue })}
                                     style={styles.picker}
-                                    dropdownIconColor="rgb(255, 0, 225)"
+                                    dropdownIconColor="rgb(219, 4, 198)"
                                     enabled={!isSubmitting}
                                 >
                                     <Picker.Item label="Joueur" value="player" />
@@ -159,16 +159,16 @@ const UpdateUserModal = ({ visible, userData, onClose, onSuccess }) => {
 const styles = StyleSheet.create({
     modalOverlay: {
         flex: 1,
-        backgroundColor: "rgba(0,0,0,0.85)",
+        backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         padding: 10,
     },
     modalContainer: {
-        backgroundColor: "rgba(30, 15, 40, 0.95)",
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
         borderRadius: 15,
-        borderColor: "rgba(115, 32, 143, 0.5)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
-        shadowColor: "rgb(255, 0, 225)",
+        shadowColor: "rgb(219, 4, 198)",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     modalTitle: {
-        color: "rgb(255, 0, 225)",
+        color: "rgb(219, 4, 198)",
         fontSize: 24,
         fontWeight: "bold",
         fontFamily: "Orbitron-Bold",
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(60, 20, 80, 0.3)",
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: "rgba(115, 32, 143, 0.5)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         color: "white",
         padding: 15,
         fontFamily: "Orbitron-Regular",
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(60, 20, 80, 0.3)",
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: "rgba(115, 32, 143, 0.5)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         overflow: "hidden",
         marginBottom: 10,
     },

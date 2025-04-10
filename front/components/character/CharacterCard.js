@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         padding: 18,
         borderRadius: 15,
         marginBottom: 15,
-        borderColor: "rgba(115, 32, 143, 0.32)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
         shadowColor: "rgba(194, 152, 187, 0)",
         shadowOffset: { width: 0, height: 4 },
@@ -86,13 +86,13 @@ const styles = StyleSheet.create({
     },
     // Style pour l'état pressed
     cardPressed: {
-        backgroundColor: "rgba(60, 30, 80, 0.85)",
-        borderColor: "rgba(255, 0, 225, 0.5)",
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
     },
     // Style pour les personnages morts
     deadCharacterCard: {
         backgroundColor: "rgba(7,3,9,0.85)",
-        borderColor: "rgba(115, 32, 143, 0.32)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         opacity: 0.8,
     },
     deadCharacterName: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         fontFamily: "Orbitron-Regular",
         fontSize: 20,
         fontWeight: "bold",
-        color: "rgb(255, 0, 230)",
+        color: "rgb(219, 4, 198)",
         marginBottom: 8,
     },
     characterText: {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginVertical: 10,
-        backgroundColor: "rgba(40, 6, 65, 0)",
+        backgroundColor: "rgba(40, 20, 55, 0.7)",
         borderRadius: 8,
         padding: 10,
     },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     scenarioText: {
-        color: "rgb(255, 0, 230)",
+        color: "rgb(219, 4, 198)",
         marginVertical: 5,
         fontWeight: "bold",
         fontFamily: "Orbitron-Regular",

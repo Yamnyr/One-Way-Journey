@@ -113,7 +113,7 @@ Pour la page CharactereList :
         color: "rgba(170, 0, 0, 0.8)",
 
     characterName: 
-        color: "rgb(255, 0, 230)",
+        color: "rgb(219, 4, 198)",
 
     // Stats du personnage
     

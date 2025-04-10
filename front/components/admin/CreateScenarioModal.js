@@ -147,7 +147,7 @@ const CreateScenarioModal = ({ visible, onClose, onCreateSuccess }) => {
                                     selectedValue={newScenario.type}
                                     onValueChange={(itemValue) => setNewScenario({ ...newScenario, type: itemValue })}
                                     style={styles.picker}
-                                    dropdownIconColor="rgb(255, 0, 225)"
+                                    dropdownIconColor="rgb(219, 4, 198)"
                                 >
                                     <Picker.Item label="Sélectionnez un type" value="" />
                                     <Picker.Item label="Destiny" value="destiny" />
@@ -208,9 +208,9 @@ const styles = StyleSheet.create({
     modalContainer: {
         backgroundColor: 'rgba(30, 15, 40, 0.95)',
         borderRadius: 15,
-        borderColor: "rgba(115, 32, 143, 0.5)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
-        shadowColor: "rgb(255, 0, 225)",
+        shadowColor: "rgb(219, 4, 198)",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     modalTitle: {
-        color: "rgb(255, 0, 225)",
+        color: "rgb(219, 4, 198)",
         fontSize: 24,
         fontWeight: "bold",
         fontFamily: "Orbitron-Bold",
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         borderWidth: 1,
-        borderColor: 'rgba(115, 32, 143, 0.8)',
+        borderColor: 'rgba(115, 32, 143, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         borderWidth: 1,
         borderColor: 'rgba(255, 0, 225, 0.3)',
-        shadowColor: "rgb(255, 0, 225)",
+        shadowColor: "rgb(219, 4, 198)",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 3,

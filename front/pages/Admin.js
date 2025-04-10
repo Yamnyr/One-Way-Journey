@@ -103,7 +103,7 @@ const Admin = () => {
 
     if (loading) return (
         <View style={styles.container}>
-            <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
+            <ActivityIndicator size="large" color="rgb(219, 4, 198)" style={styles.loader} />
         </View>
     )
 
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 20,
         shadowColor: "rgba(194, 152, 187, 0)",
-        borderColor: "rgba(107, 31, 132, 0.32)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,

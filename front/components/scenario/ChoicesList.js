@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginBottom: 10,
-        borderColor: "rgba(183, 45, 230, 0.3)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
     },
     disabledChoiceButton: {
         backgroundColor: "rgba(40, 20, 55, 0.4)",
-        borderColor: "rgba(183, 45, 230, 0.1)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
     },
     choiceText: {
         fontFamily: "Orbitron-Regular",

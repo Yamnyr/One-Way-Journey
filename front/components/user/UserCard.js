@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         padding: 18,
         borderRadius: 15,
         marginBottom: 15,
-        borderColor: "rgba(115, 32, 143, 0.32)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
         shadowColor: "rgba(194, 152, 187, 0)",
         shadowOffset: { width: 0, height: 4 },
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         fontFamily: "Orbitron-Bold",
     },
     detailsContainer: {
-        backgroundColor: "rgba(40, 6, 65, 0.4)",
+        backgroundColor: "rgba(40, 20, 55, 0.7)",
         borderRadius: 8,
         padding: 10,
         marginVertical: 10,

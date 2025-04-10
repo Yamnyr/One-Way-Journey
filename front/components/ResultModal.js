@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.7)",
     },
     modalContent: {
-        backgroundColor: "rgba(30, 15, 40, 0.95)",
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
         padding: 25,
         borderRadius: 20,
         width: "85%",
-        borderColor: "rgba(183, 45, 230, 0.6)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
         alignItems: "center",
     },

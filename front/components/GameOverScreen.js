@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         width: "85%",
         alignItems: "center",
-        borderColor: "rgba(183, 45, 230, 0.6)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
         borderWidth: 1,
     },
     gameOverTitle: {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         fontFamily: "Orbitron-Regular",
     },
     returnButton: {
-        backgroundColor: "rgba(191, 26, 109, 0.6)",
+        backgroundColor: "rgba(169, 40, 216, 0.65)",
         padding: 15,
         borderRadius: 15,
         alignItems: "center",
