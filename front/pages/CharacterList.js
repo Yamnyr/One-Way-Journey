@@ -15,6 +15,7 @@ import {
     Image,
     Platform,
     ScrollView,
+    Pressable,
 } from "react-native"
 import { getUserCharacters, deleteCharacter, createCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -101,6 +102,9 @@ const UserCharactersScreen = () => {
     }
 
     const handleNavigateToScenario = async (character) => {
+        // Ne rien faire si le personnage est mort
+        if (!character.is_alive) return;
+
         if (character.currentScenarioId) {
             try {
                 // Stocker l'ID du personnage dans AsyncStorage
@@ -164,20 +168,86 @@ const UserCharactersScreen = () => {
     }
 
     if (loading) return (
-        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
-
         <View
             style={styles.container}
             resizeMode="cover"
         >
             <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
-            {/*</ImageBackground>*/}
         </View>
     )
 
-    return (
-        // <ImageBackground source={require("../assets/space.jpg")} style={styles.container} resizeMode="cover">
+    const renderCharacterCard = ({ item }) => {
+        // Contenu de carte pour un personnage vivant
+        const liveCharacterContent = (
+            <View style={styles.cardContent}>
+                <View style={styles.characterHeader}>
+                    <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
+                    <View style={styles.characterInfo}>
+                        <Text style={styles.characterName}>{item.name}</Text>
+                        <Text style={styles.characterText}>Espèce : {item.species}</Text>
+                    </View>
+                </View>
 
+                {/* Stats du personnage (seulement pour les vivants) */}
+                <View style={styles.statsContainer}>
+                    <View style={styles.statsColumn}>
+                        <Text style={styles.statItem}>❤️ Vie : {item.life || 0}</Text>
+                        <Text style={styles.statItem}>✨ Charisme : {item.charisma || 0}</Text>
+                        <Text style={styles.statItem}>🏃 Dextérité : {item.dexterity || 0}</Text>
+                    </View>
+                    <View style={styles.statsColumn}>
+                        <Text style={styles.statItem}>🧠 Intelligence : {item.intelligence || 0}</Text>
+                        <Text style={styles.statItem}>🍀 Chance : {item.luck || 0}</Text>
+                        <Text style={styles.statItem}>✅ En vie !</Text>
+                    </View>
+                </View>
+
+                {/* Scénario actuel */}
+                {item.currentScenarioId && (
+                    <Text style={styles.scenarioText}>🎮 Scénario actuel : {item.Scenario.title}</Text>
+                )}
+            </View>
+        );
+
+        // Contenu de carte pour un personnage mort
+        const deadCharacterContent = (
+            <View style={styles.cardContent}>
+                <View style={styles.characterHeader}>
+                    <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
+                    <View style={styles.characterInfo}>
+                        <Text style={[styles.characterName, styles.deadCharacterName]}>{item.name}</Text>
+                        <Text style={styles.characterText}>Espèce : {item.species}</Text>
+                    </View>
+                </View>
+
+                {/* Message pour les personnages morts */}
+                <View style={styles.deadMessageContainer}>
+                    <Text style={styles.deadMessage}>☠️ Ce personnage est mort</Text>
+                    <Text style={styles.deadSubMessage}>Impossible de continuer l'aventure</Text>
+                </View>
+
+                {/* Indication pour la suppression */}
+                <Text style={styles.deleteHint}>Appui long pour supprimer ce personnage</Text>
+            </View>
+        );
+        return (
+            <Pressable
+                style={({ pressed }) => [
+                    styles.characterCard,
+                    !item.is_alive && styles.deadCharacterCard,
+                    pressed && item.is_alive && styles.cardPressed
+                ]}
+                onPress={() => item.is_alive && handleNavigateToScenario(item)}
+                onLongPress={() => handleDelete(item.id)}
+                delayLongPress={500} // Délai avant que l'appui long soit détecté
+                android_ripple={item.is_alive ? { color: 'rgba(255, 0, 225, 0.2)' } : null}
+            >
+                {item.is_alive ? liveCharacterContent : deadCharacterContent}
+            </Pressable>
+        );
+    };
+
+    return (
         <View
             style={styles.container}
             resizeMode="cover"
@@ -193,43 +263,7 @@ const UserCharactersScreen = () => {
                 <FlatList
                     data={characters}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.characterCard}>
-                            <TouchableOpacity onPress={() => handleNavigateToScenario(item)} style={styles.cardContent}>
-                                <View style={styles.characterHeader}>
-                                    <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
-                                    <View style={styles.characterInfo}>
-                                        <Text style={styles.characterName}>{item.name}</Text>
-                                        <Text style={styles.characterText}>Espèce : {item.species}</Text>
-                                    </View>
-                                </View>
-
-                                {/* Stats du personnage */}
-                                <View style={styles.statsContainer}>
-                                    <View style={styles.statsColumn}>
-                                        <Text style={styles.statItem}>❤️ Vie : {item.life || 0}</Text>
-                                        <Text style={styles.statItem}>✨ Charisme : {item.charisma || 0}</Text>
-                                        <Text style={styles.statItem}>🏃 Dextérité : {item.dexterity || 0}</Text>
-                                    </View>
-                                    <View style={styles.statsColumn}>
-                                        <Text style={styles.statItem}>🧠 Intelligence : {item.intelligence || 0}</Text>
-                                        <Text style={styles.statItem}>🍀 Chance : {item.luck || 0}</Text>
-                                        <Text style={styles.statItem}>{item.is_alive ? "✅ En vie ! " : "☠️ Mort ..."}</Text>
-                                    </View>
-                                </View>
-
-                                {/* Scénario actuel */}
-                                {item.currentScenarioId && (
-                                    // <Text style={styles.scenarioText}>🎮 Scénario actuel : {item.currentScenarioId.id}</Text>
-                                    <Text style={styles.scenarioText}>🎮 Scénario actuel : {item.Scenario.title}</Text>
-                                )}
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-                                <Text style={styles.buttonText}>Supprimer</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
+                    renderItem={renderCharacterCard}
                 />
             )}
 
@@ -266,7 +300,6 @@ const UserCharactersScreen = () => {
                     </View>
                 </View>
             </Modal>
-        {/*</ImageBackground>*/}
         </View>
     )
 }
@@ -308,6 +341,51 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.8,
         shadowRadius: 8,
+    },
+    // Style pour l'état pressed
+    cardPressed: {
+        backgroundColor: "rgba(60, 30, 80, 0.85)",
+        borderColor: "rgba(255, 0, 225, 0.5)",
+    },
+    // Style pour les personnages morts
+    deadCharacterCard: {
+        backgroundColor: "rgba(7,3,9,0.85)",
+        borderColor: "rgba(115, 32, 143, 0.32)",
+        opacity: 0.8,
+    },
+    deadCharacterName: {
+        color: "rgba(170, 0, 0, 0.8)",
+        textDecorationLine: "line-through",
+    },
+    deadMessageContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 15,
+        marginVertical: 5,
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
+        borderRadius: 10,
+    },
+    deadMessage: {
+        fontSize: 18,
+        color: "rgba(170, 0, 0, 0.8)",
+        fontWeight: "bold",
+        textAlign: "center",
+        fontFamily: "Orbitron-Bold",
+    },
+    deadSubMessage: {
+        fontSize: 14,
+        color: "rgba(200, 200, 200, 0.8)",
+        marginTop: 5,
+        textAlign: "center",
+        fontFamily: "Orbitron-Regular",
+    },
+    deleteHint: {
+        fontSize: 13,
+        color: "rgba(170, 0, 0, 0.8)",
+        fontStyle: "italic",
+        textAlign: "center",
+        marginTop: 10,
+        fontFamily: "Orbitron-Regular",
     },
     characterName: {
         fontFamily: "Orbitron-Regular",
@@ -355,13 +433,6 @@ const styles = StyleSheet.create({
     },
 
     // Boutons spécifiques
-    deleteButton: {
-        marginTop: 10,
-        backgroundColor: "rgba(191, 26, 109, 0.6)",
-        padding: 10,
-        borderRadius: 10,
-        alignItems: "center",
-    },
     createButton: {
         backgroundColor: "rgba(52, 8, 69, 0.71)",
         padding: 15,
@@ -460,19 +531,6 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         flex: 1,
-    },
-    Button2: {
-        position: "absolute",
-        top: 10,
-        left: 11,
-        backgroundColor: "rgb(255, 255, 255)",
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 10,
-        shadowColor: "rgba(225, 9, 207, 0.46)",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 5,
     },
 
     buttonText2: {

@@ -226,7 +226,7 @@ const choices = [
         required_value: 0,
         result: 'Vous laissez un VU au Alien pas sur qu\'ils aiment ca ...',
         effect_intelligence: -15,
-        effect_life: -15,
+        effect_life: -999,
         nextScenarioId: 26,         // La flotte ennemie X
     },
 

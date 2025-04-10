@@ -1,6 +1,6 @@
 # One Way Journey
 
-![One Way Journey Logo](./assets/logo.png)
+[//]: # (![One Way Journey Logo]&#40;./assets/logo.png&#41;)
 
 ## Description
 
@@ -11,8 +11,8 @@ Le jeu propose une expérience immersive avec un système de statistiques (vie, 
 ## Technologies utilisées
 
 ### Frontend
-- **React Native**
-- **Expo**
+- **React Native** - Framework pour le développement d'applications mobiles
+- **Expo** - Plateforme pour faciliter le développement React Native
 
 ### Backend
 - **Express.js** - Framework Node.js pour l'API REST
