@@ -125,6 +125,7 @@ const choices = [
         description: 'Tu prends l\'alien et tu fuis',
         required_stat: 'courage',
         required_value: 70,
+        effect_life: -9999,
         result: 'L\'alien etant trop lourd tu ne reussi pas a fuir assez vite.',
         nextScenarioId: 20,         //Echec fuite
     },
