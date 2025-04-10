@@ -128,7 +128,7 @@ const scenarios = [
     },
     {
         title: 'Win fuite',
-        description: 'Vous parvenez a fuire avec l\'alien lorsque vous recevez un signal',
+        description: 'Vous parvenez à fuire avec l\'alien lorsque vous recevez un signal',
         type: 'choice',
         is_final: false,
     },
@@ -165,7 +165,7 @@ const scenarios = [
     },
     {
         title: 'Une nouvelle vie',
-        description: 'Les aliens vous trouve super charismatique tellement qu\'il vous propose différention.',
+        description: 'Les aliens vous trouvent super charismatique ! tellement qu\'ils vous proposent différentes options.',
         type: 'choice',
         is_final: false,
     },
