@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 150, 136, 0.7)",
     },
     deleteButton: {
-        backgroundColor: "rgba(244, 67, 54, 0.7)",
+        backgroundColor: "rgba(191, 26, 109, 0.6)",
     },
     buttonText: {
         color: "white",
