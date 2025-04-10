@@ -15,8 +15,11 @@ const Inscription = ({ navigation }) => {
 
         try {
             await registerUser(username, email, password);
-            Alert.alert("Inscription réussie", `Bienvenue ${username} !`);
-            navigation.navigate('Connexion');
+            // Alert.alert("Inscription réussie", `Bienvenue ${username} !`);
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Accueil' }],
+            });
         } catch (error) {
             if (error.response) {
                 Alert.alert("Erreur", error.response.data.error);

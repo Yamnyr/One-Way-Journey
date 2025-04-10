@@ -33,7 +33,12 @@ export const loginUser = async (username, password) => {
 export const registerUser = async (username, email, password) => {
     try {
         const response = await axios.post(`${API_URL}/users/register`, { username, email, password });
-        return response.data;
+        const { token, user } = response.data;
+
+        // Stocker le token
+        await AsyncStorage.setItem('userToken', token);
+
+        return { token, user };
     } catch (error) {
         throw error;
     }
