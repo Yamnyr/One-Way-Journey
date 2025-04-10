@@ -1,26 +1,15 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
-import {
-    View,
-    Text,
-    FlatList,
-    ActivityIndicator,
-    StyleSheet,
-    TouchableOpacity,
-    Alert,
-    ImageBackground,
-    Modal,
-    TextInput,
-    Image,
-    Platform,
-    ScrollView,
-    Pressable,
-} from "react-native"
+import { useEffect, useState } from "react"
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, Image } from "react-native"
 import { getUserCharacters, deleteCharacter, createCharacter } from "../services/characterService"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Picker } from "@react-native-picker/picker"
 import { useNavigation } from "@react-navigation/native"
+
+// Composants importés
+import CharacterCard from "../components/CharacterCard"
+import CreateCharacterModal from "../components/CreateCharacterModal"
+import LoadingIndicator from "../components/LoadingIndicator"
 
 const UserCharactersScreen = () => {
     const [characters, setCharacters] = useState([])
@@ -103,14 +92,16 @@ const UserCharactersScreen = () => {
 
     const handleNavigateToScenario = async (character) => {
         // Ne rien faire si le personnage est mort
-        if (!character.is_alive) return;
+        if (!character.is_alive) return
 
         if (character.currentScenarioId) {
             try {
                 // Stocker l'ID du personnage dans AsyncStorage
                 await AsyncStorage.setItem("currentCharacterId", character.id.toString())
                 // Naviguer vers la page Scenario avec l'ID du scénario
-                navigation.navigate("Scenario", { scenarioId: character.currentScenarioId })
+                navigation.navigate("Scenario", {
+                    scenarioId: character.currentScenarioId,
+                })
             } catch (error) {
                 console.error("Erreur lors du stockage de l'ID du personnage:", error)
                 Alert.alert("Erreur", "Impossible de charger le scénario.")
@@ -126,132 +117,10 @@ const UserCharactersScreen = () => {
         return found ? found.emoji : "❓"
     }
 
-    // Rendu du sélecteur d'espèce en fonction de la plateforme
-    const renderSpeciesSelector = () => {
-        if (Platform.OS === "ios") {
-            // Utiliser le Picker sur iOS
-            return (
-                <Picker
-                    selectedValue={newCharacter.species}
-                    onValueChange={(itemValue) => setNewCharacter({ ...newCharacter, species: itemValue })}
-                    style={styles.picker}
-                    itemStyle={{ color: "white", fontFamily: "Orbitron-Regular" }}
-                >
-                    {speciesList.map((species) => (
-                        <Picker.Item key={species.value} label={`${species.label} ${species.emoji}`} value={species.value} />
-                    ))}
-                </Picker>
-            )
-        } else {
-            // Interface alternative pour Android et autres plateformes
-            return (
-                <ScrollView style={styles.speciesScrollView}>
-                    <View style={styles.speciesGrid}>
-                        {speciesList.map((species) => (
-                            <TouchableOpacity
-                                key={species.value}
-                                style={[styles.speciesButton, newCharacter.species === species.value && styles.speciesButtonSelected]}
-                                onPress={() => setNewCharacter({ ...newCharacter, species: species.value })}
-                            >
-                                <Text style={styles.speciesEmoji}>{species.emoji}</Text>
-                                <Text
-                                    style={[styles.speciesLabel, newCharacter.species === species.value && styles.speciesLabelSelected]}
-                                >
-                                    {species.label}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                </ScrollView>
-            )
-        }
-    }
-
-    if (loading) return (
-        <View
-            style={styles.container}
-            resizeMode="cover"
-        >
-            <ActivityIndicator size="large" color="rgb(255, 0, 225)" style={styles.loader} />
-        </View>
-    )
-
-    const renderCharacterCard = ({ item }) => {
-        // Contenu de carte pour un personnage vivant
-        const liveCharacterContent = (
-            <View style={styles.cardContent}>
-                <View style={styles.characterHeader}>
-                    <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
-                    <View style={styles.characterInfo}>
-                        <Text style={styles.characterName}>{item.name}</Text>
-                        <Text style={styles.characterText}>Espèce : {item.species}</Text>
-                    </View>
-                </View>
-
-                {/* Stats du personnage (seulement pour les vivants) */}
-                <View style={styles.statsContainer}>
-                    <View style={styles.statsColumn}>
-                        <Text style={styles.statItem}>❤️ Vie : {item.life || 0}</Text>
-                        <Text style={styles.statItem}>✨ Charisme : {item.charisma || 0}</Text>
-                        <Text style={styles.statItem}>🏃 Dextérité : {item.dexterity || 0}</Text>
-                    </View>
-                    <View style={styles.statsColumn}>
-                        <Text style={styles.statItem}>🧠 Intelligence : {item.intelligence || 0}</Text>
-                        <Text style={styles.statItem}>🍀 Chance : {item.luck || 0}</Text>
-                        <Text style={styles.statItem}>✅ En vie !</Text>
-                    </View>
-                </View>
-
-                {/* Scénario actuel */}
-                {item.currentScenarioId && (
-                    <Text style={styles.scenarioText}>🎮 Scénario actuel : {item.Scenario.title}</Text>
-                )}
-            </View>
-        );
-
-        // Contenu de carte pour un personnage mort
-        const deadCharacterContent = (
-            <View style={styles.cardContent}>
-                <View style={styles.characterHeader}>
-                    <Text style={styles.raceEmoji}>{getRaceEmoji(item.species)}</Text>
-                    <View style={styles.characterInfo}>
-                        <Text style={[styles.characterName, styles.deadCharacterName]}>{item.name}</Text>
-                        <Text style={styles.characterText}>Espèce : {item.species}</Text>
-                    </View>
-                </View>
-
-                {/* Message pour les personnages morts */}
-                <View style={styles.deadMessageContainer}>
-                    <Text style={styles.deadMessage}>☠️ Ce personnage est mort</Text>
-                    <Text style={styles.deadSubMessage}>Impossible de continuer l'aventure</Text>
-                </View>
-
-                {/* Indication pour la suppression */}
-                <Text style={styles.deleteHint}>Appui long pour supprimer ce personnage</Text>
-            </View>
-        );
-        return (
-            <Pressable
-                style={({ pressed }) => [
-                    styles.characterCard,
-                    !item.is_alive && styles.deadCharacterCard,
-                    pressed && item.is_alive && styles.cardPressed
-                ]}
-                onPress={() => item.is_alive && handleNavigateToScenario(item)}
-                onLongPress={() => handleDelete(item.id)}
-                delayLongPress={500} // Délai avant que l'appui long soit détecté
-                android_ripple={item.is_alive ? { color: 'rgba(255, 0, 225, 0.2)' } : null}
-            >
-                {item.is_alive ? liveCharacterContent : deadCharacterContent}
-            </Pressable>
-        );
-    };
+    if (loading) return <LoadingIndicator />
 
     return (
-        <View
-            style={styles.container}
-            resizeMode="cover"
-        >
+        <View style={styles.container} resizeMode="cover">
             <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("Accueil")}>
                 <Image source={require("../assets/arrowB.png")} style={styles.buttonText2} />
             </TouchableOpacity>
@@ -263,7 +132,14 @@ const UserCharactersScreen = () => {
                 <FlatList
                     data={characters}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={renderCharacterCard}
+                    renderItem={({ item }) => (
+                        <CharacterCard
+                            item={item}
+                            onPress={handleNavigateToScenario}
+                            onLongPress={handleDelete}
+                            getRaceEmoji={getRaceEmoji}
+                        />
+                    )}
                 />
             )}
 
@@ -273,33 +149,14 @@ const UserCharactersScreen = () => {
             </TouchableOpacity>
 
             {/* Modal de création de personnage */}
-            <Modal visible={modalVisible} transparent animationType="slide">
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Créer un nouveau personnage</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nom du personnage"
-                            placeholderTextColor="rgba(255, 255, 255, 0.73)"
-                            value={newCharacter.name}
-                            onChangeText={(text) => setNewCharacter({ ...newCharacter, name: text })}
-                        />
-                        <Text style={styles.label}>Espèce :</Text>
-
-                        {/* Sélecteur d'espèce conditionnel */}
-                        {renderSpeciesSelector()}
-
-                        <View style={styles.buttonRow}>
-                            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-                                <Text style={styles.buttonText}>Annuler</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.confirmButton} onPress={handleCreateCharacter}>
-                                <Text style={styles.buttonText}>Créer</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            <CreateCharacterModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                onCreate={handleCreateCharacter}
+                character={newCharacter}
+                setCharacter={setNewCharacter}
+                speciesList={speciesList}
+            />
         </View>
     )
 }
@@ -328,110 +185,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         fontStyle: "italic",
     },
-
-    // Carte personnage
-    characterCard: {
-        backgroundColor: "rgba(30, 15, 40, 0.85)",
-        padding: 18,
-        borderRadius: 15,
-        marginBottom: 15,
-        borderColor: "rgba(115, 32, 143, 0.32)",
-        borderWidth: 1,
-        shadowColor: "rgba(194, 152, 187, 0)",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.8,
-        shadowRadius: 8,
-    },
-    // Style pour l'état pressed
-    cardPressed: {
-        backgroundColor: "rgba(60, 30, 80, 0.85)",
-        borderColor: "rgba(255, 0, 225, 0.5)",
-    },
-    // Style pour les personnages morts
-    deadCharacterCard: {
-        backgroundColor: "rgba(7,3,9,0.85)",
-        borderColor: "rgba(115, 32, 143, 0.32)",
-        opacity: 0.8,
-    },
-    deadCharacterName: {
-        color: "rgba(170, 0, 0, 0.8)",
-        textDecorationLine: "line-through",
-    },
-    deadMessageContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 15,
-        marginVertical: 5,
-        backgroundColor: "rgba(30, 15, 40, 0.85)",
-        borderRadius: 10,
-    },
-    deadMessage: {
-        fontSize: 18,
-        color: "rgba(170, 0, 0, 0.8)",
-        fontWeight: "bold",
-        textAlign: "center",
-        fontFamily: "Orbitron-Bold",
-    },
-    deadSubMessage: {
-        fontSize: 14,
-        color: "rgba(200, 200, 200, 0.8)",
-        marginTop: 5,
-        textAlign: "center",
-        fontFamily: "Orbitron-Regular",
-    },
-    deleteHint: {
-        fontSize: 13,
-        color: "rgba(170, 0, 0, 0.8)",
-        fontStyle: "italic",
-        textAlign: "center",
-        marginTop: 10,
-        fontFamily: "Orbitron-Regular",
-    },
-    characterName: {
-        fontFamily: "Orbitron-Regular",
-        fontSize: 20,
-        fontWeight: "bold",
-        color: "rgb(255, 0, 230)",
-        marginBottom: 8,
-    },
-    characterText: {
-        color: "white",
-        marginBottom: 10,
-        fontFamily: "Orbitron-Regular",
-    },
-
-    // Stats du personnage
-    statsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginVertical: 10,
-        backgroundColor: "rgba(40, 6, 65, 0)",
-        borderRadius: 8,
-        padding: 10,
-    },
-    statsColumn: {
-        flex: 1,
-    },
-    statItem: {
-        color: "rgb(255, 255, 255)",
-        marginVertical: 3,
-        fontFamily: "Orbitron-Regular",
-        fontSize: 12,
-    },
-    scenarioText: {
-        color: "rgb(255, 0, 230)",
-        marginVertical: 5,
-        fontWeight: "bold",
-        fontFamily: "Orbitron-Regular",
-    },
-
-    // Boutons génériques
-    buttonText: {
-        fontFamily: "Orbitron-Regular",
-        color: "white",
-        fontWeight: "bold",
-    },
-
     // Boutons spécifiques
     createButton: {
         backgroundColor: "rgba(52, 8, 69, 0.71)",
@@ -452,143 +205,18 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontFamily: "Orbitron-Regular",
     },
-
-    // Modal
-    modalContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
+    button2: {
+        position: "absolute",
+        top: 20,
+        left: 20,
+        zIndex: 10,
     },
-    modalContent: {
-        backgroundColor: "rgba(30, 15, 40, 0.95)",
-        padding: 25,
-        borderRadius: 20,
-        width: "85%",
-        borderColor: "rgba(183, 45, 230, 0.6)",
-        borderWidth: 1,
-        maxHeight: "80%",
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginBottom: 20,
-        textAlign: "center",
-        color: "rgb(255, 255, 255)",
-        fontFamily: "Orbitron-Bold",
-    },
-
-    // Formulaire
-    label: {
-        fontFamily: "Orbitron-Regular",
-        fontSize: 16,
-        marginBottom: 8,
-        color: "rgb(255, 255, 255)",
-    },
-    input: {
-        fontFamily: "Orbitron-Regular",
-        borderWidth: 1,
-        borderColor: "rgba(75, 23, 93, 0.51)",
-        backgroundColor: "rgba(86, 23, 112, 0.76)",
-        padding: 12,
-        borderRadius: 10,
-        marginBottom: 15,
-        color: "rgb(255, 255, 255)",
-    },
-    picker: {
-        fontFamily: "Orbitron-Regular",
-        borderRadius: 10,
-        borderWidth: 0.5,
-        borderColor: "rgba(75, 23, 93, 0.51)",
-        backgroundColor: "rgba(86, 23, 112, 0.76)",
-        marginBottom: 20,
-        color: "rgb(255, 255, 255)",
-    },
-
-    // Layout boutons
-    buttonRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 15,
-    },
-    cancelButton: {
-        backgroundColor: "rgba(80, 80, 80, 0.8)",
-        padding: 12,
-        borderRadius: 10,
-        flex: 1,
-        marginRight: 10,
-        alignItems: "center",
-        fontFamily: "Orbitron-Regular",
-    },
-    confirmButton: {
-        backgroundColor: "rgba(169, 40, 216, 0.65)",
-        padding: 12,
-        borderRadius: 10,
-        flex: 1,
-        marginLeft: 10,
-        alignItems: "center",
-        fontFamily: "Orbitron-Regular",
-    },
-    cardContent: {
-        flex: 1,
-    },
-
     buttonText2: {
         opacity: 0.8,
         backgroundColor: "rgba(255, 255, 255, 0)",
         width: 30, // Largeur de l'image
         height: 30, // Hauteur de l'image
         resizeMode: "contain", // Garde les proportions
-    },
-    characterHeader: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 10,
-    },
-    characterInfo: {
-        flex: 1,
-    },
-    raceEmoji: {
-        fontSize: 40,
-        marginRight: 15,
-    },
-
-    // Styles pour le sélecteur d'espèce alternatif (Android)
-    speciesScrollView: {
-        maxHeight: 200,
-        marginBottom: 15,
-    },
-    speciesGrid: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-    },
-    speciesButton: {
-        width: "48%",
-        backgroundColor: "rgba(60, 20, 80, 0.6)",
-        borderRadius: 10,
-        padding: 12,
-        marginBottom: 10,
-        alignItems: "center",
-        borderWidth: 1,
-        borderColor: "rgba(115, 32, 143, 0.32)",
-    },
-    speciesButtonSelected: {
-        backgroundColor: "rgba(169, 40, 216, 0.65)",
-        borderColor: "rgba(255, 255, 255, 0.5)",
-    },
-    speciesEmoji: {
-        fontSize: 30,
-        marginBottom: 5,
-    },
-    speciesLabel: {
-        color: "white",
-        fontFamily: "Orbitron-Regular",
-        fontSize: 14,
-        textAlign: "center",
-    },
-    speciesLabelSelected: {
-        fontWeight: "bold",
     },
 })
 
