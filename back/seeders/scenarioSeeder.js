@@ -41,7 +41,7 @@ const scenarios = [
     {
         title: 'Un voyage infini',
         description: 'Vous voguez à l\'infini dans l\'immensité de l\'espace... ',
-        type: 'desiny',
+        type: 'destiny',
         is_final: true,
     },
 
@@ -160,8 +160,8 @@ const scenarios = [
     {
         title: 'La flotte ennemie',
         description: 'Une flotte de vaisseaux ennemis arrive à grande vitesse. laisser un VU c\'est pas ouf...',
-        type: 'destiny',
-        is_final: true,
+        type: 'choice',
+        is_final: false,
     },
     {
         title: 'Une nouvelle vie',

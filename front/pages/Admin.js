@@ -98,7 +98,7 @@ const Admin = () => {
     }
 
     const handleBack = () => {
-        navigation.navigate("Accueil")
+        navigation.navigate("AdminHome")
     }
 
     if (loading) return (

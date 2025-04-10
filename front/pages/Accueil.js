@@ -1,9 +1,11 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import { View, Text, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { jwtDecode } from "jwt-decode" // Assure-toi d'avoir fait npm install jwt-decode
+import { jwtDecode } from "jwt-decode"
 import * as Font from "expo-font"
-import { logoutUser } from "../services/Auth" // Si tu as un fichier service pour le logout
+import { logoutUser } from "../services/Auth"
 import { useMusic } from "../contexts/MusicContext"
 
 const fetchFonts = async () => {
@@ -19,7 +21,7 @@ const fetchFonts = async () => {
 const Accueil = ({ navigation }) => {
     const [fontsLoaded, setFontsLoaded] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
-    const { isMusicPlaying, toggleMusic } = useMusic() // ✅ hook utilisé dans le composant
+    const { isMusicPlaying, toggleMusic } = useMusic()
 
     useEffect(() => {
         const checkRole = async () => {
@@ -47,8 +49,8 @@ const Accueil = ({ navigation }) => {
     }, [])
 
     const handleLogout = async () => {
-        await logoutUser() // Déconnexion
-        navigation.navigate("Connexion") // Redirige vers la page de connexion après la déconnexion
+        await logoutUser()
+        navigation.navigate("Connexion")
     }
 
     if (!fontsLoaded) {
@@ -60,117 +62,101 @@ const Accueil = ({ navigation }) => {
     }
 
     return (
-        <View
-            style={styles.container}
-            resizeMode="cover"
-        >
+        <View style={styles.container} resizeMode="cover">
             {/* Bouton Logout en haut à droite */}
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Image
-                    source={require('../assets/logout.png')} // Assure-toi du chemin correct
-                    style={styles.logoutImage} // Style pour dimensionner l'image
-                />
+                <Image source={require("../assets/logout.png")} style={styles.logoutImage} />
             </TouchableOpacity>
 
             <Text style={styles.title}>One Way Journey</Text>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('characters')}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("characters")}>
                 <Text style={styles.buttonText}>Jouer</Text>
             </TouchableOpacity>
 
             {isAdmin && (
-                <>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdminScenario')}>
-                        <Text style={styles.buttonText}>Gérer les scénarios</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdminUser')}>
-                        <Text style={styles.buttonText}>Gérer les utilisateurs</Text>
-                    </TouchableOpacity>
-                </>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AdminHome")}>
+                    <Text style={styles.buttonText}>Admin</Text>
+                </TouchableOpacity>
             )}
+
             <TouchableOpacity onPress={toggleMusic} style={styles.musicButton}>
-                <Text style={styles.buttonText}>
-                    {isMusicPlaying ? '🔊 Couper le son' : '🔈 Remettre le son'}
-                </Text>
+                <Text style={styles.buttonText}>{isMusicPlaying ? "🔊 Couper le son" : "🔈 Remettre le son"}</Text>
             </TouchableOpacity>
-
         </View>
-    );
-};
+    )
+}
 
-export default Accueil;
+export default Accueil
 
 const styles = StyleSheet.create({
     loadingContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#000',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#000",
     },
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
         padding: 20,
     },
     title: {
-        color: 'rgb(219, 4, 198)',
+        color: "rgb(219, 4, 198)",
         fontSize: 34,
-        textAlign: 'center',
+        textAlign: "center",
         marginBottom: 40,
-        fontFamily: 'SixtyfourConvergence',
-        textShadowColor: 'rgba(175, 132, 168, 0.65)',
+        fontFamily: "SixtyfourConvergence",
+        textShadowColor: "rgba(175, 132, 168, 0.65)",
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 17,
-        paddingHorizontal: 20, // Ajoute de l'espace latéral
-        flexWrap: 'wrap', // Permet au texte de passer à la ligne si nécessaire
+        paddingHorizontal: 20,
+        flexWrap: "wrap",
     },
     button: {
-        backgroundColor: 'rgba(218, 9, 218, 0.65)',
+        backgroundColor: "rgba(218, 9, 218, 0.65)",
         padding: 15,
         borderRadius: 15,
-        width: '80%',
+        width: "80%",
         marginVertical: 10,
-        shadowColor: 'rgba(194, 152, 187, 0.71)',
+        shadowColor: "rgba(194, 152, 187, 0.71)",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,
     },
     buttonText: {
-        color: 'rgb(223, 182, 219)',
-        textAlign: 'center',
-        fontWeight: 'bold',
+        color: "rgb(223, 182, 219)",
+        textAlign: "center",
+        fontWeight: "bold",
         fontSize: 16,
-        fontFamily: 'Orbitron-Bold',
+        fontFamily: "Orbitron-Bold",
     },
-    // Style pour le bouton Logout en haut à droite
     logoutButton: {
-        position: 'absolute',
+        position: "absolute",
         top: 20,
         left: 15,
-        backgroundColor: 'rgba(151, 28, 172, 0)',
+        backgroundColor: "rgba(151, 28, 172, 0)",
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
-        shadowColor: 'rgba(202, 14, 187, 0.46)',
+        shadowColor: "rgba(202, 14, 187, 0.46)",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 5,
     },
-
     logoutImage: {
-        opacity: (0.8),
-        width: 30, // Largeur de l'image
-        height: 30, // Hauteur de l'image
-        resizeMode: 'contain', // Garde les proportions
+        opacity: 0.8,
+        width: 30,
+        height: 30,
+        resizeMode: "contain",
     },
     musicButton: {
-        position: 'absolute',
+        position: "absolute",
         bottom: 30,
         right: 20,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: "rgba(0,0,0,0.5)",
         padding: 10,
         borderRadius: 10,
     },
-
-});
+})
