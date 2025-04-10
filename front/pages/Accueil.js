@@ -79,9 +79,14 @@ const Accueil = ({ navigation }) => {
             </TouchableOpacity>
 
             {isAdmin && (
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Admin')}>
-                    <Text style={styles.buttonText}>Gérer les scénarios</Text>
-                </TouchableOpacity>
+                <>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdminScenario')}>
+                        <Text style={styles.buttonText}>Gérer les scénarios</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AdminUser')}>
+                        <Text style={styles.buttonText}>Gérer les utilisateurs</Text>
+                    </TouchableOpacity>
+                </>
             )}
             <TouchableOpacity onPress={toggleMusic} style={styles.musicButton}>
                 <Text style={styles.buttonText}>
@@ -154,7 +159,7 @@ const styles = StyleSheet.create({
     },
 
     logoutImage: {
-        opacity : (0.8),
+        opacity: (0.8),
         width: 30, // Largeur de l'image
         height: 30, // Hauteur de l'image
         resizeMode: 'contain', // Garde les proportions
