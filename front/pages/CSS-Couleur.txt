@@ -171,3 +171,67 @@ Pour la page CharactereList :
         backgroundColor: "rgba(169, 40, 216, 0.65)",
         borderColor: "rgba(255, 255, 255, 0.5)",
 
+Pour Inscription :
+
+    title: 
+        color: 'rgb(219, 4, 198)',
+        textShadowColor: "rgba(255, 147, 239, 0)",
+
+    input: 
+        backgroundColor: 'rgba(60, 20, 80, 0.3)',
+        borderColor: 'rgba(218, 9, 218, 0.65)',
+
+    button: 
+        backgroundColor: 'rgba(218, 9, 218, 0.65)',
+
+    buttonText: 
+        color: 'white',
+
+    link: 
+        color: 'rgb(223, 182, 219)',
+
+Pour Connexion :
+
+    },
+    title: {
+        color: '#fff',
+        textShadowColor: "rgba(255, 147, 239, 0)",
+    },
+    input: 
+        backgroundColor: 'rgba(60, 20, 80, 0.3)',
+        borderColor: 'rgba(218, 9, 218, 0.65)',
+
+    button: 
+        backgroundColor: 'rgba(218, 9, 218, 0.65)',
+        // borderColor: 'rgba(107, 31, 132, 0.32)',
+
+    buttonText: 
+        color: 'white',
+
+    link: 
+        color: 'rgb(223, 182, 219)',
+
+
+Pour Accueil :
+
+    title: 
+        color: 'rgb(219, 4, 198)',
+        textShadowColor: 'rgba(175, 132, 168, 0.65)',
+
+    button: 
+        backgroundColor: 'rgba(218, 9, 218, 0.65)',
+        shadowColor: 'rgba(194, 152, 187, 0.71)',
+
+    buttonText: 
+        color: 'rgb(223, 182, 219)',
+
+    // Style pour le bouton Logout en haut à droite
+
+    logoutButton: 
+        backgroundColor: 'rgba(151, 28, 172, 0)',
+        shadowColor: 'rgba(202, 14, 187, 0.46)',
+
+    musicButton: 
+        backgroundColor: 'rgba(0,0,0,0.5)',
+
+
