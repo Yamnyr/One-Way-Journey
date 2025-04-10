@@ -2,17 +2,34 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 
 const UserCard = ({ user, onDelete, onUpdate }) => {
     return (
-        <View style={styles.card}>
+        <View style={styles.userCard}>
             <View style={styles.cardContent}>
-                <Text style={styles.username}>{user.username}</Text>
-                <Text style={styles.email}>{user.email || "Aucun email"}</Text>
-                <Text style={styles.role}>Rôle: {user.role === "admin" ? "Administrateur" : "Joueur"}</Text>
+                <View style={styles.userHeader}>
+                    <Text style={styles.userEmoji}>{user.role === "admin" ? "👑" : "👤"}</Text>
+                    <View style={styles.userInfo}>
+                        <Text style={styles.userName}>{user.username || "Nom non disponible"}</Text>
+                        <View style={styles.metaInfoContainer}>
+                            <Text style={styles.idText}>ID: #{user.id}</Text>
+                            {user.role === "admin" && (
+                                <View style={styles.adminBadge}>
+                                    <Text style={styles.adminBadgeText}>ADMIN</Text>
+                                </View>
+                            )}
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.detailsContainer}>
+                    <Text style={styles.emailText}>Email: {user.email || "Non renseigné"}</Text>
+                </View>
             </View>
-            <View style={styles.cardActions}>
-                <TouchableOpacity style={[styles.actionButton, styles.updateButton]} onPress={() => onUpdate(user)}>
+
+            <View style={styles.buttonRow}>
+                <TouchableOpacity style={styles.editButton} onPress={() => onUpdate(user)}>
                     <Text style={styles.buttonText}>Modifier</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.actionButton, styles.deleteButton]} onPress={() => onDelete(user.id)}>
+
+                <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete(user.id)}>
                     <Text style={styles.buttonText}>Supprimer</Text>
                 </TouchableOpacity>
             </View>
@@ -21,60 +38,99 @@ const UserCard = ({ user, onDelete, onUpdate }) => {
 }
 
 const styles = StyleSheet.create({
-    card: {
-        backgroundColor: "rgba(52, 8, 69, 0.5)",
+    userCard: {
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
+        padding: 18,
         borderRadius: 15,
         marginBottom: 15,
-        padding: 15,
+        borderColor: "rgba(115, 32, 143, 0.32)",
         borderWidth: 1,
-        borderColor: "rgba(107, 31, 132, 0.32)",
-        shadowColor: "rgba(194, 152, 187, 0.3)",
-        shadowOffset: { width: 0, height: 2 },
+        shadowColor: "rgba(194, 152, 187, 0)",
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.8,
-        shadowRadius: 5,
+        shadowRadius: 8,
     },
     cardContent: {
+        flex: 1,
+    },
+    userHeader: {
+        flexDirection: "row",
+        alignItems: "flex-start",
         marginBottom: 10,
     },
-    username: {
-        fontSize: 18,
+    userInfo: {
+        flex: 1,
+    },
+    userEmoji: {
+        fontSize: 40,
+        marginRight: 15,
+    },
+    userName: {
+        fontFamily: "Orbitron-Regular",
+        fontSize: 20,
         fontWeight: "bold",
-        color: "rgb(255, 255, 255)",
+        color: "rgb(219, 4, 198)",
         marginBottom: 5,
+    },
+    metaInfoContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 8,
+    },
+    idText: {
+        color: "white",
+        fontFamily: "Orbitron-Regular",
+        marginRight: 10,
+    },
+    adminBadge: {
+        backgroundColor: "rgba(255, 215, 0, 0.8)",
+        paddingVertical: 3,
+        paddingHorizontal: 8,
+        borderRadius: 10,
+    },
+    adminBadgeText: {
+        color: "rgb(30, 15, 40)",
+        fontWeight: "bold",
+        fontSize: 12,
         fontFamily: "Orbitron-Bold",
     },
-    email: {
-        fontSize: 14,
-        color: "rgb(223, 182, 219)",
-        marginBottom: 5,
-        fontFamily: "Orbitron-Regular",
+    detailsContainer: {
+        backgroundColor: "rgba(40, 6, 65, 0.4)",
+        borderRadius: 8,
+        padding: 10,
+        marginVertical: 10,
     },
-    role: {
-        fontSize: 14,
-        color: "rgb(223, 182, 219)",
+    emailText: {
+        color: "rgb(255, 255, 255)",
         fontFamily: "Orbitron-Regular",
+        fontSize: 14,
+        lineHeight: 20,
     },
-    cardActions: {
+    buttonRow: {
         flexDirection: "row",
-        justifyContent: "flex-end",
-        marginTop: 10,
+        justifyContent: "space-between",
+        marginTop: 15,
     },
-    actionButton: {
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 10,
-        marginLeft: 10,
-    },
-    updateButton: {
+    editButton: {
         backgroundColor: "rgba(0, 150, 136, 0.7)",
+        padding: 10,
+        borderRadius: 10,
+        flex: 1,
+        marginRight: 5,
+        alignItems: "center",
     },
     deleteButton: {
         backgroundColor: "rgba(191, 26, 109, 0.6)",
+        padding: 10,
+        borderRadius: 10,
+        flex: 1,
+        marginLeft: 5,
+        alignItems: "center",
     },
     buttonText: {
-        color: "white",
-        fontSize: 14,
         fontFamily: "Orbitron-Regular",
+        color: "white",
+        fontWeight: "bold",
     },
 })
 

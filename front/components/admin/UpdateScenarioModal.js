@@ -105,7 +105,7 @@ const UpdateScenarioModal = ({ visible, scenarioData, onClose, onSuccess }) => {
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>Mettre à jour le scénario</Text>
+                        <Text style={styles.modalTitle}>Modifier le scénario</Text>
                         <TouchableOpacity
                             onPress={onClose}
                             style={styles.closeButton}
