@@ -153,7 +153,7 @@ exports.updateScenario = async (req, res) => {
         // Ajouter les nouveaux choix associés (si fournis)
         if (choices && choices.length > 0) {
             const choicePromises = choices.map(async (choice) => {
-                const { description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_luck, is_game_over } = choice;
+                const { description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_intelligence, effect_luck, is_game_over } = choice;
 
                 await Choice.create({
                     scenarioId: scenario.id,
@@ -164,6 +164,7 @@ exports.updateScenario = async (req, res) => {
                     nextScenarioId,
                     effect_life,
                     effect_charisma,
+                    effect_intelligence,
                     effect_dexterity,
                     effect_luck,
                     is_game_over,
