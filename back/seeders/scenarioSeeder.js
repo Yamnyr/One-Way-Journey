@@ -196,7 +196,7 @@ const scenarios = [
 
     {
         title: 'Une Planete Morte',
-        description: 'Une étoile proche devient supernova, menaçant de tout annihiler.',
+        description: 'La planète derrière laquelle vous vous cachiez semble étrange.',
         type: 'choice',
         is_final: false,
     },

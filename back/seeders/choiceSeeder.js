@@ -84,10 +84,10 @@ const choices = [
 
     {
         scenarioId: 32,
-        description: 'La planète semble avoir souffert mais peut etre qu\'il y a encore des êtres vivant ?',
-        required_stat: 'dexterity',
-        required_value: 80,
-        result: 'Vous Vous posez sur la planète.',
+        description: 'Atterir sur la planète',
+        required_stat: '',
+        required_value: 0,
+        result: 'Vous vous posez sur la planète.',
         effect_intelligence: 15,
         effect_luck: 5,
         nextScenarioId: 29,         //La planète morte.
@@ -111,10 +111,10 @@ const choices = [
         required_stat: '',
         required_value: 0,
         result: 'Tu vois un alien mourant qui dit "il y en a d\'autre fuyer !" en pointant le ciel .',
-        effect_dexterity: 999,
-        effect_intelligence: 999,
-        effect_life: 999,
-        effect_luck: 999,
+        effect_dexterity: 10,
+        effect_intelligence: 0,
+        effect_life: 0,
+        effect_luck: 10,
         nextScenarioId: 34,         //Run
     },
 
@@ -145,16 +145,15 @@ const choices = [
         description: 'Tu Prends pas l\'alien tu le laisse mourir et tu t\'enfuis',
         required_stat: '',
         required_value: 0,
-        result: '.',
-        effect_courage: -50,
-        effect_luck: -50,
+        result: 'Connais-tu le karma ?',
+        effect_life: -9999,
         nextScenarioId: 4,         //Pas le bon
     },
     //Win fuite
 
     {
         scenarioId: 21,
-        description: 'Un signal retenti dans toute la station',
+        description: 'Écouter le signal',
         required_stat: '',
         required_value: 0,
         result: 'L\'alien t\'aide a repondre au signal de son espèce en chantant vos louanges puis meurt...',
