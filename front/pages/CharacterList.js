@@ -7,9 +7,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useNavigation } from "@react-navigation/native"
 
 // Composants importés
-import CharacterCard from "../components/CharacterCard"
-import CreateCharacterModal from "../components/CreateCharacterModal"
-import LoadingIndicator from "../components/LoadingIndicator"
+import CharacterCard from "../components/character/CharacterCard"
+import CreateCharacterModal from "../components/character/CreateCharacterModal"
+import LoadingView from "../components/LoadingView"
 
 const UserCharactersScreen = () => {
     const [characters, setCharacters] = useState([])
@@ -117,7 +117,7 @@ const UserCharactersScreen = () => {
         return found ? found.emoji : "❓"
     }
 
-    if (loading) return <LoadingIndicator />
+    if (loading) return <LoadingView />
 
     return (
         <View style={styles.container} resizeMode="cover">
