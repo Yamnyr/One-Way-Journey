@@ -13,3 +13,17 @@ export const getScenarioById = async (scenarioId, token) => {
         throw error;
     }
 };
+
+export const getAllScenarios = async (token) => {
+    try {
+        const response = await axios.get(`${API_URL}/scenarios`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data.scenarios;
+    } catch (error) {
+        console.error('❌ Erreur lors de la récupération des scénarios:', error);
+        throw error;
+    }
+};

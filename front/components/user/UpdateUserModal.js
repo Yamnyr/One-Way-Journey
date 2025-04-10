@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(158, 158, 158, 0.7)",
     },
     buttonUpdate: {
-        backgroundColor: "rgba(33, 150, 243, 0.7)",
+        backgroundColor: "rgba(0, 150, 136, 0.7)",
     },
     buttonText: {
         color: "white",

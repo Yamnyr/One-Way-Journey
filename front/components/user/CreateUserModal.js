@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(158, 158, 158, 0.7)",
     },
     buttonCreate: {
-        backgroundColor: "rgba(76, 175, 80, 0.7)",
+        backgroundColor: "rgba(0, 150, 136, 0.7)",
     },
     buttonText: {
         color: "white",
