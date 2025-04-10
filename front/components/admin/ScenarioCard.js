@@ -17,7 +17,6 @@ const ScenarioCard = ({ scenario, onDelete, onUpdate }) => {
         if (choice.effect_intelligence) effects.push(`🧠 Intelligence: ${choice.effect_intelligence > 0 ? '+' : ''}${choice.effect_intelligence}`)
         if (choice.effect_luck) effects.push(`🍀 Chance: ${choice.effect_luck > 0 ? '+' : ''}${choice.effect_luck}`)
 
-        if (choice.is_game_over) effects.push("☠️ Fin de partie")
         if (choice.nextScenarioId) effects.push(`🔜 → Scénario #${choice.nextScenarioId}`)
 
         return effects.length > 0 ? effects.join(' | ') : "Aucun effet"

@@ -258,25 +258,9 @@ const ChoiceForm = ({ index, choice, onUpdate, onRemove, disabled = false }) => 
             </View>
 
             <View style={styles.formGroup}>
-                <View style={styles.checkboxContainer}>
-                    <Text style={styles.formLabel}>Fin de partie</Text>
-                    <TouchableOpacity
-                        onPress={() => !disabled && updateChoiceField('is_game_over', !choice.is_game_over)}
-                        style={[
-                            styles.checkbox,
-                            choice.is_game_over && styles.checkboxGameOver
-                        ]}
-                        disabled={disabled}
-                    >
-                        {choice.is_game_over && <Text style={styles.checkboxMark}>✓</Text>}
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>ID du prochain scénario</Text>
                 <TextInput
-                    placeholder="Laissez vide si fin de partie"
+                    placeholder="Exemple : 1"
                     placeholderTextColor="rgba(255, 255, 255, 0.5)"
                     keyboardType="numeric"
                     value={choice.nextScenarioId?.toString()}

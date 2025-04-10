@@ -11,9 +11,11 @@ import Inscription from "./pages/Inscription";
 import Accueil from "./pages/Accueil";
 import CharactersPage from "./pages/CharacterList";
 import Admin from "./pages/Admin";
+import UserAdmin from "./pages/UserAdmin";
 import ScenarioScreen from "./pages/Scenario";
-import {MusicProvider} from "./contexts/MusicContext";
+import { MusicProvider } from "./contexts/MusicContext";
 import SpaceBackground from "./components/SpaceBackground";
+
 
 // Ignore warning
 LogBox.ignoreLogs(['Cannot update a component']);
@@ -68,7 +70,8 @@ export default function App() {
                     <Stack.Navigator initialRouteName={isLoggedIn ? "Accueil" : "Connexion"} screenOptions={{ headerShown: false }}>
                         <Stack.Screen name="Connexion" component={Connexion} />
                         <Stack.Screen name="characters" component={CharactersPage} />
-                        <Stack.Screen name="Admin" component={Admin} />
+                        <Stack.Screen name="AdminScenario" component={Admin} />
+                        <Stack.Screen name="AdminUser" component={UserAdmin} />
                         <Stack.Screen name="Inscription" component={Inscription} />
                         <Stack.Screen name="Accueil" component={Accueil} />
                         <Stack.Screen name="Scenario" component={ScenarioScreen} />
