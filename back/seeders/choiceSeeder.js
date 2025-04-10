@@ -482,8 +482,7 @@ const choices = [
         required_stat: '',
         required_value: 0,
         result: 'Tu vois un alien mourant qui dit "il y en a d\'autre fuyer !" en pointant le ciel .',
-        effect_dexterity: 10,
-        effect_intelligence: 5,
+        effect_life: -999,
         nextScenarioId: 33,         //asteroide
     },
 
