@@ -1,0 +1,64 @@
+Pour la page Admin :
+    title: 
+        color: 'rgb(219, 4, 198)',
+    emptyText: 
+        color: "rgb(223, 182, 219)",
+    errorText: 
+        color: "rgb(255, 100, 100)",
+    buttonText2: 
+        backgroundColor: "rgba(255, 255, 255, 0)",
+    createButton: 
+        backgroundColor: "rgba(52, 8, 69, 0.71)",
+        shadowColor: "rgba(194, 152, 187, 0)",
+        borderColor: "rgba(107, 31, 132, 0.32)",
+    createButtonText: 
+        color: "rgb(255, 255, 255)",
+
+Pour la page Scénario :
+
+    characterStatsContainer: 
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
+
+    characterName: 
+        color: 'rgb(219, 4, 198)',
+
+    statBadge: 
+        backgroundColor: "rgba(40, 20, 55, 0.7)",
+
+    scenarioContainer: 
+        backgroundColor: "rgba(30, 15, 40, 0.85)",
+        borderColor: "rgba(183, 45, 230, 0.4)",
+        shadowColor: "rgba(194, 152, 187, 0.71)",
+
+    title: 
+        color: 'rgb(219, 4, 198)',
+        textShadowColor: "rgba(183, 45, 230, 0.65)",
+
+    choicesTitle: 
+        color: 'rgb(219, 4, 198)',
+
+    choiceButton: 
+        backgroundColor: "rgba(40, 20, 55, 0.7)",
+        borderColor: "rgba(183, 45, 230, 0.3)",
+
+    disabledChoiceButton: 
+        backgroundColor: "rgba(40, 20, 55, 0.4)",
+        borderColor: "rgba(183, 45, 230, 0.1)",
+
+    disabledChoiceText: 
+        color: "rgba(255, 255, 255, 0.5)",
+
+    requirementText: 
+        color: "rgba(223, 182, 219, 0.7)",
+
+    failedRequirementText: 
+        color: "rgba(255, 100, 100, 0.7)",
+
+    backButton: 
+        backgroundColor: "rgba(169, 40, 216, 0.65)",
+        shadowColor: "rgba(194, 152, 187, 0.71)",
+
+    buttonText2: 
+        backgroundColor: "rgba(255, 255, 255, 0)",
+
