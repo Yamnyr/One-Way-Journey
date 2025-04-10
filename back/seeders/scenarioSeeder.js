@@ -122,7 +122,7 @@ const scenarios = [
     },
     {
         title: 'Echec fuite',
-        description: 'L\'alien etant trop lourd tu ne reussi pas a fuir assez vite vous mourrez ...',
+        description: 'L\'alien etant trop lourd tu ne ne réussis pas à fuir assez vite vous mourrez ...',
         type: 'destiny',
         is_final: true,
     },
@@ -214,7 +214,7 @@ const scenarios = [
     },
     {
         title: 'Président des aliens',
-        description: 'Vous vivez une vie grandiose en montant les échellons de votre carriere politique !',
+        description: 'Vous vivez une vie grandiose en montant les échellons de votre carrière politique !',
         type: 'destiny',
         is_final: true,
     },
