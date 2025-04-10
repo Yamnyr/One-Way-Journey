@@ -1,3 +1,4 @@
+Pour le suvit des choix de couleurs entre les pages :
 Pour la page Admin :
     title: 
         color: 'rgb(219, 4, 198)',
@@ -192,11 +193,11 @@ Pour Inscription :
 
 Pour Connexion :
 
-    },
-    title: {
+    
+    title: 
         color: '#fff',
         textShadowColor: "rgba(255, 147, 239, 0)",
-    },
+    
     input: 
         backgroundColor: 'rgba(60, 20, 80, 0.3)',
         borderColor: 'rgba(218, 9, 218, 0.65)',
