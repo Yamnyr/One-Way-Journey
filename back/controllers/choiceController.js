@@ -3,8 +3,8 @@ const db = require('../models');
 // Création d'un choix pour un scénario
 exports.createChoice = async (req, res) => {
     try {
-        const { scenarioId, description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_luck, is_game_over } = req.body;
-        const choice = await db.Choice.create({ scenarioId, description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_luck, is_game_over });
+        const { scenarioId, description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_intelligence, effect_luck, is_game_over } = req.body;
+        const choice = await db.Choice.create({ scenarioId, description, required_stat, required_value, result, nextScenarioId, effect_life, effect_charisma, effect_dexterity, effect_intelligence, effect_luck, is_game_over });
         res.status(201).json(choice);
     } catch (error) {
         res.status(400).json({ error: error.message });
