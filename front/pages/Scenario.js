@@ -191,7 +191,6 @@ const ScenarioScreen = ({ route, navigation }) => {
                 </View>
             </ScrollView>
 
-            {/* Result Modal */}
             <ResultModal
                 visible={resultModalVisible}
                 result={currentResult}

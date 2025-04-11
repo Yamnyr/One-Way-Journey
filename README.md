@@ -87,3 +87,4 @@ Ce projet a été développé dans le cadre d'un projet à l'école IPSSI par :
 
 - [GitHub Repository](https://github.com/Yamnyr/One-Way-Journey.git)
 - [Trello Board](https://trello.com/invite/b/67f6c1b54137337469a1da8e/ATTIe6f5629b52789465136ec01465b0debdE5CADE57/one-way-journey)
+- [Présentaion](https://docs.google.com/presentation/d/12ohBbGjnzaPK9i3PqeIQ83DIOlCakRbfP6-K5hRBZ9E/edit?usp=sharing)
